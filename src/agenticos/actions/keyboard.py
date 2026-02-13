@@ -30,11 +30,12 @@ class KeyboardExecutor:
         >>> kb.press("enter")
     """
 
-    def __init__(self, typing_interval: float = 0.02) -> None:
+    def __init__(self, typing_interval: float = 0.06) -> None:
         """Initialize keyboard executor.
 
         Args:
             typing_interval: Delay between keystrokes in seconds.
+                           Default 0.06s for visible real-time typing.
         """
         self.typing_interval = typing_interval
 
@@ -98,6 +99,7 @@ class KeyboardExecutor:
         """
         try:
             pyautogui.press(key)
+            time.sleep(0.1)  # Brief pause so user sees key effect
         except Exception as e:
             raise ActionError(f"Failed to press key '{key}': {e}") from e
 
@@ -111,7 +113,8 @@ class KeyboardExecutor:
             ActionError: If hotkey fails.
         """
         try:
-            pyautogui.hotkey(*keys)
+            pyautogui.hotkey(*keys, interval=0.08)
+            time.sleep(0.15)  # Brief pause so user sees hotkey effect
         except Exception as e:
             raise ActionError(
                 f"Failed to press hotkey {'+'.join(keys)}: {e}"

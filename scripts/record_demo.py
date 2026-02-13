@@ -92,11 +92,16 @@ def record(task: str, output: str, model: str | None = None,
     api_key = resolve_api_key(config)
     azure_ad_token = None
     if azure_ad:
-        from azure.identity import DefaultAzureCredential
-        print("🔑 Acquiring Azure AD token...", end=" ", flush=True)
-        cred = DefaultAzureCredential()
-        azure_ad_token = cred.get_token("https://cognitiveservices.azure.com/.default").token
-        print("✅")
+        # Check if token is pre-acquired via env var
+        azure_ad_token = os.environ.get("AZURE_AD_TOKEN")
+        if not azure_ad_token:
+            from azure.identity import DefaultAzureCredential
+            print("🔑 Acquiring Azure AD token...", end=" ", flush=True)
+            cred = DefaultAzureCredential()
+            azure_ad_token = cred.get_token("https://cognitiveservices.azure.com/.default").token
+            print("✅")
+        else:
+            print("🔑 Using pre-acquired Azure AD token ✅")
         print()
 
     # GIF recorder

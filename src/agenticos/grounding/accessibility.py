@@ -72,7 +72,9 @@ class UIElement:
             String like '[3] Button "Save" at (500, 300)'.
         """
         name_str = f' "{self.name}"' if self.name else ""
-        return f"[{self.idx}] {self.control_type}{name_str} at {self.center}"
+        val_str = f' val="{self.value}"' if self.value else ""
+        bbox_str = f" bbox={self.bbox}" if self.control_type in ("Slider", "Edit", "ScrollBar") else ""
+        return f"[{self.idx}] {self.control_type}{name_str}{val_str}{bbox_str} at {self.center}"
 
 
 class UIAGrounder:
@@ -249,6 +251,7 @@ class UIAGrounder:
         element: object,
         results: list[UIElement],
         depth: int,
+        max_elements: int = 300,
     ) -> None:
         """Recursively walk the UI automation tree.
 
@@ -256,8 +259,11 @@ class UIAGrounder:
             element: pywinauto wrapper element.
             results: Accumulator list for found elements.
             depth: Current depth in the tree.
+            max_elements: Stop collecting after this many elements.
         """
         if depth > self.max_depth:
+            return
+        if len(results) >= max_elements:
             return
 
         try:
@@ -284,9 +290,25 @@ class UIAGrounder:
                         # Try to get value
                         value = None
                         try:
-                            value = element.window_text()  # type: ignore[attr-defined]
-                            if value == name:
-                                value = None
+                            # For sliders, try RangeValuePattern first for accurate percentage
+                            if control_type == "Slider":
+                                try:
+                                    rv = element.iface_range_value
+                                    cur = rv.CurrentValue
+                                    mn = rv.CurrentMinimum
+                                    mx = rv.CurrentMaximum
+                                    if mx > mn:
+                                        pct = int((cur - mn) / (mx - mn) * 100)
+                                        value = f"{pct}%"
+                                    else:
+                                        value = str(int(cur))
+                                except Exception:
+                                    pass
+                            # Fallback: window_text
+                            if value is None:
+                                value = element.window_text()
+                                if value == name:
+                                    value = None
                         except Exception:
                             pass
 
@@ -316,11 +338,14 @@ class UIAGrounder:
                     pass
 
             # Recurse into children
-            try:
-                for child in element.children():  # type: ignore[attr-defined]
-                    self._walk_tree(child, results, depth + 1)
-            except Exception:
-                pass
+            if len(results) < max_elements:
+                try:
+                    for child in element.children():  # type: ignore[attr-defined]
+                        if len(results) >= max_elements:
+                            break
+                        self._walk_tree(child, results, depth + 1, max_elements)
+                except Exception:
+                    pass
 
         except Exception:
             pass  # Skip inaccessible elements

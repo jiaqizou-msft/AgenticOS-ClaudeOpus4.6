@@ -29,6 +29,7 @@ class ActionType(str, Enum):
     HOTKEY = "hotkey"
     SCROLL = "scroll"
     DRAG = "drag"
+    SET_SLIDER = "set_slider"
     SHELL = "shell"
     OPEN_APP = "open_app"
     FOCUS_WINDOW = "focus_window"
@@ -254,6 +255,11 @@ class ActionCompositor:
                     p["start_x"], p["start_y"],
                     p["end_x"], p["end_y"],
                 )
+            case ActionType.SET_SLIDER:
+                return self._set_slider_via_uia(
+                    p.get("name", ""),
+                    p.get("value", 50),
+                )
             case ActionType.SHELL:
                 result: ShellResult = self.shell.run(p["command"])
                 return result.output
@@ -277,3 +283,94 @@ class ActionCompositor:
                 raise ActionError(f"Unknown action type: {action.type}")
 
         return None
+
+    def _set_slider_via_uia(self, name: str, value: float) -> str:
+        """Set a slider value directly via UIA RangeValuePattern.
+
+        This bypasses coordinate-based drag entirely and works reliably
+        with WinUI/XAML/UWP sliders (e.g., Windows Quick Settings).
+
+        Args:
+            name: Slider name (e.g., 'Brightness', 'Sound output').
+                  Matching is case-insensitive and partial (e.g., 'volume' matches 'Sound output').
+            value: Target value as a percentage (0-100).
+
+        Returns:
+            Status message.
+
+        Raises:
+            ActionError: If slider cannot be found or set.
+        """
+        # Common aliases for slider names
+        NAME_ALIASES = {
+            "volume": "sound output",
+            "sound": "sound output",
+            "audio": "sound output",
+            "speaker": "sound output",
+            "brightness": "brightness",
+            "display": "brightness",
+            "screen": "brightness",
+        }
+
+        # Normalize the search name
+        search_name = name.lower().strip()
+        canonical = NAME_ALIASES.get(search_name, search_name)
+
+        try:
+            from pywinauto import Desktop
+
+            desktop = Desktop(backend="uia")
+            slider = None
+
+            # Search all visible windows for the named slider
+            for win in desktop.windows():
+                try:
+                    if not win.is_visible():
+                        continue
+                    matches = win.descendants(control_type="Slider")
+                    for s in matches:
+                        s_name = (s.element_info.name or "").lower()
+                        # Match by canonical name or original search name
+                        if canonical in s_name or search_name in s_name:
+                            slider = s
+                            break
+                    if slider:
+                        break
+                except Exception:
+                    continue
+
+            if not slider:
+                raise ActionError(f"Slider '{name}' not found via UIA")
+
+            # Use RangeValuePattern with correct COM property names
+            try:
+                iface = slider.iface_range_value
+                min_val = iface.CurrentMinimum
+                max_val = iface.CurrentMaximum
+                old_val = iface.CurrentValue
+                # Convert percentage to actual range value
+                target = min_val + (max_val - min_val) * value / 100.0
+                iface.SetValue(target)
+                slider_name = slider.element_info.name or name
+                return (
+                    f"Set '{slider_name}' from {old_val:.0f} to {target:.0f} "
+                    f"({value}%, range: {min_val:.0f}-{max_val:.0f})"
+                )
+            except Exception as e1:
+                # Fallback: click at the percentage position on the slider
+                try:
+                    rect = slider.rectangle()
+                    target_x = rect.left + int((rect.right - rect.left) * value / 100.0)
+                    target_y = (rect.top + rect.bottom) // 2
+                    self.mouse.click(target_x, target_y)
+                    return f"Clicked slider '{name}' at {value}% position ({target_x}, {target_y})"
+                except Exception as e2:
+                    raise ActionError(
+                        f"Cannot set slider '{name}': RangeValue failed ({e1}), click failed ({e2})"
+                    )
+        except ImportError:
+            raise ActionError("pywinauto required for set_slider")
+        except ActionError:
+            raise
+        except Exception as e:
+            raise ActionError(f"set_slider failed: {e}") from e
