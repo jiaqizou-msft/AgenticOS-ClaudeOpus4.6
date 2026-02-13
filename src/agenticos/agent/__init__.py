@@ -1,8 +1,14 @@
 """Core agent modules for AgenticOS."""
 
 from agenticos.agent.base import BaseAgent, AgentState, Observation, StepResult
-from agenticos.agent.navigator import NavigatorAgent
-from agenticos.agent.planner import TaskPlanner
+# Lazy-import heavy modules (NavigatorAgent, TaskPlanner) that depend on litellm
+# to avoid import errors in lightweight scripts like human_teach.py
+try:
+    from agenticos.agent.navigator import NavigatorAgent
+    from agenticos.agent.planner import TaskPlanner
+except ImportError:
+    NavigatorAgent = None  # type: ignore[assignment,misc]
+    TaskPlanner = None  # type: ignore[assignment,misc]
 from agenticos.agent.state_validator import StateValidator, StateSnapshot, ValidationResult
 from agenticos.agent.recovery import RecoveryManager, RecoveryStrategy, RecoveryAction
 from agenticos.agent.step_memory import StepMemory, CachedStep, Episode

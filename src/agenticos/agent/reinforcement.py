@@ -32,6 +32,8 @@ REWARD_RECOVERY_NEEDED = -1.0 # Action required recovery intervention
 REWARD_DONE_SUCCESS = 2.0     # Task completed successfully
 REWARD_DONE_FAIL = -1.5       # Task ended in failure
 REWARD_PARSE_FAIL = -0.2      # LLM output couldn't be parsed
+REWARD_WRONG_CONTENT = -1.2   # Clicked on wrong content (e.g. wrong video)
+REWARD_VERIFICATION_PASS = 0.5  # Content verified as correct
 
 
 @dataclass

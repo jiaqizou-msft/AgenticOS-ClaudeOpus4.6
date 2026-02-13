@@ -186,6 +186,21 @@ TEACHING_TOPICS = [
         "difficulty": "medium",
         "category": "ui_control",
     },
+    {
+        "id": "create_folder",
+        "topic": "Creating a new folder in File Explorer",
+        "description": (
+            "Please demonstrate creating a new folder in File Explorer. "
+            "Open File Explorer, navigate to the Downloads folder, "
+            "right-click in an empty area and select New > Folder (or use Ctrl+Shift+N), "
+            "type the folder name 'TestFromAgenticOS', press Enter to confirm, "
+            "then close File Explorer with Alt+F4. "
+            "I want to learn the right-click context menu flow, "
+            "folder naming, and the keyboard shortcuts for folder creation."
+        ),
+        "difficulty": "easy",
+        "category": "system",
+    },
 ]
 
 

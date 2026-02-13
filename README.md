@@ -127,27 +127,71 @@ AgenticOS/
 │   │   ├── mouse.py             # Mouse input executor
 │   │   ├── shell.py             # Shell command executor
 │   │   ├── window.py            # Window manager
-│   │   └── compositor.py        # Action dispatch & retry
+│   │   └── compositor.py        # Action dispatch & retry (16 types)
 │   ├── agent/
 │   │   ├── base.py              # Base agent ABC & data classes
 │   │   ├── navigator.py         # Core ReAct navigator agent
-│   │   └── planner.py           # LLM task decomposition
+│   │   ├── planner.py           # LLM task decomposition
+│   │   ├── state_validator.py   # Post-action state validation
+│   │   ├── recovery.py          # Per-app recovery strategies
+│   │   ├── step_memory.py       # Cached step patterns
+│   │   ├── reinforcement.py     # Tabular Q-learning (RL)
+│   │   └── human_teacher.py     # Learning from Demonstration (LfD)
 │   ├── mcp/
 │   │   └── server.py            # FastMCP server (11 tools)
 │   └── evaluation/
 │       ├── metrics.py           # Benchmark metrics & reporting
 │       └── tasks.py             # 30 built-in benchmark tasks
-├── tests/
-│   ├── conftest.py              # Shared fixtures
-│   └── unit/                    # Unit test suite
 ├── scripts/
+│   ├── run_demo_detached.py     # Live demo runner (4 demos)
+│   ├── human_teach.py           # Human teaching CLI
 │   ├── run_benchmark.py         # Benchmark runner
 │   └── record_demo.py           # GIF demo recorder
+├── recordings/
+│   ├── demo1_settings.gif       # Demo 1 recording
+│   ├── demo2_edge_video.gif     # Demo 2 recording
+│   ├── demo4_file_explorer.gif  # Demo 4 recording
+│   ├── rl_qtable.json           # Persistent Q-table
+│   ├── step_memory.json         # Cached step patterns
+│   └── teaching/                # Learned demonstration patterns
 ├── paper/                       # Academic paper (LaTeX)
+├── tests/                       # Unit test suite
 ├── pyproject.toml               # Project config & dependencies
 ├── CLAUDE.md                    # Project memory for AI agents
 └── README.md                    # This file
 ```
+
+## 🎬 Live Demo Results
+
+Real demos run on Windows 11 with GPT-4o (Azure OpenAI):
+
+| Demo | Task | Steps | Time | Status | Iterations |
+|------|------|-------|------|--------|------------|
+| **Demo 1** | System Tray: Set brightness to 100% | 5 | 68s | ✅ SUCCESS | 1 |
+| **Demo 2** | Edge: Play 4K YouTube video fullscreen | 9 | 138s | ✅ SUCCESS | 9 |
+| **Demo 3** | Outlook email + Teams message | — | — | 🔄 In Progress | 2 |
+| **Demo 4** | File Explorer: Create folder in Downloads | 15 | 220s | 🔄 In Progress | 3 |
+
+### Key Innovations Discovered Through Iteration
+
+- **UIA Slider Control** (Demo 1): Direct `RangeValuePattern.SetValue()` via UIA — 100% reliable vs. unreliable mouse drag
+- **Content Verification** (Demo 2): Post-click window title check + RL negative reward for wrong content
+- **Recovery-Aware Actions** (Demo 4): Auto-recovery (Escape) can sabotage in-progress operations like folder rename — solved with per-app recovery disabling
+- **Done Verification** (Demo 4): Filesystem path check before accepting task completion — prevents false success
+
+## 🧠 Learning Systems
+
+### Reinforcement Learning
+- **Algorithm**: Tabular Q-learning with TD update ($\alpha=0.15$, $\gamma=0.9$)
+- **State**: Hash of UI context (window title + element count + top elements)
+- **Rewards**: +2.0 (done success), +0.3 (state changed), -0.7 (drift), -1.2 (wrong content)
+- **Persistence**: Q-table saved to `recordings/rl_qtable.json` across sessions
+
+### Human Teaching (Learning from Demonstration)
+- **11 teaching topics** defined (slider, navigation, folder creation, email, etc.)
+- **1 pattern learned** so far: "Creating a new folder in File Explorer"
+- **Workflow**: Record human demo → extract trajectory pattern → inject into LLM context
+- **CLI**: `python scripts/human_teach.py --topic <topic_id>`
 
 ## 📊 Benchmark Results
 

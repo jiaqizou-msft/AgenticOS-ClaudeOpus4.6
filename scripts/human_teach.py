@@ -29,6 +29,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
+# Import directly from the module to avoid heavy __init__ imports (litellm, etc.)
 from agenticos.agent.human_teacher import HumanTeacher, TEACHING_TOPICS  # noqa: E402
 
 

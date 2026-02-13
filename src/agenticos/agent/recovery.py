@@ -42,15 +42,16 @@ APP_RECOVERY_MAP: dict[str, list[RecoveryStrategy]] = {
     "edge": [RecoveryStrategy.ESCAPE, RecoveryStrategy.ALT_LEFT, RecoveryStrategy.CTRL_W],
     "chrome": [RecoveryStrategy.ESCAPE, RecoveryStrategy.ALT_LEFT, RecoveryStrategy.CTRL_W],
     "firefox": [RecoveryStrategy.ESCAPE, RecoveryStrategy.ALT_LEFT, RecoveryStrategy.CTRL_W],
-    # Office apps
-    "outlook": [RecoveryStrategy.ESCAPE, RecoveryStrategy.CTRL_Z, RecoveryStrategy.ALT_LEFT],
-    "teams": [RecoveryStrategy.ESCAPE, RecoveryStrategy.ALT_LEFT, RecoveryStrategy.CTRL_Z],
+    # Office apps — do NOT auto-undo (Ctrl+Z) in compose windows, it deletes text
+    "outlook": [RecoveryStrategy.ESCAPE],
+    "teams": [RecoveryStrategy.ESCAPE],
     "word": [RecoveryStrategy.ESCAPE, RecoveryStrategy.CTRL_Z],
     "excel": [RecoveryStrategy.ESCAPE, RecoveryStrategy.CTRL_Z],
     # System — Quick Settings: do NOT press Escape (it closes the panel!)
     "quick settings": [],  # No automatic recovery — let LLM figure it out
     "settings": [RecoveryStrategy.ESCAPE, RecoveryStrategy.ALT_LEFT, RecoveryStrategy.CLICK_BACK],
-    "explorer": [RecoveryStrategy.ESCAPE, RecoveryStrategy.ALT_LEFT],
+    "explorer": [],  # No auto-recovery — Escape cancels rename, Alt+Left navigates back
+    "file explorer": [],  # Same as explorer
     # Generic
     "default": [RecoveryStrategy.ESCAPE, RecoveryStrategy.ALT_LEFT, RecoveryStrategy.CTRL_Z],
 }

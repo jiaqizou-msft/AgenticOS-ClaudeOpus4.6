@@ -323,6 +323,75 @@ OmniParser & Vision+OCR & Parsing only & --- & \checkmark & --- \\
 \end{itemize}
 
 % ============================================================================
+\section{Live Demonstration Results}
+\label{sec:demos}
+
+We validated AgenticOS on four real-world Windows desktop tasks, running on physical hardware with GPT-4o (Azure OpenAI). Each demo was iterated upon, with failures diagnosed and fixes applied --- demonstrating the value of modular architecture and learning systems.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lccccl@{}}
+\toprule
+\textbf{Demo} & \textbf{Iters} & \textbf{Steps} & \textbf{Time} & \textbf{Result} & \textbf{Key Innovation} \\
+\midrule
+1: System Tray (Brightness) & 1 & 5 & 68s & \checkmark & UIA \texttt{set\_slider} via RangeValuePattern \\
+2: Edge/YouTube 4K Video & 9 & 9 & 138s & \checkmark & Content verification + RL nudges \\
+3: Outlook Email + Teams & 2 & --- & --- & In progress & Tab-based field navigation \\
+4: File Explorer (New Folder) & 3 & 15 & 220s & In progress & Filesystem done-verification \\
+\bottomrule
+\end{tabular}
+\caption{Live demonstration results on Windows 11. ``Iters'' = iterations needed to reach current state.}
+\label{tab:demos}
+\end{table}
+
+\subsection{Key Findings from Iterations}
+
+\textbf{Recovery interference} (Demo 4): The per-app recovery system, designed to press Escape when the agent drifts, actively sabotaged folder-rename operations in File Explorer by cancelling the in-progress rename. Solution: context-aware recovery disabling (empty recovery list for Explorer).
+
+\textbf{Premature completion} (Demo 4): The LLM called ``done'' at step 4 without actually creating the folder --- a \emph{false success}. Solution: per-demo \texttt{min\_done\_step} and filesystem path verification before accepting task completion.
+
+\textbf{Content verification} (Demo 2): The agent clicked on the wrong YouTube video 8 times across iterations. Solution: post-click window title verification with automatic back-navigation on mismatch, combined with RL negative reward (\texttt{REWARD\_WRONG\_CONTENT = -1.2}).
+
+% ============================================================================
+\section{Reinforcement Learning Integration}
+\label{sec:rl}
+
+AgenticOS incorporates lightweight tabular Q-learning as an overlay on LLM-driven action selection. The RL layer does not replace the LLM but provides confidence signals and historical warnings:
+
+\begin{equation}
+Q(s, a) \leftarrow Q(s, a) + \alpha \big[ r + \gamma \max_{a'} Q(s', a') - Q(s, a) \big]
+\end{equation}
+
+where $s$ is a hash of the UI context (window title + element count + top element names), $a$ is the action type (click, type\_text, hotkey, etc.), $\alpha = 0.15$ is the learning rate, and $\gamma = 0.9$ is the discount factor.
+
+Reward signals are derived from state validation:
+\begin{itemize}
+  \item \texttt{STATE\_CHANGED}: $+0.3$ (action produced visible change)
+  \item \texttt{DRIFT}: $-0.7$ (unexpected state change)
+  \item \texttt{RECOVERY\_NEEDED}: $-1.0$ (required intervention)
+  \item \texttt{DONE\_SUCCESS}: $+2.0$ (task completed)
+  \item \texttt{WRONG\_CONTENT}: $-1.2$ (clicked wrong item)
+\end{itemize}
+
+After 1 episode (Demo 4), the Q-table contains 6 state-action entries, with \texttt{click} having the lowest Q-value ($-0.51$), reflecting repeated failed click attempts on File Explorer elements.
+
+% ============================================================================
+\section{Human Teaching: Learning from Demonstration}
+\label{sec:teaching}
+
+We implemented a Learning from Demonstration (LfD) module that allows humans to teach the agent specific UI tasks it struggles with:
+
+\begin{enumerate}
+  \item \textbf{Identify weakness}: The system tracks which demos fail and suggests teaching topics.
+  \item \textbf{Record demonstration}: The human performs the task while the system records mouse/keyboard events with screenshots.
+  \item \textbf{Extract pattern}: Mouse trajectories, key sequences, and timing are abstracted into a generalizable pattern.
+  \item \textbf{Inject into LLM context}: Learned patterns are included as ``LEARNED FROM HUMAN DEMO'' hints in the LLM prompt.
+\end{enumerate}
+
+Currently, 11 teaching topics are defined (slider adjustment, browser navigation, folder creation, email compose, etc.), with 1 pattern successfully learned and persisted. The teaching system stores patterns as JSON, enabling cross-session knowledge transfer.
+
+% ============================================================================
 \section{Discussion}
 \label{sec:discussion}
 
@@ -333,16 +402,19 @@ OmniParser & Vision+OCR & Parsing only & --- & \checkmark & --- \\
   \item \textbf{LLM dependency}: The system's effectiveness is bounded by the reasoning capabilities of the underlying LLM. Local models via Ollama may have significantly lower success rates.
   \item \textbf{Latency}: The observe-think-act loop introduces latency per step (2--5 seconds depending on model and grounding complexity), making real-time interaction challenging.
   \item \textbf{Security}: Desktop automation inherently carries risks. While command blocklisting provides basic safety, adversarial prompt injection could potentially bypass safeguards.
+  \item \textbf{Recovery-action conflicts}: Auto-recovery strategies can interfere with legitimate in-progress operations (e.g., Escape cancelling a rename). Context-dependent recovery disabling partially addresses this.
+  \item \textbf{False success detection}: LLMs may prematurely claim task completion. Filesystem/state verification guards mitigate but do not fully solve this.
 \end{enumerate}
 
 \subsection{Future Work}
 
 \begin{enumerate}
-  \item \textbf{Learning from demonstrations}: Recording expert sessions and fine-tuning grounding/action models on task-specific data.
-  \item \textbf{Parallel action execution}: Identifying independent action sequences that can be executed concurrently.
+  \item \textbf{Expanded demonstrations}: Complete Demo 3 (Outlook+Teams) and Demo 4 (File Explorer) to 100\% success.
+  \item \textbf{Richer RL}: Move from tabular Q-learning to function approximation for better state generalization.
+  \item \textbf{Active teaching}: Agent autonomously identifies when to request human demonstration during execution.
   \item \textbf{Cross-platform support}: Extending grounding to Linux (AT-SPI) and macOS (AXUIElement).
-  \item \textbf{Reinforcement learning}: Using benchmark results as reward signals to improve navigation policies.
   \item \textbf{OSWorld evaluation}: Running the full OSWorld benchmark suite for standardized comparison.
+  \item \textbf{Multi-agent orchestration}: Combining AgenticOS with specialized agents (code, web, file) via MCP.
 \end{enumerate}
 
 % ============================================================================

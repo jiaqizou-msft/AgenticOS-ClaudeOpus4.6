@@ -111,7 +111,16 @@ CRITICAL RULES:
     Example: {"type": "set_slider", "params": {"name": "Brightness", "value": 100}}
     This directly sets the slider value via Windows UI Automation — much more reliable than drag.
     Only fall back to "drag" if set_slider fails.
-12. Elements with val="..." show the current value. Use bbox coordinates for precise targeting."""
+12. Elements with val="..." show the current value. Use bbox coordinates for precise targeting.
+13. CONTENT VERIFICATION: After clicking on search results or videos, ALWAYS check the window title
+    and visible content to verify you selected the RIGHT item. If the title does not match what you
+    searched for (e.g. you searched '4k landscape video' but the video title is about something else),
+    go BACK and select a different result. Never proceed with wrong content.
+14. VIDEO CONTROLS: On YouTube, 'k' toggles play/pause, 'f' toggles fullscreen. After pressing 'k',
+    verify the video is actually paused by checking if a play button is visible.
+15. EMAIL COMPOSE: In Outlook, use Tab to move between To, Subject, and Body fields. After typing in
+    To field, press Tab to move to Subject. After Subject, press Tab again to reach the Body.
+    Use Ctrl+Enter to send the email."""
 
 # Azure OpenAI config
 API_BASE = "https://bugtotest-resource.cognitiveservices.azure.com/"
@@ -141,42 +150,106 @@ DEMOS = {
     },
     2: {
         "name": "Demo 2: Edge - 4K Video Fullscreen",
+        "pre_launch": 'start msedge --inprivate "https://www.youtube.com/results?search_query=4k+landscape+nature+video"',
         "task": (
-            "1. Use open_app to open 'msedge'. "
-            "2. Wait 3 seconds for Edge to load. "
-            "3. Use hotkey keys=['ctrl','l'] to focus the address bar. "
-            "4. Use type_text to type 'youtube.com' then press_key 'enter'. "
-            "5. Wait 3 seconds for YouTube to load. "
-            "6. Click on the YouTube search bar and type_text '4k landscape video' then press_key 'enter'. "
-            "7. Wait 3 seconds for results. Click on the first video thumbnail. "
-            "8. Wait 3 seconds for video to start. Press key 'f' to toggle fullscreen. "
-            "9. Use wait for 10 seconds. "
-            "10. Press_key 'f' to exit fullscreen, then press_key 'k' to pause the video. "
-            "11. Done with success=true."
+            "Play a 4K landscape nature video on YouTube in Edge, go fullscreen, then pause it.\n"
+            "Edge is already open with YouTube search results for '4k landscape nature video'.\n\n"
+            "Step 1: wait 3 seconds for results to fully load. If you see a consent/cookie dialog,\n"
+            "        click 'Reject all' or 'Accept all' to dismiss it.\n"
+            "Step 2: Look at the YouTube search results on screen. You need to click on a video\n"
+            "        thumbnail. The thumbnails are the large images on the LEFT side of each result.\n"
+            "        Look at the SCREENSHOT carefully to find a thumbnail image that shows nature,\n"
+            "        landscapes, mountains, or forests. Click on the FIRST visible video thumbnail\n"
+            "        (the large image area, not the title text). The thumbnail is usually around\n"
+            "        x=500-700, y=300-500 area for the first result.\n"
+            "Step 3: wait 3 seconds for the video to start playing.\n"
+            "Step 4: VERIFY: Check the window title — it should mention landscape, nature, 4K,\n"
+            "        scenic, etc. If wrong, hotkey ['alt','left'] to go back and try a different video.\n"
+            "Step 5: press_key 'f' to enter fullscreen.\n"
+            "Step 6: wait 10 seconds.\n"
+            "Step 7: press_key 'f' to exit fullscreen.\n"
+            "Step 8: press_key 'k' to PAUSE the video.\n"
+            "Step 9: wait 1 second.\n"
+            "Step 10: done with success=true.\n\n"
+            "CRITICAL: Click on a video THUMBNAIL (the large preview image), not on text links.\n"
+            "If clicking at one position doesn't work, try scrolling down a bit and clicking\n"
+            "a different thumbnail. Use Tab key to navigate between results if clicking fails."
         ),
         "output": "recordings/demo2_edge_video.gif",
-        "max_steps": 20,
+        "max_steps": 25,
     },
     3: {
         "name": "Demo 3: Outlook Email and Teams Message",
+        "pre_launch": "start outlook",
         "task": (
-            "Part A - Email:\n"
-            "1. Use open_app to open 'outlook'. Wait 3 seconds.\n"
-            "2. Click 'New mail' or 'New message' button. Wait 2 seconds.\n"
-            "3. Click the To field and type_text 'jiaqizou@microsoft.com'. Press_key 'tab'.\n"
-            "4. Click the Subject field and type_text 'Sent from AgenticOS-Opus4.6'. Press_key 'tab'.\n"
-            "5. Click the email body and type_text 'hello'.\n"
-            "6. Use hotkey keys=['ctrl','enter'] to send. Wait 2 seconds.\n"
-            "Part B - Teams:\n"
-            "7. Use open_app to open 'msteams'. Wait 3 seconds.\n"
-            "8. Use hotkey keys=['ctrl','e'] to open search.\n"
-            "9. Type_text 'Jiaqi Zou' and press_key 'enter'. Wait 2 seconds.\n"
-            "10. Click on 'Jiaqi Zou' in the results. Wait 2 seconds.\n"
-            "11. Click the message box, type_text 'Hi', and press_key 'enter'.\n"
-            "12. Done with success=true."
+            "Send an email in Outlook and a message in Teams.\n\n"
+            "===== PART A: Send Email in Outlook =====\n"
+            "Step 1: The Outlook app should already be open. Click on it in the taskbar or use\n"
+            "        open_app 'outlook'. Wait 3 seconds.\n"
+            "Step 2: Use hotkey ['ctrl','n'] to create a new email. Wait 2 seconds.\n"
+            "Step 3: The cursor should be in the To field. type_text 'jiaqizou@microsoft.com'.\n"
+            "Step 4: Press Tab ONCE to move past To field. Then check: if you see a CC/BCC area,\n"
+            "        press Tab again to skip it.\n"
+            "Step 5: Now type the Subject: type_text 'Sent from AgenticOS-Opus4.6'.\n"
+            "Step 6: Press Tab ONCE to move from Subject to Body.\n"
+            "Step 7: type_text 'Hello from AgenticOS! This email was composed and sent by an AI agent.'.\n"
+            "Step 8: VERIFY the email by looking at the screenshot:\n"
+            "        - Is the To field filled with jiaqizou@microsoft.com?\n"
+            "        - Is the Subject filled with 'Sent from AgenticOS-Opus4.6'?\n"
+            "        - Is the Body filled with 'Hello from AgenticOS...'?\n"
+            "        If any field is EMPTY, do NOT send. Instead click on that field and fix it.\n"
+            "Step 9: hotkey ['ctrl','enter'] to SEND the email. Wait 2 seconds.\n"
+            "Step 10: The compose window should close (email sent).\n\n"
+            "===== PART B: Send Teams Message =====\n"
+            "Step 11: open_app 'msteams'. Wait 4 seconds.\n"
+            "Step 12: hotkey ['ctrl','e'] to open search. Wait 1 second.\n"
+            "Step 13: type_text 'Jiaqi Zou' then press_key 'enter'. Wait 2 seconds.\n"
+            "Step 14: Click on the contact 'Jiaqi Zou' in search results. Wait 2 seconds.\n"
+            "Step 15: The chat message box should be at the bottom. Click on it.\n"
+            "Step 16: type_text 'Hi from AgenticOS!' then press_key 'enter'.\n"
+            "Step 17: done with success=true.\n\n"
+            "CRITICAL RULES:\n"
+            "- IMPORTANT: If a 'Discard' dialog appears, click 'No' or 'Don't save' or 'Cancel'\n"
+            "  to dismiss it without discarding the draft. Then start over with Ctrl+N.\n"
+            "- Use Ctrl+N for new email, Tab to navigate fields, Ctrl+Enter to send.\n"
+            "- VERIFY all fields are filled BEFORE sending — look at the screenshot.\n"
+            "- Do NOT call done until BOTH the email AND the Teams message are sent."
         ),
         "output": "recordings/demo3_outlook_teams.gif",
-        "max_steps": 25,
+        "max_steps": 30,
+    },
+    4: {
+        "name": "Demo 4: File Explorer - Create Folder in Downloads",
+        "pre_launch": "start explorer %USERPROFILE%\\Downloads",
+        "min_done_step": 7,
+        "done_verify_path": "~/Downloads/TestFromAgenticOS",
+        "task": (
+            "Create a new folder called 'TestFromAgenticOS' in the Downloads folder using File Explorer.\n"
+            "File Explorer is already open showing the Downloads folder.\n\n"
+            "YOU MUST FOLLOW EVERY STEP IN ORDER. Do NOT skip steps or call done early.\n\n"
+            "Step 1: wait 3 seconds for File Explorer to fully load.\n"
+            "Step 2: Click on an empty area in the FILE LIST (the main white area on the right side)\n"
+            "        to make sure File Explorer has keyboard focus. Click around x=800, y=500.\n"
+            "Step 3: hotkey ['ctrl','shift','n'] to create a new folder.\n"
+            "        A new folder named 'New folder' should appear with its name selected for editing.\n"
+            "        If nothing happens, try right_click at x=800, y=500 then click 'New' then 'Folder'.\n"
+            "Step 4: wait 1 second for the new folder name to be editable.\n"
+            "Step 5: type_text 'TestFromAgenticOS' — this replaces the default 'New folder' name.\n"
+            "Step 6: press_key 'enter' to CONFIRM the folder name. This is CRITICAL — without Enter\n"
+            "        the folder name is not saved.\n"
+            "Step 7: wait 2 seconds. Look at the UI elements — you should now see a ListItem or\n"
+            "        element named 'TestFromAgenticOS' in the file list. If not, the folder was\n"
+            "        NOT created — go back to Step 2 and try again.\n"
+            "Step 8: hotkey ['alt','f4'] to close File Explorer.\n"
+            "Step 9: done with success=true, summary='Created TestFromAgenticOS folder in Downloads'.\n\n"
+            "CRITICAL RULES:\n"
+            "- Do NOT press Alt+F4 before pressing Enter to confirm the folder name!\n"
+            "- Do NOT call done until you see 'TestFromAgenticOS' in the element list.\n"
+            "- After Ctrl+Shift+N, the cursor is already in the name field — just type immediately.\n"
+            "- The system will verify the folder exists on disk before accepting done."
+        ),
+        "output": "recordings/demo4_file_explorer.gif",
+        "max_steps": 15,
     },
 }
 
@@ -319,6 +392,25 @@ def run_demo(demo_cfg: dict, token: str, memory: StepMemory, rl: QLearner) -> tu
     recorder = GifRecorder(fps=5, max_duration=180)
     recorder.start()
 
+    # Minimize all windows before starting to give a clean desktop
+    try:
+        import pyautogui
+        pyautogui.hotkey('win', 'd')  # Show desktop
+        time.sleep(1.0)
+    except Exception:
+        pass
+
+    # Pre-launch apps for demos that need them (saves LLM steps on window management)
+    pre_launch = demo_cfg.get("pre_launch")
+    if pre_launch:
+        log(f"  Pre-launching: {pre_launch}")
+        try:
+            import subprocess
+            subprocess.Popen(pre_launch, shell=True)
+            time.sleep(4.0)  # Wait for app to open
+        except Exception as e:
+            log(f"  Pre-launch error: {e}")
+
     steps: list[dict] = []
     success = False
     t_start = time.time()
@@ -345,9 +437,9 @@ def run_demo(demo_cfg: dict, token: str, memory: StepMemory, rl: QLearner) -> tu
         log(f"    State: {state_before.summary()}")
 
         # ── 4. Build element text for LLM ──
-        elem_text = "\n".join(el.description() for el in elements[:60])
-        if len(elements) > 60:
-            elem_text += f"\n... ({len(elements) - 60} more)"
+        elem_text = "\n".join(el.description() for el in elements[:100])
+        if len(elements) > 100:
+            elem_text += f"\n... ({len(elements) - 100} more)"
 
         # ── 5. History context ──
         history = ""
@@ -389,6 +481,19 @@ def run_demo(demo_cfg: dict, token: str, memory: StepMemory, rl: QLearner) -> tu
                     f"Try a different approach."
                 )
 
+            # ── Inject learned teaching patterns ──
+            teaching_hint = ""
+            try:
+                teacher = HumanTeacher(persist_dir=str(ROOT / "recordings" / "teaching"))
+                for topic, pattern in teacher._patterns.items():
+                    if pattern.action_sequence and pattern.success_rate > 0:
+                        teaching_hint += f"\n\nLEARNED FROM HUMAN DEMO ({topic}):\n"
+                        for act in pattern.action_sequence:
+                            teaching_hint += f"  - {act.get('type', 'action')}: {act}\n"
+                        teaching_hint += f"  (demonstrated {pattern.source_demos}x, success rate {pattern.success_rate:.0%})\n"
+            except Exception:
+                pass
+
             messages = [
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": [
@@ -397,7 +502,8 @@ def run_demo(demo_cfg: dict, token: str, memory: StepMemory, rl: QLearner) -> tu
                         f"Current window: {state_before.window_title}\n"
                         f"UI Elements:\n{elem_text}"
                         f"{history}"
-                        f"{validation_feedback}\n\n"
+                        f"{validation_feedback}"
+                        f"{teaching_hint}\n\n"
                         f"What is the next action?"
                     )},
                     {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}},
@@ -442,9 +548,22 @@ def run_demo(demo_cfg: dict, token: str, memory: StepMemory, rl: QLearner) -> tu
 
         # ── 9. Premature done guard ──
         if action_type == "done":
-            if step_num < 4:
-                log(f"    REJECTED premature done at step {step_num}")
+            min_done = demo_cfg.get("min_done_step", 4)
+            if step_num < min_done:
+                log(f"    REJECTED premature done at step {step_num} (need step >= {min_done})")
                 continue
+
+            # Filesystem verification (e.g. check folder was actually created)
+            verify_path = demo_cfg.get("done_verify_path")
+            if verify_path:
+                expanded = os.path.expanduser(verify_path)
+                if not os.path.exists(expanded):
+                    log(f"    REJECTED done: verification path does not exist: {expanded}")
+                    log(f"    The task is NOT complete. Continue working.")
+                    continue
+                else:
+                    log(f"    ✓ Verified: {expanded} exists")
+
             success = params.get("success", True)
             log(f"    ✓ DONE: {'SUCCESS' if success else 'FAILED'}: {params.get('summary', '')}")
             steps.append({"step": step_num, "thought": thought, "action_type": "done",
