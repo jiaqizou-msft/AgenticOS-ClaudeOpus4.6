@@ -18,11 +18,12 @@ class TestUIElement:
             class_name="Button",
             is_enabled=True,
             is_visible=True,
-            bounding_box=(100, 200, 80, 30),
+            bbox=(100, 200, 180, 230),
+            center=(140, 215),
         )
         assert elem.name == "OK"
         assert elem.control_type == "Button"
-        assert elem.bounding_box == (100, 200, 80, 30)
+        assert elem.bbox == (100, 200, 180, 230)
 
     def test_to_dict(self):
         elem = UIElement(
@@ -32,12 +33,15 @@ class TestUIElement:
             class_name="Button",
             is_enabled=True,
             is_visible=True,
-            bounding_box=(50, 50, 100, 40),
+            bbox=(50, 50, 150, 90),
+            center=(100, 70),
+            idx=3,
         )
         d = elem.to_dict()
         assert d["name"] == "Save"
         assert d["control_type"] == "Button"
-        assert "bounding_box" in d
+        assert "bbox" in d
+        assert d["idx"] == 3
 
     def test_description(self):
         elem = UIElement(
@@ -47,13 +51,15 @@ class TestUIElement:
             class_name="MenuItem",
             is_enabled=True,
             is_visible=True,
-            bounding_box=(10, 10, 60, 25),
+            bbox=(10, 10, 70, 35),
+            center=(40, 22),
+            idx=1,
         )
-        desc = elem.description
+        desc = elem.description()
         assert "File" in desc
         assert "MenuItem" in desc
 
-    def test_center_property(self):
+    def test_center_coords(self):
         elem = UIElement(
             name="Test",
             control_type="Button",
@@ -61,11 +67,10 @@ class TestUIElement:
             class_name="Button",
             is_enabled=True,
             is_visible=True,
-            bounding_box=(100, 200, 80, 40),
+            bbox=(100, 200, 180, 240),
+            center=(140, 220),
         )
-        cx, cy = elem.center
-        assert cx == 140  # 100 + 80/2
-        assert cy == 220  # 200 + 40/2
+        assert elem.center == (140, 220)
 
 
 class TestUIAGrounder:
@@ -75,9 +80,6 @@ class TestUIAGrounder:
         grounder = UIAGrounder()
         assert grounder is not None
 
-    @patch("agenticos.grounding.accessibility.Desktop")
-    def test_detect_empty(self, mock_desktop):
-        mock_desktop.return_value.windows.return_value = []
-        grounder = UIAGrounder()
-        elements = grounder.detect()
-        assert isinstance(elements, list)
+    def test_init_custom_params(self):
+        grounder = UIAGrounder(max_depth=5, interactive_only=False, min_size=10)
+        assert grounder.max_depth == 5

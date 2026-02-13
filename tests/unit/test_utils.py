@@ -21,17 +21,17 @@ class TestConfig:
         config = AgenticOSConfig()
         assert config.max_steps == 15
         assert config.grounding_mode == GroundingMode.HYBRID
-        assert config.llm_provider == LLMProvider.ANTHROPIC
+        assert config.llm_provider == LLMProvider.LITELLM
         assert config.confirm_actions is True
 
     def test_custom_config(self):
         config = AgenticOSConfig(
             max_steps=25,
-            grounding_mode=GroundingMode.UIA_ONLY,
+            grounding_mode=GroundingMode.UIA,
             confirm_actions=False,
         )
         assert config.max_steps == 25
-        assert config.grounding_mode == GroundingMode.UIA_ONLY
+        assert config.grounding_mode == GroundingMode.UIA
         assert config.confirm_actions is False
 
 

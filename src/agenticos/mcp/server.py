@@ -27,9 +27,7 @@ def create_mcp_server() -> FastMCP:
         Configured FastMCP server instance with all tools registered.
     """
     mcp = FastMCP(
-        "AgenticOS",
-        version="0.1.0",
-        description="AI-powered Windows desktop automation via MCP",
+        "agenticos",
     )
 
     # Shared instances
