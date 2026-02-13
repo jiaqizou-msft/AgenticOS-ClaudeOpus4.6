@@ -39,7 +39,7 @@ def run_task_dry(task: BenchmarkTask) -> TaskResult:
         category=task.category,
         success=success,
         steps_taken=steps,
-        max_steps=task.max_steps,
+        optimal_steps=task.optimal_steps,
         elapsed_seconds=round(elapsed, 2),
         grounding_accuracy=round(accuracy, 3),
         cost_usd=round(cost, 4),
@@ -102,13 +102,15 @@ def main():
 
     # Get tasks
     if args.category == "basic":
-        tasks = BenchmarkSuite.builtin_basic()
+        suite = BenchmarkSuite.builtin_basic()
     elif args.category == "intermediate":
-        tasks = BenchmarkSuite.builtin_intermediate()
+        suite = BenchmarkSuite.builtin_intermediate()
     elif args.category == "advanced":
-        tasks = BenchmarkSuite.builtin_advanced()
+        suite = BenchmarkSuite.builtin_advanced()
     else:
-        tasks = BenchmarkSuite.builtin_all()
+        suite = BenchmarkSuite.builtin_all()
+
+    tasks = suite.tasks
 
     print(f"🏁 AgenticOS Benchmark Runner")
     print(f"   Tasks: {len(tasks)} ({args.category})")
@@ -137,20 +139,19 @@ def main():
 
     # Compute metrics
     metrics = BenchmarkMetrics(results)
-    summary = metrics.summary()
 
     print()
     print("=" * 60)
     print("📊 BENCHMARK RESULTS")
     print("=" * 60)
-    print(f"  Total tasks:    {summary['total_tasks']}")
-    print(f"  Success rate:   {summary['success_rate']:.1%}")
-    print(f"  Mean time:      {summary['mean_time_seconds']:.1f}s")
-    print(f"  Mean efficiency: {summary['mean_step_efficiency']:.2f}")
-    print(f"  Total cost:     ${summary['total_cost_usd']:.4f}")
+    print(f"  Total tasks:    {len(results)}")
+    print(f"  Success rate:   {metrics.success_rate:.1%}")
+    print(f"  Mean time:      {metrics.mean_time:.1f}s")
+    print(f"  Mean efficiency: {metrics.mean_step_efficiency:.2f}")
+    print(f"  Total cost:     ${metrics.total_cost:.4f}")
     print()
 
-    by_cat = metrics.success_rate_by_category
+    by_cat = metrics.success_rate_by_category()
     for cat, rate in by_cat.items():
         print(f"  {cat:15s}: {rate:.1%}")
 
