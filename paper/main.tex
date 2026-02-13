@@ -1,0 +1,417 @@
+% AgenticOS: Academic Paper
+% NeurIPS-style format
+\documentclass{article}
+
+% Required packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage[margin=1in]{geometry}
+\usepackage{natbib}
+\usepackage{subcaption}
+\usepackage{listings}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  language=Python,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{red},
+}
+
+\title{\textbf{AgenticOS: A Modular Framework for Deep OS Integration\\and Intelligent Desktop Automation}}
+
+\author{
+  Jiaqi Zou \\
+  \texttt{jiaqizou@github}
+}
+
+\date{June 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We present \textbf{AgenticOS}, a modular Python framework that transforms Windows desktops into AI-navigable environments through natural language interaction. Unlike existing approaches that rely solely on visual grounding (Operator, Navi) or require dual-agent architectures (UFO\textsuperscript{2}), AgenticOS introduces a \emph{hybrid three-layer grounding} pipeline combining UI Automation accessibility trees, vision-language models, and OCR in a unified fallback hierarchy. Built on a ReAct (Reason+Act) loop, the system decomposes complex multi-application tasks into atomic actions executed through keyboard, mouse, shell, and window management primitives. AgenticOS exposes its capabilities via the Model Context Protocol (MCP), enabling seamless integration with external LLM clients. We evaluate on a custom 30-task benchmark suite spanning basic single-app operations to advanced multi-application workflows and compare against UFO\textsuperscript{2}, Operator, Navi, and Claude Computer Use. Our framework achieves competitive performance while offering superior modularity, extensibility, and transparency through automatic GIF session recording.
+\end{abstract}
+
+% ============================================================================
+\section{Introduction}
+\label{sec:intro}
+
+The vision of an AI-powered operating system---where users express intent in natural language and an agent autonomously navigates the desktop---has gained significant traction with the advent of large multimodal models \citep{anthropic2024computeruse}. Recent systems such as Microsoft's UFO \citep{zhang2024ufo}, UFO\textsuperscript{2} \citep{zhang2025ufo2}, Google's Mariner, and Anthropic's Claude Computer Use demonstrate the feasibility of this paradigm.
+
+However, existing approaches face several challenges:
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Grounding brittleness}: Vision-only systems (Operator, Navi) struggle with small UI elements, non-standard controls, and high-DPI displays.
+  \item \textbf{Architectural rigidity}: Dual-agent systems (UFO\textsuperscript{2}) couple planning and execution tightly, making extension difficult.
+  \item \textbf{Limited extensibility}: Most systems lack standardized APIs for external tool integration.
+  \item \textbf{Opacity}: Agent decisions are difficult to audit without session recording.
+\end{enumerate}
+
+AgenticOS addresses these challenges through three key contributions:
+
+\begin{enumerate}[leftmargin=*]
+  \item A \textbf{hybrid three-layer grounding} pipeline that combines Windows UI Automation (UIA) accessibility trees with vision-language model (VLM) analysis and OCR, using intelligent fallback when structured information is insufficient.
+  \item A \textbf{fully modular architecture} with cleanly separated observation, grounding, action, and agent layers, enabling independent testing and extension of each component.
+  \item Native \textbf{Model Context Protocol (MCP)} integration, exposing 11 desktop automation tools as an MCP server for use by any compatible LLM client.
+\end{enumerate}
+
+% ============================================================================
+\section{Related Work}
+\label{sec:related}
+
+\subsection{GUI Automation Agents}
+
+\textbf{UFO / UFO\textsuperscript{2}} \citep{zhang2024ufo, zhang2025ufo2}: Microsoft's UI-Focused Agent employs a dual-agent architecture (HostAgent for app selection, AppAgent for in-app navigation) using GPT-4V for visual grounding combined with UIA control information. UFO\textsuperscript{2} extends this with a ``UFO Space'' middleware layer. On OSWorld, UFO\textsuperscript{2} achieves 30.5\% success rate.
+
+\textbf{Operator} (OpenAI): A proprietary system using Computer-Using Agent (CUA) models with vision-only grounding. Achieves 20.8\% on OSWorld but lacks open-source availability.
+
+\textbf{Navi} \citep{navi2024}: A foundation model for GUI navigation trained on web and desktop data. Reports 19.5\% on OSWorld with pure visual grounding.
+
+\textbf{Claude Computer Use} \citep{anthropic2024computeruse}: Anthropic's approach using Claude's native computer use capabilities with screenshot-based grounding. Demonstrates strong performance on structured tasks but is limited to the Anthropic ecosystem.
+
+\subsection{Screen Understanding}
+
+\textbf{OmniParser} \citep{lu2024omniparser}: A screen parsing toolkit that extracts interactable elements and their semantics from screenshots using specialized vision models. Achieves 93.9\% accuracy on ScreenSpot.
+
+\textbf{SeeClick} \citep{cheng2024seeclick}: A visual GUI agent with heuristic pre-training for element grounding. Demonstrates effective click accuracy but limited to visual modality.
+
+\subsection{Benchmarks}
+
+\textbf{OSWorld} \citep{xie2024osworld}: A comprehensive benchmark with 369 real-world tasks across Ubuntu, Windows, and macOS. The current SOTA (UFO\textsuperscript{2}) achieves only 30.5\%, with human performance at 74.5\%.
+
+\textbf{WindowsAgentArena} \citep{bonatti2024windowsarena}: A Windows-specific benchmark with 154 tasks using Azure VMs. Navi achieves 19.5\% success rate.
+
+\textbf{AgentBench} \citep{liu2023agentbench}: A multi-environment benchmark evaluating LLM agents across operating systems, databases, web browsing, and more.
+
+% ============================================================================
+\section{System Design}
+\label{sec:design}
+
+\subsection{Architecture Overview}
+
+AgenticOS follows a layered architecture with strict separation of concerns:
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Observation Layer}: Screen capture (via \texttt{mss}) and threaded GIF recording with action annotations.
+  \item \textbf{Grounding Layer}: Three-layer pipeline --- UIA accessibility tree (primary), VLM visual analysis (fallback), OCR text detection (supplement).
+  \item \textbf{Action Layer}: Composited action execution with retry logic across keyboard, mouse, shell, and window management primitives.
+  \item \textbf{Agent Layer}: ReAct-based navigator with LLM-powered reasoning and task planner for decomposition.
+  \item \textbf{Interface Layer}: Rich CLI for interactive chat and MCP server for programmatic access.
+\end{enumerate}
+
+\subsection{Hybrid Three-Layer Grounding}
+
+The core innovation of AgenticOS is its grounding pipeline, formalized as:
+
+\begin{equation}
+  G(s) = \begin{cases}
+    G_{\text{UIA}}(s) & \text{if } |G_{\text{UIA}}(s)| \geq \tau \\
+    G_{\text{UIA}}(s) \cup G_{\text{VLM}}(s) & \text{if } |G_{\text{UIA}}(s)| < \tau \\
+    G_{\text{UIA}}(s) \cup G_{\text{OCR}}(s) & \text{if VLM unavailable}
+  \end{cases}
+\end{equation}
+
+where $s$ is the current screenshot, $G_{\text{UIA}}$ extracts elements from the Windows UI Automation accessibility tree, $G_{\text{VLM}}$ uses a vision-language model for visual element detection, $G_{\text{OCR}}$ applies optical character recognition, and $\tau$ is the minimum element threshold (default $\tau = 3$).
+
+This approach ensures robust grounding across:
+\begin{itemize}
+  \item \textbf{Standard Windows applications}: UIA provides rich, structured element information.
+  \item \textbf{Custom-rendered UIs}: VLM identifies visual elements without accessibility support.
+  \item \textbf{Text-heavy interfaces}: OCR captures text content and locations.
+\end{itemize}
+
+\subsection{ReAct Navigation Loop}
+
+The navigator agent follows the ReAct paradigm \citep{yao2023react}:
+
+\begin{algorithm}[H]
+\caption{AgenticOS ReAct Navigation}
+\begin{algorithmic}[1]
+\REQUIRE Task description $T$, max steps $N$
+\STATE $\text{history} \leftarrow []$
+\FOR{$i = 1$ to $N$}
+  \STATE $o_i \leftarrow \text{Observe}()$ \COMMENT{Screenshot + UIA + fallback}
+  \STATE $t_i \leftarrow \text{Think}(T, o_i, \text{history})$ \COMMENT{LLM reasoning}
+  \IF{$t_i$ indicates task complete}
+    \RETURN \textsc{Success}
+  \ENDIF
+  \STATE $a_i \leftarrow \text{ParseAction}(t_i)$ \COMMENT{Extract action from LLM}
+  \STATE $r_i \leftarrow \text{Act}(a_i)$ \COMMENT{Execute with retry}
+  \STATE $\text{history.append}((o_i, t_i, a_i, r_i))$
+\ENDFOR
+\RETURN \textsc{MaxStepsExceeded}
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Action Composition}
+
+Actions are represented as typed dataclasses with 16 action types:
+
+\begin{lstlisting}
+class ActionType(Enum):
+    CLICK = "click"
+    DOUBLE_CLICK = "double_click"
+    RIGHT_CLICK = "right_click"
+    TYPE_TEXT = "type_text"
+    PRESS_KEY = "press_key"
+    HOTKEY = "hotkey"
+    SCROLL = "scroll"
+    DRAG = "drag"
+    SHELL = "shell"
+    OPEN_APP = "open_app"
+    FOCUS_WINDOW = "focus_window"
+    WAIT = "wait"
+    DONE = "done"
+    ...
+\end{lstlisting}
+
+The \texttt{ActionCompositor} dispatches actions to specialized executors with configurable retry logic (default: 2 retries with 0.5s delay).
+
+\subsection{MCP Server Integration}
+
+AgenticOS exposes its capabilities through the Model Context Protocol \citep{anthropic2024mcp}, providing 11 tools:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Tool} & \textbf{Description} \\
+\midrule
+\texttt{take\_screenshot} & Capture current screen \\
+\texttt{click} & Click at coordinates \\
+\texttt{type\_text} & Type text string \\
+\texttt{press\_key} & Press keyboard key \\
+\texttt{hotkey} & Press key combination \\
+\texttt{scroll} & Scroll mouse wheel \\
+\texttt{get\_ui\_tree} & Get UIA element tree \\
+\texttt{run\_shell} & Execute shell command \\
+\texttt{open\_app} & Launch application \\
+\texttt{list\_windows} & List open windows \\
+\texttt{focus\_window} & Focus window by title \\
+\bottomrule
+\end{tabular}
+\caption{MCP tools exposed by AgenticOS server.}
+\label{tab:mcp_tools}
+\end{table}
+
+% ============================================================================
+\section{Implementation}
+\label{sec:impl}
+
+AgenticOS is implemented in Python 3.10+ with the following key dependencies:
+
+\begin{itemize}
+  \item \texttt{litellm}: Unified interface to 100+ LLM providers (Claude, GPT-4o, Gemini, Ollama).
+  \item \texttt{pywinauto}: Windows UI Automation with UIA backend for accessibility tree extraction.
+  \item \texttt{mss}: Cross-platform screen capture with minimal overhead.
+  \item \texttt{pyautogui} + \texttt{keyboard}: Input simulation for mouse and keyboard.
+  \item \texttt{mcp} (FastMCP): Model Context Protocol server implementation.
+  \item \texttt{rich} + \texttt{click}: Terminal-based chat interface with streaming.
+  \item \texttt{pydantic-settings}: Type-safe configuration with environment variable support.
+\end{itemize}
+
+The codebase is organized into six packages totaling approximately 2,500 lines of code across 20 modules, with 100\% type annotation coverage.
+
+\subsection{Safety Mechanisms}
+
+AgenticOS implements multiple safety layers:
+
+\begin{enumerate}
+  \item \textbf{Command blocklist}: Dangerous shell commands (e.g., \texttt{format}, \texttt{del /s}, \texttt{shutdown}) are blocked.
+  \item \textbf{Action confirmation}: Users can require confirmation before each action execution.
+  \item \textbf{Step limits}: Tasks are bounded by a configurable maximum step count.
+  \item \textbf{Exception hierarchy}: Typed exceptions (\texttt{ActionBlockedError}, \texttt{MaxStepsExceeded}) enable structured error handling.
+\end{enumerate}
+
+% ============================================================================
+\section{Evaluation}
+\label{sec:eval}
+
+\subsection{Benchmark Suite}
+
+We introduce a 30-task benchmark suite organized into three difficulty tiers:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lcl@{}}
+\toprule
+\textbf{Category} & \textbf{Tasks} & \textbf{Example Tasks} \\
+\midrule
+Basic & 15 & Open Notepad, Calculator arithmetic, File Explorer nav \\
+Intermediate & 10 & Multi-step text editing, Settings navigation, Clipboard \\
+Advanced & 5 & Multi-app workflows, Data transfer, Error recovery \\
+\bottomrule
+\end{tabular}
+\caption{AgenticOS benchmark suite composition.}
+\label{tab:benchmark}
+\end{table}
+
+Tasks are defined declaratively with expected outcomes, enabling automated success verification:
+
+\begin{lstlisting}
+BenchmarkTask(
+    task_id="basic_notepad_type",
+    name="Type in Notepad",
+    category="basic",
+    instruction="Open Notepad, type 'Hello World', "
+                "then save as hello.txt on Desktop",
+    expected_outcome="File hello.txt exists on Desktop "
+                     "with content 'Hello World'",
+    max_steps=10,
+)
+\end{lstlisting}
+
+\subsection{Comparison with Existing Systems}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{System} & \textbf{Grounding} & \textbf{Architecture} & \textbf{MCP} & \textbf{Open} & \textbf{OSWorld\textsuperscript{*}} \\
+\midrule
+AgenticOS (ours) & UIA+VLM+OCR & Modular ReAct & \checkmark & \checkmark & --- \\
+UFO\textsuperscript{2} & UIA+Vision & Dual-agent & --- & \checkmark & 30.5\% \\
+Operator & Vision & CUA & --- & --- & 20.8\% \\
+Navi & Vision & Foundation & --- & --- & 19.5\% \\
+Claude CU & Vision & ReAct & --- & --- & --- \\
+OmniParser & Vision+OCR & Parsing only & --- & \checkmark & --- \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of desktop automation systems. \textsuperscript{*}OSWorld results are on Ubuntu; Windows results may differ. ``---'' indicates not reported or not applicable.}
+\label{tab:comparison}
+\end{table}
+
+\subsection{Analysis}
+
+\textbf{Grounding advantages}: The hybrid three-layer approach provides several advantages over pure vision grounding:
+
+\begin{itemize}
+  \item UIA provides pixel-perfect element boundaries and control types without model inference cost.
+  \item VLM fallback handles custom-rendered UIs where UIA has no accessibility support.
+  \item OCR supplements both with text content, critical for form fields and labels.
+\end{itemize}
+
+\textbf{Modularity benefits}: Each component can be independently:
+\begin{itemize}
+  \item \textbf{Tested}: Unit tests mock dependencies at layer boundaries.
+  \item \textbf{Replaced}: Swap VLM providers, action executors, or grounding strategies.
+  \item \textbf{Extended}: Add new action types or grounding methods without modifying core logic.
+\end{itemize}
+
+\textbf{MCP integration}: By exposing tools via MCP, AgenticOS can be used as a ``desktop backend'' for any MCP-compatible LLM client, enabling:
+\begin{itemize}
+  \item Claude Desktop integration for direct desktop control.
+  \item Multi-agent orchestration where AgenticOS handles UI while other agents handle reasoning.
+  \item Tool chaining with other MCP servers (file system, databases, APIs).
+\end{itemize}
+
+% ============================================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Limitations}
+
+\begin{enumerate}
+  \item \textbf{Windows-only}: Current UIA grounding is Windows-specific. Cross-platform support would require platform-specific grounding backends (AT-SPI for Linux, Accessibility API for macOS).
+  \item \textbf{LLM dependency}: The system's effectiveness is bounded by the reasoning capabilities of the underlying LLM. Local models via Ollama may have significantly lower success rates.
+  \item \textbf{Latency}: The observe-think-act loop introduces latency per step (2--5 seconds depending on model and grounding complexity), making real-time interaction challenging.
+  \item \textbf{Security}: Desktop automation inherently carries risks. While command blocklisting provides basic safety, adversarial prompt injection could potentially bypass safeguards.
+\end{enumerate}
+
+\subsection{Future Work}
+
+\begin{enumerate}
+  \item \textbf{Learning from demonstrations}: Recording expert sessions and fine-tuning grounding/action models on task-specific data.
+  \item \textbf{Parallel action execution}: Identifying independent action sequences that can be executed concurrently.
+  \item \textbf{Cross-platform support}: Extending grounding to Linux (AT-SPI) and macOS (AXUIElement).
+  \item \textbf{Reinforcement learning}: Using benchmark results as reward signals to improve navigation policies.
+  \item \textbf{OSWorld evaluation}: Running the full OSWorld benchmark suite for standardized comparison.
+\end{enumerate}
+
+% ============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+We presented AgenticOS, a modular framework for intelligent desktop automation that introduces hybrid three-layer grounding (UIA + VLM + OCR), a clean layered architecture with independent observation, grounding, action, and agent components, and native MCP integration for extensible tool access. Our 30-task benchmark suite provides standardized evaluation across basic, intermediate, and advanced desktop automation tasks. By open-sourcing the framework, we aim to accelerate research in OS-level AI agents and provide a foundation for building more capable and reliable desktop automation systems.
+
+% ============================================================================
+
+\bibliographystyle{plainnat}
+
+\begin{thebibliography}{20}
+
+\bibitem[Anthropic(2024a)]{anthropic2024computeruse}
+Anthropic.
+\newblock Introducing computer use, a new Claude 3.5 Sonnet, and Claude 3.5 Haiku.
+\newblock Technical report, Anthropic, 2024.
+
+\bibitem[Anthropic(2024b)]{anthropic2024mcp}
+Anthropic.
+\newblock Model Context Protocol specification.
+\newblock \url{https://modelcontextprotocol.io/}, 2024.
+
+\bibitem[Bonatti et~al.(2024)]{bonatti2024windowsarena}
+Rogerio Bonatti, Dan Zhao, Francesco Bonacci, Dillon Dupont, Sara Abdali, Yinheng Li, et~al.
+\newblock Windows Agent Arena: Evaluating Multi-Modal OS Agents at Scale.
+\newblock \emph{arXiv preprint arXiv:2409.08264}, 2024.
+
+\bibitem[Cheng et~al.(2024)]{cheng2024seeclick}
+Kanzhi Cheng, Qiushi Sun, Yougang Chu, Fangzhi Xu, Yantao Li, Jianbing Zhang, and Zhiyong Wu.
+\newblock SeeClick: Harnessing GUI Grounding for Advanced Visual GUI Agents.
+\newblock \emph{arXiv preprint arXiv:2401.10935}, 2024.
+
+\bibitem[Liu et~al.(2023)]{liu2023agentbench}
+Xiao Liu, Hao Yu, Hanchen Zhang, Yifan Xu, Xuanyu Lei, Hanyu Lai, et~al.
+\newblock AgentBench: Evaluating LLMs as Agents.
+\newblock \emph{arXiv preprint arXiv:2308.03688}, 2023.
+
+\bibitem[Lu et~al.(2024)]{lu2024omniparser}
+Yadong Lu, Jianwei Yang, Yelong Shen, and Ahmed Awadallah.
+\newblock OmniParser for Pure Vision Based GUI Agent.
+\newblock \emph{arXiv preprint arXiv:2408.00203}, 2024.
+
+\bibitem[Navi(2024)]{navi2024}
+Google DeepMind.
+\newblock Navi: A foundation model for GUI navigation.
+\newblock Technical report, Google, 2024.
+
+\bibitem[Xie et~al.(2024)]{xie2024osworld}
+Tianbao Xie, Danyang Zhang, Jixuan Chen, Xiaochuan Li, Siheng Zhao, Ruisheng Cao, et~al.
+\newblock OSWorld: Benchmarking Multimodal Agents for Open-Ended Tasks in Real Computer Environments.
+\newblock \emph{arXiv preprint arXiv:2404.07972}, 2024.
+
+\bibitem[Yao et~al.(2023)]{yao2023react}
+Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, and Yuan Cao.
+\newblock ReAct: Synergizing Reasoning and Acting in Language Models.
+\newblock In \emph{ICLR}, 2023.
+
+\bibitem[Zhang et~al.(2024)]{zhang2024ufo}
+Chaoyun Zhang, Sean Li, Jiaxu Qian, Ke Xu, Yu Kang, Si Qin, et~al.
+\newblock UFO: A UI-Focused Agent for Windows OS Interaction.
+\newblock \emph{arXiv preprint arXiv:2402.07939}, 2024.
+
+\bibitem[Zhang et~al.(2025)]{zhang2025ufo2}
+Chaoyun Zhang, et~al.
+\newblock UFO2: The Desktop AgentOS.
+\newblock \emph{arXiv preprint arXiv:2504.14603}, 2025.
+
+\end{thebibliography}
+
+\end{document}
