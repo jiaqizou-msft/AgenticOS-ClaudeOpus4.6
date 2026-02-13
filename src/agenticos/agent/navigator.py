@@ -124,8 +124,21 @@ class NavigatorAgent(BaseAgent):
         # Vision grounder (lazy init)
         self._vision_grounder = None
 
-        # API key
+        # API key / Azure AD token
         self._api_key = resolve_api_key(self.config)
+        self._azure_ad_token: Optional[str] = None
+        if self.config.azure_ad_auth:
+            self._azure_ad_token = self._get_azure_ad_token()
+
+    def _get_azure_ad_token(self) -> str:
+        """Get Azure AD token for Azure OpenAI auth."""
+        try:
+            from azure.identity import DefaultAzureCredential
+            credential = DefaultAzureCredential()
+            token = credential.get_token("https://cognitiveservices.azure.com/.default")
+            return token.token
+        except Exception as e:
+            raise LLMError(f"Azure AD token acquisition failed: {e}") from e
 
     def _get_vision_grounder(self):
         """Lazy-initialize vision grounder."""
@@ -205,13 +218,26 @@ class NavigatorAgent(BaseAgent):
         messages = self._build_messages(observation, task, history)
 
         try:
-            response = await litellm.acompletion(
-                model=self.config.llm_model,
-                messages=messages,
-                max_tokens=self.config.llm_max_tokens,
-                temperature=self.config.llm_temperature,
-                api_key=self._api_key,
-            )
+            # Build kwargs for litellm
+            kwargs: dict = {
+                "model": self.config.llm_model,
+                "messages": messages,
+                "max_tokens": self.config.llm_max_tokens,
+                "temperature": self.config.llm_temperature,
+            }
+            if self._api_key:
+                kwargs["api_key"] = self._api_key
+            if self.config.llm_base_url:
+                kwargs["api_base"] = self.config.llm_base_url
+            if self.config.llm_api_version:
+                kwargs["api_version"] = self.config.llm_api_version
+            if self._azure_ad_token:
+                kwargs["azure_ad_token"] = self._azure_ad_token
+                kwargs.pop("api_key", None)  # Don't send api_key with AD token
+
+            # Use sync completion in a thread to avoid asyncio issues
+            # with certain providers (e.g., Azure OpenAI + litellm)
+            response = await asyncio.to_thread(litellm.completion, **kwargs)
 
             content = response.choices[0].message.content
             return self._parse_llm_response(content)

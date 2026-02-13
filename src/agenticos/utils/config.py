@@ -14,6 +14,7 @@ class LLMProvider(str, Enum):
     """Supported LLM providers."""
     ANTHROPIC = "anthropic"
     OPENAI = "openai"
+    AZURE = "azure"
     OLLAMA = "ollama"
     LITELLM = "litellm"
 
@@ -50,7 +51,15 @@ class AgenticOSConfig(BaseSettings):
     )
     llm_base_url: Optional[str] = Field(
         default=None,
-        description="Base URL for the LLM API (for local models)",
+        description="Base URL for the LLM API (for local models or Azure endpoint)",
+    )
+    llm_api_version: Optional[str] = Field(
+        default=None,
+        description="API version (required for Azure OpenAI)",
+    )
+    azure_ad_auth: bool = Field(
+        default=False,
+        description="Use Azure AD token auth instead of API key (requires azure-identity)",
     )
     llm_temperature: float = Field(
         default=0.1,
@@ -165,6 +174,7 @@ def resolve_api_key(config: AgenticOSConfig) -> Optional[str]:
     env_map = {
         LLMProvider.ANTHROPIC: "ANTHROPIC_API_KEY",
         LLMProvider.OPENAI: "OPENAI_API_KEY",
+        LLMProvider.AZURE: "AZURE_API_KEY",
     }
 
     env_var = env_map.get(config.llm_provider)
