@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgenticOS — Project Progress Presentation</title>
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 18px; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0d1117; color: #c9d1d9;
+    overflow-x: hidden;
+  }
+
+  /* ── Slide Container ── */
+  .slide {
+    min-height: 100vh; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 60px 80px; position: relative;
+  }
+  .slide::after {
+    content: ''; position: absolute; bottom: 0; left: 10%; right: 10%;
+    height: 1px; background: linear-gradient(90deg, transparent, #30363d, transparent);
+  }
+
+  /* ── Typography ── */
+  h1 { font-size: 3.2rem; font-weight: 800; margin-bottom: 0.3em; }
+  h2 { font-size: 2.4rem; font-weight: 700; margin-bottom: 0.5em; }
+  h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.4em; color: #8b949e; }
+  p, li { font-size: 1.1rem; line-height: 1.7; color: #8b949e; }
+  .highlight { color: #58a6ff; }
+  .accent { color: #f0883e; }
+  .success { color: #3fb950; }
+  .warn { color: #d29922; }
+  .fail { color: #f85149; }
+
+  /* ── Gradient Titles ── */
+  .gradient-text {
+    background: linear-gradient(135deg, #58a6ff 0%, #bc8cff 50%, #f778ba 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gradient-orange {
+    background: linear-gradient(135deg, #f0883e 0%, #d29922 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Cards ── */
+  .card-grid {
+    display: grid; gap: 24px; width: 100%; max-width: 1200px;
+    margin-top: 30px;
+  }
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .card {
+    background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+    padding: 28px; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    border-color: #58a6ff44;
+  }
+  .card h4 { font-size: 1.15rem; color: #e6edf3; margin-bottom: 10px; }
+  .card p { font-size: 0.95rem; }
+  .card .icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+
+  /* ── Timeline ── */
+  .timeline { position: relative; max-width: 900px; width: 100%; margin-top: 30px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 30px; top: 0; bottom: 0;
+    width: 3px; background: linear-gradient(180deg, #58a6ff, #bc8cff, #f778ba);
+    border-radius: 2px;
+  }
+  .timeline-item {
+    position: relative; padding-left: 70px; margin-bottom: 28px;
+  }
+  .timeline-item::before {
+    content: ''; position: absolute; left: 22px; top: 6px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #58a6ff; border: 3px solid #0d1117;
+  }
+  .timeline-item .date { font-size: 0.85rem; color: #58a6ff; font-weight: 600; margin-bottom: 4px; }
+  .timeline-item .desc { font-size: 1rem; color: #c9d1d9; }
+  .timeline-item .hash { font-family: 'Cascadia Code', monospace; font-size: 0.8rem; color: #6e7681; }
+
+  /* ── Tables ── */
+  table { border-collapse: collapse; width: 100%; max-width: 1100px; margin-top: 24px; }
+  th, td {
+    padding: 12px 18px; text-align: left; border-bottom: 1px solid #21262d;
+    font-size: 0.95rem;
+  }
+  th { color: #8b949e; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; }
+  td { color: #c9d1d9; }
+  tr:hover td { background: #161b2244; }
+
+  /* ── Stats Row ── */
+  .stats-row {
+    display: flex; gap: 40px; margin-top: 30px; flex-wrap: wrap;
+    justify-content: center;
+  }
+  .stat-box { text-align: center; }
+  .stat-num { font-size: 3rem; font-weight: 800; }
+  .stat-label { font-size: 0.85rem; color: #8b949e; margin-top: 4px; }
+
+  /* ── Architecture Diagram ── */
+  .arch-box {
+    background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+    padding: 30px 40px; font-family: 'Cascadia Code', 'Fira Code', monospace;
+    font-size: 0.82rem; line-height: 1.6; color: #c9d1d9; max-width: 800px;
+    width: 100%; margin-top: 24px; white-space: pre; overflow-x: auto;
+  }
+
+  /* ── Progress Bars ── */
+  .progress-row { display: flex; align-items: center; gap: 16px; margin: 8px 0; width: 100%; max-width: 700px; }
+  .progress-label { width: 180px; font-size: 0.9rem; text-align: right; color: #c9d1d9; }
+  .progress-bar-bg {
+    flex: 1; height: 20px; background: #21262d; border-radius: 10px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; border-radius: 10px;
+    transition: width 0.8s ease;
+  }
+  .progress-val { width: 50px; font-size: 0.9rem; font-weight: 700; }
+
+  /* ── Code Blocks ── */
+  code, .code {
+    font-family: 'Cascadia Code', 'Fira Code', monospace;
+    background: #161b22; padding: 2px 8px; border-radius: 4px;
+    font-size: 0.9em; color: #e6edf3;
+  }
+  .code-block {
+    background: #161b22; border: 1px solid #30363d; border-radius: 10px;
+    padding: 24px 28px; font-family: 'Cascadia Code', monospace;
+    font-size: 0.85rem; line-height: 1.7; max-width: 900px; width: 100%;
+    margin-top: 20px; overflow-x: auto; color: #c9d1d9;
+  }
+  .code-block .kw { color: #ff7b72; }
+  .code-block .str { color: #a5d6ff; }
+  .code-block .fn { color: #d2a8ff; }
+  .code-block .cmt { color: #8b949e; }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block; padding: 4px 12px; border-radius: 20px;
+    font-size: 0.75rem; font-weight: 600; margin: 2px 4px;
+  }
+  .badge-blue { background: #1f6feb33; color: #58a6ff; border: 1px solid #1f6feb55; }
+  .badge-green { background: #238636aa; color: #3fb950; border: 1px solid #3fb95055; }
+  .badge-orange { background: #9e6a0333; color: #d29922; border: 1px solid #d2992255; }
+  .badge-red { background: #da363333; color: #f85149; border: 1px solid #f8514955; }
+  .badge-purple { background: #8957e533; color: #bc8cff; border: 1px solid #bc8cff55; }
+
+  /* ── GIF Preview ── */
+  .gif-showcase {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    max-width: 1100px; width: 100%; margin-top: 24px;
+  }
+  .gif-card {
+    background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+    overflow: hidden; transition: transform 0.2s;
+  }
+  .gif-card:hover { transform: scale(1.02); border-color: #58a6ff44; }
+  .gif-card img { width: 100%; display: block; border-bottom: 1px solid #30363d; }
+  .gif-card .gif-info { padding: 16px; }
+  .gif-card h4 { font-size: 1rem; color: #e6edf3; margin-bottom: 6px; }
+  .gif-card .gif-meta { font-size: 0.8rem; color: #8b949e; }
+
+  /* ── Navigation Dots ── */
+  .nav-dots {
+    position: fixed; right: 24px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 10px; z-index: 100;
+  }
+  .nav-dot {
+    width: 10px; height: 10px; border-radius: 50%; background: #30363d;
+    border: none; cursor: pointer; transition: all 0.2s;
+  }
+  .nav-dot:hover, .nav-dot.active { background: #58a6ff; transform: scale(1.3); }
+  .nav-dot-label {
+    position: absolute; right: 22px; top: 50%; transform: translateY(-50%);
+    background: #161b22; color: #c9d1d9; padding: 4px 10px; border-radius: 6px;
+    font-size: 0.7rem; white-space: nowrap; pointer-events: none; opacity: 0;
+    transition: opacity 0.2s; border: 1px solid #30363d;
+  }
+  .nav-dot-wrap { position: relative; }
+  .nav-dot-wrap:hover .nav-dot-label { opacity: 1; }
+
+  /* ── Slide Numbering ── */
+  .slide-num {
+    position: absolute; top: 30px; right: 40px;
+    font-size: 0.8rem; color: #30363d; font-weight: 600;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .slide { padding: 40px 24px; }
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.8rem; }
+    .card-grid.cols-3, .card-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+    .gif-showcase { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation Dots -->
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 1: Title -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-title">
+  <span class="slide-num">01</span>
+  <div style="text-align:center; max-width: 900px;">
+    <div style="font-size: 5rem; margin-bottom: 16px;">🖥️</div>
+    <h1 class="gradient-text">AgenticOS</h1>
+    <h3 style="margin-top: 10px;">Turn Windows into an AI-Navigable Desktop</h3>
+    <p style="margin-top: 24px; font-size: 1.2rem; color: #c9d1d9;">
+      A modular Python framework for deep OS integration and intelligent
+      desktop automation using GPT-4o + Windows UI Automation
+    </p>
+    <div style="margin-top: 40px;">
+      <span class="badge badge-blue">Python 3.10+</span>
+      <span class="badge badge-purple">GPT-4o Vision</span>
+      <span class="badge badge-green">UI Automation</span>
+      <span class="badge badge-orange">Reinforcement Learning</span>
+      <span class="badge badge-red">Human Supervision</span>
+    </div>
+    <p style="margin-top: 40px; font-size: 0.85rem; color: #6e7681;">
+      Built by Jiaqi Zou &nbsp;·&nbsp; Microsoft &nbsp;·&nbsp; February 2026<br>
+      Powered by Claude Opus 4.6 + Azure OpenAI GPT-4o
+    </p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 2: Problem & Vision -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-problem">
+  <span class="slide-num">02</span>
+  <h2 class="gradient-text">The Problem</h2>
+  <h3>Why do we need AI desktop agents?</h3>
+  <div class="card-grid cols-3" style="margin-top: 30px;">
+    <div class="card">
+      <span class="icon">🔄</span>
+      <h4>Repetitive GUI Tasks</h4>
+      <p>Users spend hours on repetitive desktop workflows that could be automated — 
+         but traditional scripting is fragile and breaks with UI changes.</p>
+    </div>
+    <div class="card">
+      <span class="icon">🧪</span>
+      <h4>QA & Bug Reproduction</h4>
+      <p>Testers need to reproduce bugs across different machines. 
+         An AI agent can record and replay complex multi-app scenarios 
+         on any Device Under Test (DUT).</p>
+    </div>
+    <div class="card">
+      <span class="icon">♿</span>
+      <h4>Accessibility Automation</h4>
+      <p>Accessibility testing requires navigating every UI element. 
+         An agent that reads the UIA tree can systematically verify 
+         compliance at scale.</p>
+    </div>
+  </div>
+  <div class="card-grid cols-2" style="margin-top: 12px;">
+    <div class="card">
+      <span class="icon">🌐</span>
+      <h4>Cross-App Orchestration</h4>
+      <p>Real workflows span Outlook → Teams → Browser → File Explorer.
+         Existing tools automate single apps. AgenticOS coordinates across the full desktop.</p>
+    </div>
+    <div class="card">
+      <span class="icon">📈</span>
+      <h4>Learning from Humans</h4>
+      <p>The agent improves over time through RL rewards and human supervision feedback —
+         becoming faster and more accurate with each run.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 3: Architecture -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-arch">
+  <span class="slide-num">03</span>
+  <h2 class="gradient-text">Architecture</h2>
+  <h3>Five-layer modular design</h3>
+  <div class="arch-box">
+┌─────────────────────────────────────────────────────────────────┐
+│                  <span style="color:#58a6ff;">CLI / Chat Interface</span>                          │
+│              Rich terminal + argparse + MCP Server              │
+├─────────────────────────────────────────────────────────────────┤
+│                     <span style="color:#bc8cff;">Agent Layer</span>                               │
+│  ┌────────────┐ ┌──────────┐ ┌────────┐ ┌───────────────────┐  │
+│  │ <span style="color:#d2a8ff;">Navigator</span>  │ │ <span style="color:#d2a8ff;">Planner</span>  │ │  <span style="color:#d2a8ff;">RL</span>    │ │ <span style="color:#f778ba;">Human Supervisor</span> │  │
+│  │ (GPT-4o)  │ │ (decomp) │ │(Q-learn)│ │ (review+optimize) │  │
+│  └────────────┘ └──────────┘ └────────┘ └───────────────────┘  │
+├─────────────────────────────────────────────────────────────────┤
+│                   <span style="color:#3fb950;">Grounding Layer</span>                            │
+│     ┌──────────┐     ┌──────────┐     ┌──────────┐             │
+│     │   <span style="color:#7ee787;">UIA</span>    │     │  <span style="color:#7ee787;">Vision</span>  │     │   <span style="color:#7ee787;">OCR</span>    │             │
+│     │(pywinauto)│     │  (VLM)   │     │(RapidOCR) │             │
+│     └──────────┘     └──────────┘     └──────────┘             │
+├─────────────────────────────────────────────────────────────────┤
+│                    <span style="color:#f0883e;">Action Layer</span>                               │
+│   ┌────────┐  ┌────────┐  ┌────────┐  ┌──────────┐            │
+│   │<span style="color:#ffa657;">Keyboard</span>│  │ <span style="color:#ffa657;">Mouse</span>  │  │ <span style="color:#ffa657;">Shell</span>  │  │ <span style="color:#ffa657;">Window</span>   │            │
+│   │        │  │        │  │        │  │ <span style="color:#ffa657;">Manager</span>  │            │
+│   └────────┘  └────────┘  └────────┘  └──────────┘            │
+├─────────────────────────────────────────────────────────────────┤
+│                 <span style="color:#f85149;">Observation Layer</span>                             │
+│      ┌───────────────┐      ┌──────────────────┐              │
+│      │  <span style="color:#ff7b72;">Screenshot</span>   │      │  <span style="color:#ff7b72;">GIF Recorder</span>    │              │
+│      │  (mss)        │      │  (imageio)       │              │
+│      └───────────────┘      └──────────────────┘              │
+└─────────────────────────────────────────────────────────────────┘</div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 4: ReAct Loop -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-loop">
+  <span class="slide-num">04</span>
+  <h2 class="gradient-text">The Observe → Think → Act Loop</h2>
+  <h3>How the agent processes each step</h3>
+  <div style="display: flex; gap: 20px; margin-top: 30px; max-width: 1100px; width: 100%; flex-wrap: wrap; justify-content: center;">
+    <div class="card" style="flex: 1; min-width: 220px; text-align: center; border-top: 3px solid #58a6ff;">
+      <span class="icon">📸</span>
+      <h4>1. Observe</h4>
+      <p>Capture screenshot (mss) + UIA accessibility tree (pywinauto).
+         Extract element names, bounding boxes, values.</p>
+    </div>
+    <div style="display:flex; align-items:center; color:#30363d; font-size:2rem;">→</div>
+    <div class="card" style="flex: 1; min-width: 220px; text-align: center; border-top: 3px solid #bc8cff;">
+      <span class="icon">🧠</span>
+      <h4>2. Think</h4>
+      <p>Send screenshot + element tree to GPT-4o.
+         Receives JSON: <code>{thought, action}</code>.
+         RL checks confidence. Optimizer injects hints.</p>
+    </div>
+    <div style="display:flex; align-items:center; color:#30363d; font-size:2rem;">→</div>
+    <div class="card" style="flex: 1; min-width: 220px; text-align: center; border-top: 3px solid #3fb950;">
+      <span class="icon">⚡</span>
+      <h4>3. Act</h4>
+      <p>Execute action via compositor (16 action types).
+         Post-action validation detects drift. Recovery manager corrects mistakes.</p>
+    </div>
+    <div style="display:flex; align-items:center; color:#30363d; font-size:2rem;">→</div>
+    <div class="card" style="flex: 1; min-width: 220px; text-align: center; border-top: 3px solid #f0883e;">
+      <span class="icon">📊</span>
+      <h4>4. Learn</h4>
+      <p>Update Q-table with reward signal. Store successful patterns
+         in step memory. Human supervisor rates the result.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 5: Demo Showcase -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-demos">
+  <span class="slide-num">05</span>
+  <h2 class="gradient-text">14 Live Demos</h2>
+  <h3>Real Windows 11 automation, recorded as GIFs</h3>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Demo</th><th>Application</th><th>Steps</th><th>Time</th><th>Status</th><th>Human Rating</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>System Tray — Brightness & Volume</td><td>Quick Settings</td><td>5</td><td>68s</td><td class="success">✅ PASS</td><td>—</td></tr>
+      <tr><td>2</td><td>Edge — 4K YouTube Fullscreen</td><td>Edge + YouTube</td><td>9</td><td>138s</td><td class="success">✅ PASS</td><td>—</td></tr>
+      <tr><td>3</td><td>Outlook Email + Teams Message</td><td>Outlook + Teams</td><td>—</td><td>—</td><td class="warn">🔄 WIP</td><td>—</td></tr>
+      <tr><td>4</td><td>File Explorer — Create Folder</td><td>Explorer</td><td>15</td><td>220s</td><td class="success">✅ PASS</td><td>—</td></tr>
+      <tr><td>5</td><td>Notepad — Type Message</td><td>Notepad</td><td>4</td><td>99s</td><td class="success">✅ PASS</td><td><span class="warn">1/5</span></td></tr>
+      <tr><td>6</td><td>Calculator — 123 + 456</td><td>Calculator</td><td>3</td><td>53s</td><td class="warn">⚠️ Issues</td><td><span class="fail">0/5</span></td></tr>
+      <tr><td>7</td><td>CMD — Echo Command</td><td>CMD</td><td>3</td><td>56s</td><td class="warn">⚠️ Issues</td><td><span class="fail">0/5</span></td></tr>
+      <tr><td>8</td><td>Settings — About Page</td><td>Settings</td><td>2</td><td>28s</td><td class="success">✅ PASS</td><td><span class="warn">1/5</span></td></tr>
+      <tr><td>9</td><td>Notepad — Select All & Copy</td><td>Notepad</td><td>5</td><td>74s</td><td class="success">✅ PASS</td><td><span class="warn">1/5</span></td></tr>
+      <tr><td>10</td><td>Notepad — Find Text</td><td>Notepad</td><td>3</td><td>49s</td><td class="success">✅ PASS</td><td><span class="warn">1/5</span></td></tr>
+      <tr><td>11</td><td>Calculator — 7 × 8</td><td>Calculator</td><td>4</td><td>65s</td><td class="success">✅ PASS</td><td><span class="warn">1/5</span></td></tr>
+      <tr><td>12</td><td>PowerShell — Get-Date</td><td>PowerShell</td><td>3</td><td>43s</td><td class="success">✅ PASS</td><td><span class="warn">0/5</span></td></tr>
+      <tr><td>13</td><td>Notepad — Undo Typing</td><td>Notepad</td><td>6</td><td>105s</td><td class="fail">❌ FAIL</td><td><span class="fail">0/5</span></td></tr>
+      <tr><td>14</td><td>Task Manager — View Processes</td><td>Task Manager</td><td>2</td><td>36s</td><td class="success">✅ PASS</td><td><span class="warn">1/5</span></td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top: 16px; font-size: 0.9rem;">
+    <span class="success">●</span> 10/14 autonomous pass &nbsp;·&nbsp;
+    <span class="warn">●</span> 2 partial issues &nbsp;·&nbsp;
+    <span class="fail">●</span> 1 failure &nbsp;·&nbsp;
+    <span class="highlight">●</span> 1 in progress
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 6: Key Numbers -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-stats">
+  <span class="slide-num">06</span>
+  <h2 class="gradient-text">By The Numbers</h2>
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-num highlight">14</div>
+      <div class="stat-label">Live Demos</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num success">71%</div>
+      <div class="stat-label">Success Rate</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num accent">16</div>
+      <div class="stat-label">Action Types</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:#bc8cff;">63</div>
+      <div class="stat-label">Q-Table Entries</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:#f778ba;">43</div>
+      <div class="stat-label">RL Episodes</div>
+    </div>
+  </div>
+  <div class="stats-row" style="margin-top: 20px;">
+    <div class="stat-box">
+      <div class="stat-num highlight">10</div>
+      <div class="stat-label">Human Reviews</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num success">11</div>
+      <div class="stat-label">MCP Tools</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num accent">30</div>
+      <div class="stat-label">Benchmark Tasks</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:#bc8cff;">5</div>
+      <div class="stat-label">Architecture Layers</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:#f778ba;">9</div>
+      <div class="stat-label">Git Commits</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 7: Human Supervision System -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-supervision">
+  <span class="slide-num">07</span>
+  <h2 class="gradient-text">Human-in-the-Loop Supervision</h2>
+  <h3>The agent learns from your feedback</h3>
+  <div class="card-grid cols-2" style="margin-top: 24px;">
+    <div class="card" style="border-left: 3px solid #58a6ff;">
+      <h4>🎬 Review Phase</h4>
+      <p>After each demo, the agent pauses and presents:</p>
+      <ul style="margin-top:10px; padding-left:18px;">
+        <li>GIF recording of the full run</li>
+        <li>Step-by-step action log</li>
+        <li>Success/failure status & timing</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left: 3px solid #bc8cff;">
+      <h4>📝 Rating Phase</h4>
+      <p>Human rates three dimensions (1-5):</p>
+      <ul style="margin-top:10px; padding-left:18px;">
+        <li><strong>Accuracy</strong> — right outcome? (2× weight)</li>
+        <li><strong>Completeness</strong> — all parts done?</li>
+        <li><strong>Efficiency</strong> — no wasted steps?</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left: 3px solid #3fb950;">
+      <h4>🧠 RL Reward Injection</h4>
+      <p>Human score → RL reward signal (range <code>[-2, +3]</code>).
+         Weighted 3× stronger than automated rewards.
+         Directly updates the Q-table for better future decisions.</p>
+    </div>
+    <div class="card" style="border-left: 3px solid #f0883e;">
+      <h4>⚡ Demo Optimizer</h4>
+      <p>Learns per-demo profiles over time:</p>
+      <ul style="margin-top:10px; padding-left:18px;">
+        <li>Golden sequence capture from best runs</li>
+        <li>Step budget tightening from median of good runs</li>
+        <li>Prompt hint injection from corrective notes</li>
+        <li>Validation skipping at ≥90% confidence</li>
+      </ul>
+    </div>
+  </div>
+  <div class="code-block" style="margin-top: 24px;">
+<span class="cmt"># Enable human supervision mode</span>
+python scripts/run_demo_detached.py --demo fast <span class="kw">--supervise</span>
+
+<span class="cmt"># The agent runs each demo, then pauses for your review:</span>
+<span class="str">  ════════════════════════════════════════════════════════════════
+    HUMAN SUPERVISION — Review Demo Result
+  ════════════════════════════════════════════════════════════════
+    Demo:    Demo 5: Notepad - Type Message
+    Status:  ✓ SUCCESS
+    Steps:   4
+    Time:    99.1s
+    GIF:     recordings/demo5_notepad_type.gif
+
+    Accuracy (did it achieve the right outcome?) [1-5]: _
+    Completeness (were ALL parts finished?) [1-5]: _
+    Efficiency (no wasted/repeated steps?) [1-5]: _
+    Any corrective notes? > _</span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 8: RL & Amortization -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-rl">
+  <span class="slide-num">08</span>
+  <h2 class="gradient-text">Reinforcement Learning & Amortization</h2>
+  <h3>Getting faster without getting sloppy</h3>
+  <div class="card-grid cols-2">
+    <div class="card">
+      <h4>📈 Tabular Q-Learning</h4>
+      <p>State = hash(window_title + UI elements).<br>
+         Action = one of 16 action types.<br>
+         Update: Q(s,a) ← Q(s,a) + α[r + γ·max Q(s',a') − Q(s,a)]<br>
+         α = 0.15, γ = 0.9</p>
+      <p style="margin-top:10px;">Rewards:</p>
+      <table style="margin-top:8px;">
+        <tr><td class="success">+2.0</td><td>Task done successfully</td></tr>
+        <tr><td class="success">+0.3</td><td>State changed (progress)</td></tr>
+        <tr><td class="highlight">+1.5</td><td>Speed bonus (fast completion)</td></tr>
+        <tr><td class="fail">−0.7</td><td>State drift detected</td></tr>
+        <tr><td class="fail">−1.2</td><td>Wrong content selected</td></tr>
+        <tr><td class="accent">+3.0</td><td>Human rates 5/5</td></tr>
+        <tr><td class="fail">−2.0</td><td>Human rates 1/5</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h4>⚡ Amortization Strategies</h4>
+      <p>Speed optimization targets <strong>overhead only</strong> — 
+         cursor movement and typing speed are <em>never</em> accelerated.</p>
+      <ul style="margin-top:12px; padding-left:18px; line-height: 2;">
+        <li><strong>Token caching</strong>: Azure AD tokens cached ~50min (saves ~15s)</li>
+        <li><strong>RL pre-seeding</strong>: Commonsense priors for known apps</li>
+        <li><strong>Fast mode</strong>: Skip validation (~8s/step saved)</li>
+        <li><strong>Step budget</strong>: Tighten max_steps from good runs</li>
+        <li><strong>Golden replay</strong>: Replay best action sequences</li>
+        <li><strong>Prompt hints</strong>: Human notes prevent repeated mistakes</li>
+        <li><strong>UIA timeout</strong>: 8s fast vs 12s standard</li>
+        <li><strong>LLM tokens</strong>: 400 fast vs 4096 standard</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 9: Human Feedback Results -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-feedback">
+  <span class="slide-num">09</span>
+  <h2 class="gradient-text">First Human Supervision Run</h2>
+  <h3>Real feedback from the first supervised session (Feb 17, 2026)</h3>
+  <table>
+    <thead>
+      <tr><th>Demo</th><th>Accuracy</th><th>Completeness</th><th>Efficiency</th><th>Human Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>5: Notepad Type</td><td class="warn">1/5</td><td class="warn">1/5</td><td class="warn">1/5</td>
+        <td style="font-size:0.85rem;">"Done well, but no visible cursor movement or character-by-character typing"</td>
+      </tr>
+      <tr>
+        <td>6: Calculator</td><td class="fail">—</td><td class="fail">—</td><td class="fail">—</td>
+        <td style="font-size:0.85rem;">"Did not do 123, just =456. Slow down input to human speed"</td>
+      </tr>
+      <tr>
+        <td>7: CMD Echo</td><td class="fail">—</td><td class="fail">—</td><td class="fail">—</td>
+        <td style="font-size:0.85rem;">"Showed Ctrl+V instead of echo command. Did not self-correct"</td>
+      </tr>
+      <tr>
+        <td>8: Settings About</td><td class="warn">1/5</td><td class="warn">1/5</td><td class="warn">1/5</td>
+        <td style="font-size:0.85rem;">"Easy and fast. Could we do vision QA on system info?"</td>
+      </tr>
+      <tr>
+        <td>9: Select & Copy</td><td class="warn">1/5</td><td class="warn">1/5</td><td class="warn">1/5</td>
+        <td style="font-size:0.85rem;">—</td>
+      </tr>
+      <tr>
+        <td>10: Find Text</td><td class="warn">1/5</td><td class="warn">1/5</td><td class="warn">1/5</td>
+        <td style="font-size:0.85rem;">"Went well and expected"</td>
+      </tr>
+      <tr>
+        <td>11: Calc 7×8</td><td class="warn">1/5</td><td class="warn">1/5</td><td class="warn">1/5</td>
+        <td style="font-size:0.85rem;">"Great"</td>
+      </tr>
+      <tr>
+        <td>12: PowerShell</td><td class="fail">—</td><td class="fail">—</td><td class="warn">1/5</td>
+        <td style="font-size:0.85rem;">"Human would just look at lower-right of screen"</td>
+      </tr>
+      <tr>
+        <td>13: Undo Typing</td><td class="fail">—</td><td class="fail">—</td><td class="warn">1/5</td>
+        <td style="font-size:0.85rem;">—</td>
+      </tr>
+      <tr>
+        <td>14: Task Manager</td><td class="warn">1/5</td><td class="warn">1/5</td><td class="warn">1/5</td>
+        <td style="font-size:0.85rem;">—</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-top: 20px; color: #f0883e; font-size: 1rem;">
+    💡 Key insight: Even demos that <em>pass</em> autonomously may not meet human quality expectations.
+    Human supervision catches issues automated metrics miss.
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 10: Development Timeline -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-timeline">
+  <span class="slide-num">10</span>
+  <h2 class="gradient-text">Development Timeline</h2>
+  <h3>9 commits, one ambitious project</h3>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="date">Commit 1 — Initial Implementation</div>
+      <div class="desc">Full framework: CLI, 5-layer architecture, MCP server (11 tools), 30 benchmark tasks</div>
+      <div class="hash">d859f43</div>
+    </div>
+    <div class="timeline-item">
+      <div class="date">Commit 2-3 — Build Fixes</div>
+      <div class="desc">Test alignment, build backend, CI workflow setup</div>
+      <div class="hash">f923835 → 5860a3b</div>
+    </div>
+    <div class="timeline-item">
+      <div class="date">Commit 4 — Benchmark Results</div>
+      <div class="desc">Benchmark runner, dry-run evaluation across 30 tasks</div>
+      <div class="hash">d44e958</div>
+    </div>
+    <div class="timeline-item">
+      <div class="date">Commit 5 — Azure OpenAI + Demo Runner</div>
+      <div class="desc">Azure AD token auth, synchronous demo runner, first live demo attempts</div>
+      <div class="hash">e559531</div>
+    </div>
+    <div class="timeline-item">
+      <div class="date">Commit 6 — UIA Slider + RL + Human Teaching</div>
+      <div class="desc">Demo 1 (brightness/volume), UIA RangeValuePattern, Q-learning, LfD system</div>
+      <div class="hash">a9e0f6e</div>
+    </div>
+    <div class="timeline-item">
+      <div class="date">Commit 7 — Demo 4 + Recovery</div>
+      <div class="desc">File Explorer folder creation, per-app recovery strategies, done verification</div>
+      <div class="hash">5a00c68</div>
+    </div>
+    <div class="timeline-item">
+      <div class="date">Commit 8 — 10 Fast Demos + Amortization</div>
+      <div class="desc">Demos 5-14, fast mode (skip validation), RL pre-seeding, speed bonuses. Best run: 7/10 pass</div>
+      <div class="hash">755fc97</div>
+    </div>
+    <div class="timeline-item" style="margin-bottom: 0;">
+      <div class="date">Commit 9 — Human Supervision + Optimizer (v7)</div>
+      <div class="desc">HumanSupervisor module, DemoOptimizer, --supervise flag, golden sequences, prompt hints</div>
+      <div class="hash">e8b4e95</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 11: Key Innovations -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-innovations">
+  <span class="slide-num">11</span>
+  <h2 class="gradient-text">Key Innovations</h2>
+  <h3>Lessons learned from real-world desktop automation</h3>
+  <div class="card-grid cols-2">
+    <div class="card" style="border-top: 3px solid #58a6ff;">
+      <h4>🎚️ UIA Slider Control</h4>
+      <p>Direct <code>RangeValuePattern.SetValue()</code> via Windows UI Automation.
+         100% reliable vs unreliable mouse drag on slider controls.
+         Discovered while debugging Demo 1 (brightness).</p>
+    </div>
+    <div class="card" style="border-top: 3px solid #3fb950;">
+      <h4>🔍 Content Verification</h4>
+      <p>Post-click window title checking prevents wrong content selection.
+         Essential for YouTube video search — the agent verifies the video matches
+         the search query before proceeding.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid #f0883e;">
+      <h4>🔄 Recovery-Aware Actions</h4>
+      <p>Auto-recovery (Escape key) can sabotage in-progress operations like
+         folder rename dialogs. Solution: per-app recovery strategy that knows
+         when NOT to intervene.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid #bc8cff;">
+      <h4>✅ Filesystem Verification</h4>
+      <p>Before accepting "done", verify the actual outcome on disk.
+         For Demo 4: check that <code>~/Downloads/TestFromAgenticOS</code> exists.
+         Prevents false success claims.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid #f778ba;">
+      <h4>👤 Human Signal > Automated Metrics</h4>
+      <p>First supervised run revealed: demos that pass automated checks
+         (return success=true) may still fail human quality expectations.
+         Human RL signal catches nuances automated metrics miss.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid #f85149;">
+      <h4>⚡ Speed ≠ Mouse Speed</h4>
+      <p>Optimization must target overhead (LLM latency, UIA detection, validation)
+         not physical interaction speed. Human reviewer explicitly requested:
+         "slow down input to human speed."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 12: Comparison -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-comparison">
+  <span class="slide-num">12</span>
+  <h2 class="gradient-text">Comparison with Existing Systems</h2>
+  <table>
+    <thead>
+      <tr><th>System</th><th>Architecture</th><th>Grounding</th><th>Learning</th><th>Human-in-Loop</th><th>Open Source</th></tr>
+    </thead>
+    <tbody>
+      <tr style="background: #161b22;">
+        <td><strong class="highlight">AgenticOS</strong></td>
+        <td>Modular ReAct</td>
+        <td>UIA + Vision + OCR</td>
+        <td>Q-Learning + Supervision</td>
+        <td class="success">✅ Full supervision</td>
+        <td class="success">✅</td>
+      </tr>
+      <tr>
+        <td>UFO²</td>
+        <td>Dual-agent</td>
+        <td>UIA + Vision</td>
+        <td>None</td>
+        <td class="fail">❌</td>
+        <td class="success">✅</td>
+      </tr>
+      <tr>
+        <td>Operator</td>
+        <td>CUA</td>
+        <td>Vision only</td>
+        <td>None</td>
+        <td class="fail">❌</td>
+        <td class="fail">❌</td>
+      </tr>
+      <tr>
+        <td>Navi</td>
+        <td>Foundation</td>
+        <td>Vision only</td>
+        <td>None</td>
+        <td class="fail">❌</td>
+        <td class="fail">❌</td>
+      </tr>
+      <tr>
+        <td>Claude CU</td>
+        <td>ReAct</td>
+        <td>Vision only</td>
+        <td>None</td>
+        <td class="fail">❌</td>
+        <td class="fail">❌</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-top: 20px; font-size: 0.95rem;">
+    <span class="highlight">AgenticOS differentiators:</span>
+    Triple-layer grounding (UIA+Vision+OCR) &nbsp;·&nbsp;
+    Online RL with persistent Q-table &nbsp;·&nbsp;
+    Human supervision with feedback-driven optimization &nbsp;·&nbsp;
+    Golden sequence replay for amortization
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 13: What's Next -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-next">
+  <span class="slide-num">13</span>
+  <h2 class="gradient-text">What's Next</h2>
+  <h3>Roadmap for continued development</h3>
+  <div class="card-grid cols-2">
+    <div class="card">
+      <span class="icon">🎯</span>
+      <h4>Vision QA Mode</h4>
+      <p>Human asks questions about what's on screen, agent answers
+         by analyzing the screenshot. Requested by human supervisor
+         during Demo 8 review.</p>
+    </div>
+    <div class="card">
+      <span class="icon">🔁</span>
+      <h4>Playback Recorder</h4>
+      <p>Record successful automation runs for deterministic replay
+         on other machines (DUTs). Enables bug reproduction and
+         regression testing.</p>
+    </div>
+    <div class="card">
+      <span class="icon">🐢</span>
+      <h4>Human-Speed Interaction</h4>
+      <p>Slow down keyboard/mouse input to match human speed for
+         better observability. Character-by-character typing with
+         visible cursor movement.</p>
+    </div>
+    <div class="card">
+      <span class="icon">📊</span>
+      <h4>Confidence Dashboard</h4>
+      <p>Real-time visualization of per-demo confidence levels,
+         golden sequence status, and human feedback trends.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 14: Thank You -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-end">
+  <span class="slide-num">14</span>
+  <div style="text-align: center;">
+    <div style="font-size: 4rem; margin-bottom: 24px;">🖥️✨</div>
+    <h1 class="gradient-text">Thank You</h1>
+    <p style="margin-top: 20px; font-size: 1.3rem; color: #c9d1d9;">
+      AgenticOS — Making Windows AI-navigable
+    </p>
+    <div style="margin-top: 40px;">
+      <p style="font-size: 1rem;">
+        <span class="highlight">GitHub:</span>
+        <a href="https://github.com/jiaqizou-msft/AgenticOS-ClaudeOpus4.6" 
+           style="color: #58a6ff; text-decoration: none;">
+          jiaqizou-msft/AgenticOS-ClaudeOpus4.6
+        </a>
+      </p>
+      <p style="font-size: 0.9rem; color: #8b949e; margin-top: 12px;">
+        Built with Claude Opus 4.6 · Azure OpenAI GPT-4o · Python · Windows UI Automation
+      </p>
+    </div>
+    <div style="margin-top: 40px;">
+      <code style="font-size: 1rem; padding: 12px 24px; border-radius: 8px; border: 1px solid #30363d;">
+        python scripts/run_demo_detached.py --demo fast --supervise
+      </code>
+    </div>
+  </div>
+</section>
+
+<!-- ── Navigation Script ── -->
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const navContainer = document.getElementById('navDots');
+  const labels = [
+    'Title', 'Problem', 'Architecture', 'ReAct Loop', 'Demos',
+    'Stats', 'Supervision', 'RL & Amortization', 'Feedback',
+    'Timeline', 'Innovations', 'Comparison', 'Roadmap', 'End'
+  ];
+
+  slides.forEach((slide, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'nav-dot-wrap';
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    dot.onclick = () => slide.scrollIntoView({ behavior: 'smooth' });
+    const label = document.createElement('span');
+    label.className = 'nav-dot-label';
+    label.textContent = labels[i] || `Slide ${i+1}`;
+    wrap.appendChild(dot);
+    wrap.appendChild(label);
+    navContainer.appendChild(wrap);
+  });
+
+  // Highlight active dot on scroll
+  const dots = document.querySelectorAll('.nav-dot');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = [...slides].indexOf(entry.target);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+    });
+  }, { threshold: 0.5 });
+  slides.forEach(s => observer.observe(s));
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    const active = [...dots].findIndex(d => d.classList.contains('active'));
+    if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      if (active < slides.length - 1) slides[active + 1].scrollIntoView({ behavior: 'smooth' });
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      if (active > 0) slides[active - 1].scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+</script>
+
+</body>
+</html>

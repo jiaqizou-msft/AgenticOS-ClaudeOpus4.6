@@ -2,14 +2,332 @@
 
 # 🖥️ AgenticOS
 
-**Turn Windows into an AI-Navigable Desktop via CLI Chat**
+### Turn Windows into an AI-Navigable Desktop
 
-[![CI](https://github.com/jiaqizou/AgenticOS-ClaudeOpus4.6/actions/workflows/ci.yml/badge.svg)](https://github.com/jiaqizou/AgenticOS-ClaudeOpus4.6/actions/workflows/ci.yml)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![GPT-4o](https://img.shields.io/badge/GPT--4o-Vision-412991?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com/)
+[![Windows](https://img.shields.io/badge/Windows_11-0078D4?style=for-the-badge&logo=windows11&logoColor=white)](https://www.microsoft.com/windows)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
-*A modular Python framework for deep OS integration and intelligent desktop automation using multi-modal LLMs.*
+**A modular Python framework for deep OS integration and intelligent desktop automation using multi-modal LLMs, Windows UI Automation, and human-supervised reinforcement learning.**
+
+[🎬 Demo Showcase](#-demo-showcase) · [🚀 Quick Start](#-quick-start) · [🏗️ Architecture](#%EF%B8%8F-architecture) · [📊 Presentation](#-presentation)
+
+---
+
+<img src="recordings/demo1_settings.gif" width="720" alt="AgenticOS Demo — AI agent adjusting system settings autonomously">
+
+*▲ Demo 1: AI agent autonomously adjusts brightness to 100% and volume to 10% via the System Tray Quick Settings panel*
+
+</div>
+
+---
+
+## ✨ What is AgenticOS?
+
+AgenticOS is an **AI desktop automation agent** that can see your screen, understand the UI, and take actions — just like a human user would. It combines:
+
+| Capability | Technology |
+|:---:|:---|
+| 🧠 | **GPT-4o Vision** — understands screenshots and makes decisions |
+| 🔍 | **Windows UI Automation** (UIA) — reads the accessibility tree |
+| 📊 | **Reinforcement Learning** (Q-learning) — improves with every run |
+| 👤 | **Human Supervision** — quality feedback and guided improvement |
+| ⚡ | **Amortization** — repeated tasks get faster over time |
+
+> **Think of it as:** An AI intern that watches your screen, learns your workflows, and gets better with practice — with you as the supervisor.
+
+---
+
+## 🎬 Demo Showcase
+
+Real demos running on **Windows 11** with **GPT-4o** (Azure OpenAI). Every GIF below was recorded live.
+
+### 🎚️ Demo 1 — System Tray: Brightness & Volume
+
+<details open>
+<summary><strong>Set brightness 100%, volume 10% via Quick Settings</strong></summary>
+
+<div align="center">
+<img src="recordings/demo1_settings.gif" width="700" alt="Demo 1: Brightness and Volume">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 5 |
+| **Time** | 68 seconds |
+| **Key Innovation** | UIA `RangeValuePattern.SetValue()` — 100% reliable slider control |
+
+</details>
+
+---
+
+### 🌐 Demo 2 — Edge: 4K YouTube Fullscreen
+
+<details>
+<summary><strong>Search YouTube, play 4K nature video, fullscreen, pause</strong></summary>
+
+<div align="center">
+<img src="recordings/demo2_edge_video.gif" width="700" alt="Demo 2: YouTube 4K Video">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 9 |
+| **Time** | 138 seconds |
+| **Key Innovation** | Content verification — checks window title matches search query |
+
+</details>
+
+---
+
+### 📁 Demo 4 — File Explorer: Create Folder
+
+<details>
+<summary><strong>Create "TestFromAgenticOS" folder in Downloads</strong></summary>
+
+<div align="center">
+<img src="recordings/demo4_file_explorer.gif" width="700" alt="Demo 4: File Explorer">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 15 |
+| **Time** | 220 seconds |
+| **Key Innovation** | Filesystem verification before accepting "done" |
+
+</details>
+
+---
+
+### ✏️ Demo 5 — Notepad: Type Message
+
+<details>
+<summary><strong>Open Notepad and type a message</strong></summary>
+
+<div align="center">
+<img src="recordings/demo5_notepad_type.gif" width="700" alt="Demo 5: Notepad Type">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 4 |
+| **Time** | 99 seconds |
+| **Human Rating** | ⭐ 1/5 accuracy — "No visible cursor movement" |
+| **Mode** | ⚡ Fast |
+
+</details>
+
+---
+
+### 🔢 Demo 6 — Calculator: 123 + 456
+
+<details>
+<summary><strong>Open Calculator, compute 123 + 456 = 579</strong></summary>
+
+<div align="center">
+<img src="recordings/demo6_calc_add.gif" width="700" alt="Demo 6: Calculator">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 3 |
+| **Time** | 53 seconds |
+| **Human Rating** | ⚠️ 0/5 accuracy — "Did not type 123, just pressed =" |
+| **Mode** | ⚡ Fast |
+
+</details>
+
+---
+
+### 💻 Demo 7 — CMD: Echo Command
+
+<details>
+<summary><strong>Open Command Prompt and run <code>echo Hello from AgenticOS</code></strong></summary>
+
+<div align="center">
+<img src="recordings/demo7_cmd_echo.gif" width="700" alt="Demo 7: CMD Echo">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 3 |
+| **Time** | 56 seconds |
+| **Human Rating** | ⚠️ 0/5 accuracy — "Showed Ctrl+V, no echo command" |
+| **Mode** | ⚡ Fast |
+
+</details>
+
+---
+
+### ⚙️ Demo 8 — Settings: About Page
+
+<details>
+<summary><strong>Navigate to Settings → System → About</strong></summary>
+
+<div align="center">
+<img src="recordings/demo8_settings_about.gif" width="700" alt="Demo 8: Settings About">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 2 |
+| **Time** | 28 seconds |
+| **Human Rating** | ⭐ 1/5 accuracy — "Easy and fast. Could we do vision QA?" |
+| **Mode** | ⚡ Fast |
+
+</details>
+
+---
+
+### 📋 Demo 9 — Notepad: Select All & Copy
+
+<details>
+<summary><strong>Select all text and copy to clipboard</strong></summary>
+
+<div align="center">
+<img src="recordings/demo9_notepad_selectall.gif" width="700" alt="Demo 9: Select All">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 5 |
+| **Time** | 74 seconds |
+| **Human Rating** | ✅ Pass |
+| **Mode** | ⚡ Fast |
+
+</details>
+
+---
+
+### 🔍 Demo 10 — Notepad: Find Text
+
+<details>
+<summary><strong>Use Ctrl+F to search for "fox" in preloaded text</strong></summary>
+
+<div align="center">
+<img src="recordings/demo10_notepad_find.gif" width="700" alt="Demo 10: Find Text">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 3 |
+| **Time** | 49 seconds |
+| **Human Rating** | ⭐ 1/5 accuracy — "Went well and expected" |
+| **Mode** | ⚡ Fast |
+
+</details>
+
+---
+
+### ✖️ Demo 11 — Calculator: 7 × 8
+
+<details>
+<summary><strong>Compute 7 × 8 = 56</strong></summary>
+
+<div align="center">
+<img src="recordings/demo11_calc_multiply.gif" width="700" alt="Demo 11: Calculator Multiply">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 4 |
+| **Time** | 65 seconds |
+| **Human Rating** | ⭐ 1/5 accuracy — "Great" |
+| **Mode** | ⚡ Fast |
+
+</details>
+
+---
+
+### 🐚 Demo 12 — PowerShell: Get-Date
+
+<details>
+<summary><strong>Open PowerShell and run <code>Get-Date</code></strong></summary>
+
+<div align="center">
+<img src="recordings/demo12_powershell_date.gif" width="700" alt="Demo 12: PowerShell">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 3 |
+| **Time** | 43 seconds |
+| **Human Rating** | ✅ Pass |
+| **Mode** | ⚡ Fast |
+
+</details>
+
+---
+
+### ↩️ Demo 13 — Notepad: Undo Typing
+
+<details>
+<summary><strong>Type text, then Ctrl+Z to undo</strong></summary>
+
+<div align="center">
+<img src="recordings/demo13_notepad_undo.gif" width="700" alt="Demo 13: Undo">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 6 |
+| **Time** | 105 seconds |
+| **Human Rating** | ❌ 0/5 — Only failure in the suite |
+| **Mode** | ⚡ Fast |
+
+</details>
+
+---
+
+### 📋 Demo 14 — Task Manager: View Processes
+
+<details>
+<summary><strong>Open Task Manager and view running processes</strong></summary>
+
+<div align="center">
+<img src="recordings/demo14_taskmgr.gif" width="700" alt="Demo 14: Task Manager">
+</div>
+
+| Metric | Value |
+|--------|-------|
+| **Steps** | 2 |
+| **Time** | 36 seconds |
+| **Human Rating** | ⭐ 1/5 accuracy — Pass |
+| **Mode** | ⚡ Fast |
+
+</details>
+
+---
+
+## 📊 Results Summary
+
+<div align="center">
+
+### 14 Demos · 10 Pass · 2 Partial · 1 Fail · 1 WIP
+
+</div>
+
+| # | Demo | App | Steps | Time | Status | Human Supervised |
+|---|------|-----|-------|------|--------|:---:|
+| 1 | System Tray: Brightness & Volume | Quick Settings | 5 | 68s | ✅ | — |
+| 2 | Edge: 4K YouTube Fullscreen | Edge | 9 | 138s | ✅ | — |
+| 3 | Outlook Email + Teams Message | Outlook + Teams | — | — | 🔄 | — |
+| 4 | File Explorer: Create Folder | Explorer | 15 | 220s | ✅ | — |
+| 5 | Notepad: Type Message | Notepad | 4 | 99s | ✅ | ✅ |
+| 6 | Calculator: 123 + 456 | Calculator | 3 | 53s | ⚠️ | ✅ |
+| 7 | CMD: Echo Command | CMD | 3 | 56s | ⚠️ | ✅ |
+| 8 | Settings: About Page | Settings | 2 | 28s | ✅ | ✅ |
+| 9 | Notepad: Select All & Copy | Notepad | 5 | 74s | ✅ | ✅ |
+| 10 | Notepad: Find Text | Notepad | 3 | 49s | ✅ | ✅ |
+| 11 | Calculator: 7 × 8 | Calculator | 4 | 65s | ✅ | ✅ |
+| 12 | PowerShell: Get-Date | PowerShell | 3 | 43s | ✅ | ✅ |
+| 13 | Notepad: Undo Typing | Notepad | 6 | 105s | ❌ | ✅ |
+| 14 | Task Manager: View Processes | Task Manager | 2 | 36s | ✅ | ✅ |
+
+<div align="center">
+
+**63** Q-table entries · **43** RL episodes · **10** human-supervised reviews
 
 </div>
 
@@ -18,251 +336,233 @@
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     CLI / Chat Interface                     │
-│                    (Rich + Click terminal)                    │
-├─────────────────────────────────────────────────────────────┤
-│                      Agent Layer                             │
-│    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│    │  Navigator    │  │   Planner    │  │   ReAct Loop │     │
-│    │  (LLM core)  │  │  (decompose) │  │   (observe→  │     │
-│    │              │  │              │  │    think→act) │     │
-│    └──────────────┘  └──────────────┘  └──────────────┘     │
-├─────────────────────────────────────────────────────────────┤
-│                   Grounding Layer                            │
-│    ┌──────────┐    ┌──────────┐    ┌──────────┐             │
-│    │   UIA    │    │  Vision  │    │   OCR    │             │
-│    │(pywinauto│    │  (VLM)   │    │(RapidOCR)│             │
-│    │ a11y tree│    │          │    │          │             │
-│    └──────────┘    └──────────┘    └──────────┘             │
-├─────────────────────────────────────────────────────────────┤
-│                    Action Layer                              │
-│    ┌────────┐  ┌────────┐  ┌────────┐  ┌──────────┐        │
-│    │Keyboard│  │ Mouse  │  │ Shell  │  │ Window   │        │
-│    │        │  │        │  │        │  │ Manager  │        │
-│    └────────┘  └────────┘  └────────┘  └──────────┘        │
-├─────────────────────────────────────────────────────────────┤
-│                  Observation Layer                            │
-│    ┌───────────────┐    ┌──────────────────┐                │
-│    │  Screenshot   │    │  GIF Recorder    │                │
-│    │  (mss)        │    │  (imageio)       │                │
-│    └───────────────┘    └──────────────────┘                │
-├─────────────────────────────────────────────────────────────┤
-│               MCP Server (FastMCP)                           │
-│    11 tools exposed for external LLM integration             │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                    CLI / Chat Interface                            │
+│               Rich terminal + argparse + MCP Server               │
+├──────────────────────────────────────────────────────────────────┤
+│                       Agent Layer                                 │
+│  ┌───────────┐ ┌─────────┐ ┌──────────┐ ┌──────────────────────┐ │
+│  │ Navigator │ │ Planner │ │   RL     │ │  Human Supervisor    │ │
+│  │ (GPT-4o)  │ │ (decomp)│ │(Q-learn) │ │  + Demo Optimizer    │ │
+│  └───────────┘ └─────────┘ └──────────┘ └──────────────────────┘ │
+├──────────────────────────────────────────────────────────────────┤
+│                     Grounding Layer                               │
+│        ┌──────────┐    ┌──────────┐    ┌──────────┐              │
+│        │   UIA    │    │  Vision  │    │   OCR    │              │
+│        │(pywinauto)│    │  (VLM)   │    │(RapidOCR)│              │
+│        └──────────┘    └──────────┘    └──────────┘              │
+├──────────────────────────────────────────────────────────────────┤
+│                      Action Layer                                 │
+│     ┌────────┐ ┌────────┐ ┌────────┐ ┌──────────┐ ┌──────────┐  │
+│     │Keyboard│ │ Mouse  │ │ Shell  │ │ Window   │ │ Slider   │  │
+│     │        │ │        │ │        │ │ Manager  │ │ (UIA)    │  │
+│     └────────┘ └────────┘ └────────┘ └──────────┘ └──────────┘  │
+├──────────────────────────────────────────────────────────────────┤
+│                    Observation Layer                               │
+│         ┌───────────────┐      ┌──────────────────┐              │
+│         │  Screenshot   │      │  GIF Recorder    │              │
+│         │  (mss)        │      │  (imageio)       │              │
+│         └───────────────┘      └──────────────────┘              │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
-## ✨ Features
+### The Observe → Think → Act → Learn Loop
 
-- **🤖 Multi-LLM Support** — Claude, GPT-4o, Gemini, Ollama local models via `litellm`
-- **🔍 Hybrid Screen Understanding** — UIA accessibility tree + VLM vision + OCR (three-layer fallback)
-- **⌨️ Full Input Simulation** — Keyboard, mouse, shell commands, window management
-- **🎬 GIF Session Recording** — Automatic recording of agent actions with annotations
-- **🔌 MCP Server** — 11 tools exposed via Model Context Protocol for external integration
-- **📊 Built-in Benchmarks** — 30 tasks across basic/intermediate/advanced categories
-- **🛡️ Safety First** — Dangerous command blocklist, action confirmation, step limits
+```
+  ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐
+  │ OBSERVE │────▶│  THINK  │────▶│   ACT   │────▶│  LEARN  │
+  │ Screen  │     │ GPT-4o  │     │ Execute │     │ RL + QA │
+  │ + UIA   │     │ Decide  │     │ Action  │     │ Update  │
+  └─────────┘     └─────────┘     └─────────┘     └────┬────┘
+       ▲                                                │
+       └────────────────────────────────────────────────┘
+                    Loop until "done"
+```
+
+---
+
+## 🧠 Learning Systems
+
+### Reinforcement Learning (Q-Learning)
+
+| Component | Detail |
+|-----------|--------|
+| **Algorithm** | Tabular Q-learning with TD update |
+| **State** | Hash of window title + UI element context |
+| **Actions** | 16 action types (click, type, hotkey, etc.) |
+| **Learning Rate (α)** | 0.15 |
+| **Discount (γ)** | 0.9 |
+| **Rewards** | +2.0 done, +0.3 progress, -0.7 drift, -1.2 wrong content |
+| **Persistence** | Q-table saved to `recordings/rl_qtable.json` |
+| **Pre-seeding** | Commonsense priors for known apps |
+| **Episodes** | 43 completed, 63 Q-table entries |
+
+### 👤 Human Supervision (NEW in v7)
+
+Run demos with `--supervise` to enable human review after each task:
+
+```
+═══════════════════════════════════════════════════════
+  HUMAN SUPERVISION — Review Demo Result
+═══════════════════════════════════════════════════════
+  Demo:    Demo 5: Notepad - Type Message
+  Status:  ✓ SUCCESS
+  Steps:   4
+  Time:    99.1s
+  GIF:     recordings/demo5_notepad_type.gif
+
+  Accuracy (did it achieve the right outcome?) [1-5]: _
+  Completeness (were ALL parts finished?) [1-5]: _
+  Efficiency (no wasted/repeated steps?) [1-5]: _
+  Any corrective notes? > _
+```
+
+Human ratings flow into:
+- 📊 **RL reward signal** — weighted 3× stronger than automated rewards
+- ⚡ **Demo Optimizer** — tightens step budgets, captures golden sequences
+- 💬 **Prompt hints** — corrective notes injected into future LLM calls
+
+### ⚡ Amortization (Speed Optimization)
+
+> **Design constraint:** Cursor movement and typing speed are **never** accelerated. All optimization targets overhead.
+
+| Strategy | Savings | Description |
+|----------|---------|-------------|
+| Token caching | ~15s | Azure AD tokens cached for ~50 minutes |
+| RL pre-seeding | Varies | Commonsense priors skip exploration |
+| Fast mode | ~8s/step | Skip post-action validation |
+| Step budget | ~30% | Tighten max_steps from best runs |
+| Golden replay | Skip LLM | Replay best action sequences |
+| Prompt hints | Quality | Human notes prevent repeated mistakes |
+
+---
 
 ## 🚀 Quick Start
 
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/jiaqizou/AgenticOS-ClaudeOpus4.6.git
+git clone https://github.com/jiaqizou-msft/AgenticOS-ClaudeOpus4.6.git
 cd AgenticOS-ClaudeOpus4.6
-
-# Install in development mode
 pip install -e ".[dev]"
-
-# Set your API key
-set ANTHROPIC_API_KEY=your-key-here
 ```
 
-### Usage
+### Run Demos
 
 ```bash
+# Run all fast demos (5-14)
+python scripts/run_demo_detached.py --demo fast
+
+# Run with human supervision
+python scripts/run_demo_detached.py --demo fast --supervise
+
+# Run a specific demo
+python scripts/run_demo_detached.py --demo 1
+
+# Run a range
+python scripts/run_demo_detached.py --demo 5-14
+
 # Interactive chat mode
-agenticos
-
-# Single task mode
 agenticos --task "Open Notepad and type Hello World"
-
-# With a specific model
-agenticos --model gpt-4o --task "Take a screenshot and save it"
-
-# Skip action confirmations
-agenticos --no-confirm --task "Open Calculator"
-
-# Without GIF recording
-agenticos --no-record --task "List files on desktop"
 ```
 
-### MCP Server
+### Configure Azure OpenAI
 
 ```bash
-# Run the MCP server (for integration with Claude Desktop, etc.)
-python -m agenticos.mcp.server
+set AZURE_API_BASE=https://your-resource.cognitiveservices.azure.com/
+set AZURE_API_VERSION=2024-12-01-preview
+# Uses Azure AD authentication via DefaultAzureCredential
 ```
+
+---
 
 ## 📦 Project Structure
 
 ```
 AgenticOS/
 ├── src/agenticos/
-│   ├── __init__.py              # Package root (version)
-│   ├── cli.py                   # Rich CLI chat interface
-│   ├── utils/
-│   │   ├── config.py            # Pydantic-settings configuration
-│   │   └── exceptions.py        # Custom exception hierarchy
-│   ├── observation/
-│   │   ├── screenshot.py        # mss-based screen capture
-│   │   └── recorder.py          # Threaded GIF recorder
+│   ├── agent/
+│   │   ├── navigator.py         # Core ReAct navigator (GPT-4o)
+│   │   ├── planner.py           # LLM task decomposition
+│   │   ├── reinforcement.py     # Tabular Q-learning
+│   │   ├── human_supervisor.py  # 👤 Post-demo human review
+│   │   ├── demo_optimizer.py    # ⚡ Per-demo amortization engine
+│   │   ├── human_teacher.py     # Learning from Demonstration
+│   │   ├── state_validator.py   # Post-action state validation
+│   │   ├── recovery.py          # Per-app recovery strategies
+│   │   └── step_memory.py       # Cached step patterns
 │   ├── grounding/
 │   │   ├── accessibility.py     # pywinauto UIA grounding
 │   │   ├── visual.py            # VLM-based visual grounding
 │   │   └── ocr.py               # RapidOCR text detection
 │   ├── actions/
-│   │   ├── keyboard.py          # Keyboard input executor
-│   │   ├── mouse.py             # Mouse input executor
-│   │   ├── shell.py             # Shell command executor
-│   │   ├── window.py            # Window manager
-│   │   └── compositor.py        # Action dispatch & retry (16 types)
-│   ├── agent/
-│   │   ├── base.py              # Base agent ABC & data classes
-│   │   ├── navigator.py         # Core ReAct navigator agent
-│   │   ├── planner.py           # LLM task decomposition
-│   │   ├── state_validator.py   # Post-action state validation
-│   │   ├── recovery.py          # Per-app recovery strategies
-│   │   ├── step_memory.py       # Cached step patterns
-│   │   ├── reinforcement.py     # Tabular Q-learning (RL)
-│   │   └── human_teacher.py     # Learning from Demonstration (LfD)
-│   ├── mcp/
-│   │   └── server.py            # FastMCP server (11 tools)
-│   └── evaluation/
-│       ├── metrics.py           # Benchmark metrics & reporting
-│       └── tasks.py             # 30 built-in benchmark tasks
+│   │   └── compositor.py        # 16 action types with retry
+│   ├── observation/
+│   │   ├── screenshot.py        # mss-based screen capture
+│   │   └── recorder.py          # GIF session recorder
+│   └── mcp/
+│       └── server.py            # FastMCP server (11 tools)
 ├── scripts/
-│   ├── run_demo_detached.py     # Live demo runner (4 demos)
-│   ├── human_teach.py           # Human teaching CLI
-│   ├── run_benchmark.py         # Benchmark runner
-│   └── record_demo.py           # GIF demo recorder
-├── recordings/
-│   ├── demo1_settings.gif       # Demo 1 recording
-│   ├── demo2_edge_video.gif     # Demo 2 recording
-│   ├── demo4_file_explorer.gif  # Demo 4 recording
-│   ├── rl_qtable.json           # Persistent Q-table
-│   ├── step_memory.json         # Cached step patterns
-│   └── teaching/                # Learned demonstration patterns
+│   ├── run_demo_detached.py     # Demo runner v7 (14 demos)
+│   └── human_teach.py           # Human teaching CLI
+├── recordings/                  # GIF recordings & persistent data
+│   ├── demo*.gif                # 15 demo GIF recordings
+│   ├── rl_qtable.json           # Persistent Q-table (63 entries)
+│   └── supervision/             # Human feedback & optimizer state
+├── docs/
+│   └── presentation.html        # 📊 14-slide interactive presentation
 ├── paper/                       # Academic paper (LaTeX)
-├── tests/                       # Unit test suite
-├── pyproject.toml               # Project config & dependencies
-├── CLAUDE.md                    # Project memory for AI agents
-└── README.md                    # This file
+└── tests/                       # Unit test suite
 ```
 
-## 🎬 Live Demo Results
+---
 
-Real demos run on Windows 11 with GPT-4o (Azure OpenAI):
+## 📊 Presentation
 
-| Demo | Task | Steps | Time | Status | Iterations |
-|------|------|-------|------|--------|------------|
-| **Demo 1** | System Tray: Set brightness to 100% | 5 | 68s | ✅ SUCCESS | 1 |
-| **Demo 2** | Edge: Play 4K YouTube video fullscreen | 9 | 138s | ✅ SUCCESS | 9 |
-| **Demo 3** | Outlook email + Teams message | — | — | 🔄 In Progress | 2 |
-| **Demo 4** | File Explorer: Create folder in Downloads | 15 | 220s | 🔄 In Progress | 3 |
-
-### Key Innovations Discovered Through Iteration
-
-- **UIA Slider Control** (Demo 1): Direct `RangeValuePattern.SetValue()` via UIA — 100% reliable vs. unreliable mouse drag
-- **Content Verification** (Demo 2): Post-click window title check + RL negative reward for wrong content
-- **Recovery-Aware Actions** (Demo 4): Auto-recovery (Escape) can sabotage in-progress operations like folder rename — solved with per-app recovery disabling
-- **Done Verification** (Demo 4): Filesystem path check before accepting task completion — prevents false success
-
-## 🧠 Learning Systems
-
-### Reinforcement Learning
-- **Algorithm**: Tabular Q-learning with TD update ($\alpha=0.15$, $\gamma=0.9$)
-- **State**: Hash of UI context (window title + element count + top elements)
-- **Rewards**: +2.0 (done success), +0.3 (state changed), -0.7 (drift), -1.2 (wrong content)
-- **Persistence**: Q-table saved to `recordings/rl_qtable.json` across sessions
-
-### Human Teaching (Learning from Demonstration)
-- **11 teaching topics** defined (slider, navigation, folder creation, email, etc.)
-- **1 pattern learned** so far: "Creating a new folder in File Explorer"
-- **Workflow**: Record human demo → extract trajectory pattern → inject into LLM context
-- **CLI**: `python scripts/human_teach.py --topic <topic_id>`
-
-## 📊 Benchmark Results
-
-AgenticOS includes a comprehensive benchmark suite with 30 tasks:
-
-| Category       | Tasks | Description                                        |
-|---------------|-------|----------------------------------------------------|
-| **Basic**      | 15    | Single-app operations (Notepad, Calculator, Explorer) |
-| **Intermediate** | 10 | Multi-step workflows, settings, clipboard            |
-| **Advanced**   | 5     | Multi-app coordination, error recovery               |
-
-### Comparison with Existing Systems
-
-| System         | Architecture     | Grounding        | Success Rate | Open Source |
-|---------------|------------------|------------------|-------------|-------------|
-| **AgenticOS** | Modular ReAct    | UIA+Vision+OCR  | TBD         | ✅           |
-| UFO²           | Dual-agent       | UIA + Vision     | 30.5%*      | ✅           |
-| Operator       | CUA              | Vision only      | 20.8%*      | ❌           |
-| Navi           | Foundation model | Vision only      | 19.5%*      | ❌           |
-| Claude CU      | ReAct            | Vision only      | —           | ❌           |
-
-*Results from OSWorld benchmark (Ubuntu). Windows results may differ.
-
-## 🔧 Configuration
-
-AgenticOS uses environment variables or `.env` files:
-
-| Variable              | Default                          | Description                  |
-|-----------------------|----------------------------------|------------------------------|
-| `ANTHROPIC_API_KEY`   | —                                | Anthropic API key            |
-| `OPENAI_API_KEY`      | —                                | OpenAI API key               |
-| `AGENTICOS_MODEL`     | `claude-sonnet-4-20250514`   | LLM model to use             |
-| `AGENTICOS_MAX_STEPS` | `15`                             | Max steps per task           |
-| `AGENTICOS_GROUNDING` | `hybrid`                         | Grounding mode               |
-| `AGENTICOS_CONFIRM`   | `true`                           | Confirm before actions       |
-
-## 🧪 Development
+An interactive **14-slide HTML presentation** covering the full project is available:
 
 ```bash
-# Run tests
-pytest tests/ -v
-
-# Run with coverage
-pytest tests/ --cov=agenticos --cov-report=term-missing
-
-# Lint
-ruff check src/ tests/
-
-# Type check
-mypy src/agenticos/
-
-# Format
-ruff format src/ tests/
+start docs/presentation.html
 ```
 
-## 📄 Academic Paper
+Covers: project motivation, architecture, ReAct loop, demo results, human supervision system, RL & amortization, development timeline, comparison with existing systems, and roadmap.
 
-See [paper/](paper/) for the full LaTeX source of our paper:
+---
 
-> **AgenticOS: A Modular Framework for Deep OS Integration and Intelligent Desktop Automation**
+## 🏆 Comparison with Existing Systems
 
-The paper presents our architecture, compares against existing systems (UFO², Operator, Claude Computer Use, OmniParser), and evaluates performance on our 30-task benchmark suite.
+| System | Architecture | Grounding | Learning | Open Source |
+|--------|-------------|-----------|----------|:---:|
+| **AgenticOS** | Modular ReAct | UIA + Vision + OCR | Q-learning + Human | ✅ |
+| UFO² | Dual-agent | UIA + Vision | — | ✅ |
+| Operator | CUA | Vision only | — | ❌ |
+| Navi | Foundation model | Vision only | — | ❌ |
+| Claude Computer Use | ReAct | Vision only | — | ❌ |
+
+---
+
+## 🔮 Roadmap
+
+- [ ] **Vision QA Mode** — Ask the agent questions about what's on screen
+- [ ] **Playback Recorder** — Deterministic replay on other machines for bug reproduction
+- [ ] **Human-Speed Interaction** — Character-by-character typing with visible cursor movement
+- [ ] **Confidence Dashboard** — Real-time visualization of per-demo optimization
+- [ ] **Multi-DUT Support** — Run the same automation across multiple test machines
+
+---
 
 ## 📜 License
 
 [MIT License](LICENSE) — see LICENSE file for details.
 
-## 🙏 Acknowledgments
+---
 
-- [UFO](https://github.com/microsoft/UFO) — Microsoft's UI-Focused Agent for Windows
-- [OmniParser](https://github.com/microsoft/OmniParser) — Screen Parsing Toolkit
-- [litellm](https://github.com/BerriAI/litellm) — Multi-LLM provider proxy
-- [pywinauto](https://github.com/pywinauto/pywinauto) — Windows UI Automation
-- [FastMCP](https://github.com/jlowin/fastmcp) — Model Context Protocol SDK
+<div align="center">
+
+**Built with ❤️ by Jiaqi Zou · Microsoft · 2025**
+
+*Powered by Claude Opus 4.6 + Azure OpenAI GPT-4o*
+
+⭐ Star this repo if you find it useful!
+
+</div>
