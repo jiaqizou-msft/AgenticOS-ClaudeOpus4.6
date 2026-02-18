@@ -1,0 +1,752 @@
+{
+  "q_table": {
+    "27daeadd8988": {
+      "wait": 0.0,
+      "click": -0.50516878125,
+      "press_key": -0.15,
+      "hotkey": -0.15,
+      "right_click": -0.15,
+      "type_text": -0.39785048437500004
+    },
+    "d58d6582b0f2": {
+      "type_text": 0.4,
+      "hotkey": 0.4,
+      "press_key": 0.3,
+      "click": 0.1
+    },
+    "1f6d9fec7d4d": {
+      "type_text": 0.5252740483031696,
+      "press_key": 0.43341199652092793,
+      "click": 0.35871747600428083,
+      "hotkey": 0.1,
+      "check_ui_element": 0.05390811829535827
+    },
+    "7de366260bf8": {
+      "type_text": 0.5,
+      "press_key": 0.4,
+      "click": 0.0
+    },
+    "6bf145d736cd": {
+      "type_text": 0.5,
+      "press_key": 0.4,
+      "click": 0.0
+    },
+    "7f0abfc439f3": {
+      "click": 0.4040300942038313,
+      "scroll": 0.2,
+      "press_key": 0.1,
+      "wait": 0.21612822001875
+    },
+    "d249ee80c5a4": {
+      "click": 0.318,
+      "scroll": 0.2,
+      "press_key": 0.1,
+      "wait": 0.063
+    },
+    "7f199ddd2617": {
+      "click": 0.2843954822357004,
+      "open_app": 0.129,
+      "hotkey": 0.06089339010181955,
+      "type_text": 0.06089339010181955
+    },
+    "78c69c30e390": {
+      "press_key": 0.045
+    },
+    "cb5c1a0c8dd8": {
+      "type_text": 0.2907919971751017,
+      "click": 0.27359233393322857
+    },
+    "fc99d9f5c73e": {
+      "click": 0.08799517406249999,
+      "type_text": 0.06360179472210936
+    },
+    "49a177084a21": {
+      "click": 0.0225
+    },
+    "9aa6168f5b60": {
+      "click": 0.0225
+    },
+    "909e6353794e": {
+      "click": 0.0225
+    },
+    "8e0e9921770b": {
+      "hotkey": 0.044662499999999994
+    },
+    "7250c865bff7": {
+      "type_text": 0.3770262392687734,
+      "click": 0.3492509781940677,
+      "hotkey": 0.20259242052633597,
+      "verify": 0.08100516474974943,
+      "press_key": 0.07339854230128441
+    },
+    "dca56bdb17a4": {
+      "type_text": 0.0225
+    },
+    "8bb1a45650e4": {
+      "hotkey": 0.0225
+    },
+    "ccd074afcad3": {
+      "type_text": 0.0225
+    },
+    "9016b688f6aa": {
+      "type_text": 0.17082824768614024
+    },
+    "7efbfcc732a3": {
+      "type_text": 0.08839302695156248,
+      "press_key": 0.05613993363846093
+    },
+    "cea4dd7d7c34": {
+      "hotkey": 0.06649256249999999
+    },
+    "79d190513d51": {
+      "hotkey": 0.0225,
+      "type_text": 0.025537499999999998
+    },
+    "ef24a9c515d0": {
+      "type_text": 0.045072562499999996,
+      "press_key": 0.05029167093749999
+    },
+    "fe641a927109": {
+      "type_text": 0.045072562499999996,
+      "hotkey": 0.025537499999999998
+    },
+    "1add53d7e66e": {
+      "hotkey": 0.08799517406249999
+    },
+    "b7abc34af8a8": {
+      "hotkey": 0.0225,
+      "type_text": 0.025537499999999998
+    },
+    "b7ca86dc0fdf": {
+      "open_app": 0.0225
+    },
+    "c9105212be6a": {
+      "wait": 0.0225
+    },
+    "4ae3ba6eb41d": {
+      "hotkey": 0.06649256249999999
+    },
+    "93e458df453f": {
+      "hotkey": 0.0225
+    },
+    "3c68c7a8f021": {
+      "hotkey": 0.0225,
+      "type_text": 0.06943962093749999
+    },
+    "a5ac2666f342": {
+      "hotkey": 0.044662499999999994
+    },
+    "a5be8691f360": {
+      "type_text": 0.0225
+    },
+    "9d6c8ce6d9d8": {
+      "type_text": 0.0225
+    },
+    "a0c39c8c30de": {
+      "hotkey": 0.5,
+      "type_text": 0.4,
+      "press_key": 0.3,
+      "click": 0.2
+    },
+    "d693ab60a05b": {
+      "click": 0.4,
+      "type_text": 0.3,
+      "hotkey": 0.3,
+      "wait": 0.3
+    },
+    "0d3f2359a15b": {
+      "click": 0.4,
+      "hotkey": 0.4,
+      "type_text": 0.3,
+      "press_key": 0.2
+    },
+    "66f8f3eaa71f": {
+      "click": 0.3,
+      "scroll": 0.2,
+      "wait": 0.2
+    },
+    "c061b9b9c9a1": {
+      "click": 0.4,
+      "hotkey": 0.3,
+      "press_key": 0.3,
+      "type_text": 0.2
+    },
+    "16e677eefe2c": {
+      "click": 0.4,
+      "drag": 0.3,
+      "type_text": 0.1
+    },
+    "7ecec3c52b08": {
+      "click": 0.4,
+      "wait": 0.2
+    },
+    "427801f7b198": {
+      "click": 0.4,
+      "type_text": 0.3,
+      "press_key": 0.2
+    },
+    "f024db12cb2e": {
+      "click": 0.3,
+      "type_text": 0.4,
+      "hotkey": 0.3
+    },
+    "12a4023c24ef": {
+      "click": 0.3,
+      "type_text": 0.4,
+      "press_key": 0.3
+    },
+    "cce0a788a7d2": {
+      "click": 0.4,
+      "type_text": 0.3
+    },
+    "200c147086a0": {
+      "click": 0.4,
+      "scroll": 0.2,
+      "wait": 0.2
+    },
+    "8a2deaab65b4": {
+      "click": 0.3,
+      "wait": 0.2
+    },
+    "3403a1e6dc8b": {
+      "type_text": 0.0225,
+      "press_key": 0.025537499999999998
+    },
+    "ef7abbcdec88": {
+      "wait": 0.0225,
+      "hotkey": 0.047654437499999994
+    },
+    "490639a7edb6": {
+      "wait": 0.0225,
+      "click": 0.025537499999999998,
+      "press_key": 0.0480658224515625,
+      "type_text": 0.026002920937499997
+    }
+  },
+  "stats": {
+    "27daeadd8988:wait": {
+      "total_reward": 0.0,
+      "count": 1,
+      "successes": 0,
+      "failures": 0,
+      "avg_reward": 0.0
+    },
+    "27daeadd8988:click": {
+      "total_reward": -4.4,
+      "count": 5,
+      "successes": 0,
+      "failures": 5,
+      "avg_reward": -0.8800000000000001
+    },
+    "27daeadd8988:press_key": {
+      "total_reward": -1.0,
+      "count": 1,
+      "successes": 0,
+      "failures": 1,
+      "avg_reward": -1.0
+    },
+    "27daeadd8988:hotkey": {
+      "total_reward": -1.0,
+      "count": 1,
+      "successes": 0,
+      "failures": 1,
+      "avg_reward": -1.0
+    },
+    "27daeadd8988:right_click": {
+      "total_reward": -1.0,
+      "count": 1,
+      "successes": 0,
+      "failures": 1,
+      "avg_reward": -1.0
+    },
+    "27daeadd8988:type_text": {
+      "total_reward": -4.5,
+      "count": 6,
+      "successes": 1,
+      "failures": 5,
+      "avg_reward": -0.75
+    },
+    "7f199ddd2617:click": {
+      "total_reward": 1.9999999999999996,
+      "count": 11,
+      "successes": 11,
+      "failures": 0,
+      "avg_reward": 0.18181818181818177
+    },
+    "78c69c30e390:press_key": {
+      "total_reward": 0.3,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.3
+    },
+    "cb5c1a0c8dd8:type_text": {
+      "total_reward": 1.8499999999999996,
+      "count": 10,
+      "successes": 10,
+      "failures": 0,
+      "avg_reward": 0.18499999999999997
+    },
+    "7f199ddd2617:open_app": {
+      "total_reward": 0.5,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.5
+    },
+    "fc99d9f5c73e:click": {
+      "total_reward": 0.6,
+      "count": 4,
+      "successes": 4,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "cb5c1a0c8dd8:click": {
+      "total_reward": 1.6499999999999997,
+      "count": 11,
+      "successes": 11,
+      "failures": 0,
+      "avg_reward": 0.14999999999999997
+    },
+    "49a177084a21:click": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "9aa6168f5b60:click": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "7f0abfc439f3:click": {
+      "total_reward": 0.9,
+      "count": 6,
+      "successes": 6,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "909e6353794e:click": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "1f6d9fec7d4d:type_text": {
+      "total_reward": 1.2,
+      "count": 8,
+      "successes": 8,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "1f6d9fec7d4d:click": {
+      "total_reward": 0.44999999999999996,
+      "count": 3,
+      "successes": 3,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "8e0e9921770b:hotkey": {
+      "total_reward": 0.3,
+      "count": 2,
+      "successes": 2,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "7f199ddd2617:hotkey": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "d249ee80c5a4:wait": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "7250c865bff7:type_text": {
+      "total_reward": 2.849999999999999,
+      "count": 19,
+      "successes": 19,
+      "failures": 0,
+      "avg_reward": 0.14999999999999997
+    },
+    "7250c865bff7:click": {
+      "total_reward": 1.4999999999999998,
+      "count": 10,
+      "successes": 10,
+      "failures": 0,
+      "avg_reward": 0.14999999999999997
+    },
+    "7250c865bff7:hotkey": {
+      "total_reward": 0.6,
+      "count": 4,
+      "successes": 4,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "7250c865bff7:verify": {
+      "total_reward": -0.30000000000000004,
+      "count": 3,
+      "successes": 0,
+      "failures": 0,
+      "avg_reward": -0.10000000000000002
+    },
+    "7250c865bff7:press_key": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "dca56bdb17a4:type_text": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "8bb1a45650e4:hotkey": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "ccd074afcad3:type_text": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "9016b688f6aa:type_text": {
+      "total_reward": 1.2,
+      "count": 8,
+      "successes": 8,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "7efbfcc732a3:type_text": {
+      "total_reward": 0.6,
+      "count": 4,
+      "successes": 4,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "7efbfcc732a3:press_key": {
+      "total_reward": 0.3,
+      "count": 2,
+      "successes": 2,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "7f0abfc439f3:wait": {
+      "total_reward": 0.6,
+      "count": 4,
+      "successes": 4,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "cea4dd7d7c34:hotkey": {
+      "total_reward": 0.44999999999999996,
+      "count": 3,
+      "successes": 3,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "fc99d9f5c73e:type_text": {
+      "total_reward": 0.3,
+      "count": 2,
+      "successes": 2,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "79d190513d51:hotkey": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "79d190513d51:type_text": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "ef24a9c515d0:type_text": {
+      "total_reward": 0.3,
+      "count": 2,
+      "successes": 2,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "ef24a9c515d0:press_key": {
+      "total_reward": 0.3,
+      "count": 2,
+      "successes": 2,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "fe641a927109:type_text": {
+      "total_reward": 0.3,
+      "count": 2,
+      "successes": 2,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "fe641a927109:hotkey": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "1f6d9fec7d4d:check_ui_element": {
+      "total_reward": -0.1,
+      "count": 1,
+      "successes": 0,
+      "failures": 0,
+      "avg_reward": -0.1
+    },
+    "1f6d9fec7d4d:press_key": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "1add53d7e66e:hotkey": {
+      "total_reward": 0.6,
+      "count": 4,
+      "successes": 4,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "b7abc34af8a8:hotkey": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "b7abc34af8a8:type_text": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "7f199ddd2617:type_text": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "d249ee80c5a4:click": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "b7ca86dc0fdf:open_app": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "c9105212be6a:wait": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "4ae3ba6eb41d:hotkey": {
+      "total_reward": 0.44999999999999996,
+      "count": 3,
+      "successes": 3,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "93e458df453f:hotkey": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "3c68c7a8f021:hotkey": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "3c68c7a8f021:type_text": {
+      "total_reward": 0.44999999999999996,
+      "count": 3,
+      "successes": 3,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "a5ac2666f342:hotkey": {
+      "total_reward": 0.3,
+      "count": 2,
+      "successes": 2,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "a5be8691f360:type_text": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "9d6c8ce6d9d8:type_text": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "3403a1e6dc8b:type_text": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "3403a1e6dc8b:press_key": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "ef7abbcdec88:wait": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "ef7abbcdec88:hotkey": {
+      "total_reward": 0.3,
+      "count": 2,
+      "successes": 2,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "490639a7edb6:wait": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "490639a7edb6:click": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "490639a7edb6:press_key": {
+      "total_reward": 0.3,
+      "count": 2,
+      "successes": 2,
+      "failures": 0,
+      "avg_reward": 0.15
+    },
+    "490639a7edb6:type_text": {
+      "total_reward": 0.15,
+      "count": 1,
+      "successes": 1,
+      "failures": 0,
+      "avg_reward": 0.15
+    }
+  },
+  "episode_rewards": [
+    -13.4,
+    -0.19999999999999996,
+    -1.0,
+    -0.6,
+    -0.9,
+    -0.75,
+    -0.9,
+    -0.75,
+    -0.75,
+    -0.75,
+    -0.75,
+    -0.75,
+    2.8193827390670774,
+    -0.6,
+    3.1157618403434753,
+    -0.6,
+    3.164936661720276,
+    2.9,
+    -0.44999999999999996,
+    -1.35,
+    3.095527249574661,
+    2.724993813037872,
+    3.257952779531479,
+    3.1549017131328583,
+    2.3,
+    -0.9,
+    2.792677271366119,
+    -0.9,
+    -1.05,
+    2.3964118123054505,
+    2.463653415441513,
+    2.3274859726428985,
+    3.1484177887439726,
+    2.4349457442760465,
+    -1.3,
+    -1.05,
+    2.7489467620849606,
+    -0.9,
+    2.5148939251899716,
+    -1.5,
+    2.4510771572589873,
+    2.411044716835022,
+    2.604755699634552,
+    2.45,
+    -1.2,
+    2.9249372442563373,
+    2.8704060196876524,
+    3.180345598856608,
+    -1.2,
+    2.8708856662114464,
+    -1.2,
+    2.9783789555231728,
+    -1.2,
+    2.8663581927617394,
+    -1.2,
+    3.085992101828257,
+    -1.2,
+    -0.6,
+    -1.2,
+    3.0497904340426123,
+    -1.2,
+    2.6807588497797648,
+    -0.75,
+    2.957314428687096,
+    -0.9,
+    2.7946915566921233
+  ],
+  "total_reward": 13.500000000000034
+}

@@ -201,6 +201,73 @@ TEACHING_TOPICS = [
         "difficulty": "easy",
         "category": "system",
     },
+    # ── v2 teaching topics ──
+    {
+        "id": "edge_tab_management",
+        "topic": "Managing browser tabs in Edge",
+        "description": (
+            "Please demonstrate tab management in Edge: Ctrl+T for new tab, "
+            "Ctrl+W to close, Ctrl+Tab to cycle, Ctrl+1-9 to jump to tab. "
+            "Show opening 3 tabs, switching between them, and closing one."
+        ),
+        "difficulty": "medium",
+        "category": "browser",
+    },
+    {
+        "id": "teams_meeting_schedule",
+        "topic": "Scheduling a meeting in Teams",
+        "description": (
+            "Please demonstrate scheduling a Teams meeting: open Calendar, "
+            "click 'New meeting', fill in title and time, add attendees, "
+            "then save. I want to learn the Teams calendar workflow."
+        ),
+        "difficulty": "medium",
+        "category": "communication",
+    },
+    {
+        "id": "outlook_email_compose",
+        "topic": "Composing and organizing email in Outlook",
+        "description": (
+            "Please demonstrate composing a new email in Outlook: Ctrl+N, "
+            "fill in To/Subject/Body, then creating a folder by right-clicking "
+            "Inbox. Show search with Ctrl+E and flagging an email."
+        ),
+        "difficulty": "medium",
+        "category": "communication",
+    },
+    {
+        "id": "settings_navigation",
+        "topic": "Navigating Windows Settings categories",
+        "description": (
+            "Please demonstrate navigating Windows Settings efficiently: "
+            "open Settings with Win+I, navigate to Display, WiFi, Updates, "
+            "Accounts. Show how to use the search box and breadcrumb navigation."
+        ),
+        "difficulty": "easy",
+        "category": "system",
+    },
+    {
+        "id": "file_operations",
+        "topic": "File operations: rename, copy, search in Explorer",
+        "description": (
+            "Please demonstrate file operations in Explorer: select a file, "
+            "F2 to rename, Ctrl+C/Ctrl+V to copy, Ctrl+E to search, "
+            "and changing the View to Details. Show column sorting too."
+        ),
+        "difficulty": "easy",
+        "category": "system",
+    },
+    {
+        "id": "office_basics",
+        "topic": "Basic Office app operations",
+        "description": (
+            "Please demonstrate basic Office operations: create a blank doc in Word, "
+            "create a blank workbook in Excel with SUM formula, "
+            "create a blank presentation in PowerPoint with title text."
+        ),
+        "difficulty": "medium",
+        "category": "office",
+    },
 ]
 
 

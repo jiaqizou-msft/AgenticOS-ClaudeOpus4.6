@@ -420,10 +420,856 @@ DEMOS = {
         "output": "recordings/demo14_taskmgr.gif",
         "max_steps": 6,
     },
+    # ── Edge Browser (15-22) ──
+    15: {
+        "name": "Demo 15: Edge - Navigate to URL",
+        "app": "edge", "difficulty": "beginner",
+        "pre_launch": "start msedge --inprivate about:blank",
+        "fast_mode": True, "timeout": 90, "min_done_step": 2,
+        "task": (
+            "Navigate to bing.com in Edge. Edge is open with a blank tab.\n"
+            "Step 1: hotkey ['ctrl','l'] to focus the address bar.\n"
+            "Step 2: type_text 'bing.com' then press_key 'enter'.\n"
+            "Step 3: wait 2 seconds for the page to load.\n"
+            "Step 4: done with success=true, summary='Navigated to bing.com'.\n"
+            "IMPORTANT: Edge is already open. Use Ctrl+L, type URL, press Enter."
+        ),
+        "output": "recordings/v2/demo15_edge_navigate.gif",
+        "max_steps": 5,
+    },
+    16: {
+        "name": "Demo 16: Edge - New Tab and Search",
+        "app": "edge", "difficulty": "beginner",
+        "pre_launch": "start msedge --inprivate about:blank",
+        "fast_mode": True, "timeout": 90, "min_done_step": 2,
+        "task": (
+            "Open a new tab in Edge and search for 'Windows 11 features'.\n"
+            "Step 1: hotkey ['ctrl','t'] to open a new tab.\n"
+            "Step 2: type_text 'Windows 11 features' then press_key 'enter'.\n"
+            "Step 3: wait 2 seconds for search results to load.\n"
+            "Step 4: done with success=true, summary='Searched for Windows 11 features'.\n"
+            "IMPORTANT: Edge is already open. Ctrl+T for new tab, type query, Enter."
+        ),
+        "output": "recordings/v2/demo16_edge_search.gif",
+        "max_steps": 6,
+    },
+    17: {
+        "name": "Demo 17: Edge - Bookmark Page",
+        "app": "edge", "difficulty": "beginner",
+        "pre_launch": "start msedge --inprivate \"https://www.bing.com\"",
+        "fast_mode": True, "timeout": 90, "min_done_step": 2,
+        "task": (
+            "Bookmark the current page in Edge. Bing.com is loaded.\n"
+            "Step 1: wait 2 seconds for the page to load.\n"
+            "Step 2: hotkey ['ctrl','d'] to open the bookmark dialog.\n"
+            "Step 3: wait 1 second for the dialog to appear.\n"
+            "Step 4: press_key 'enter' to confirm the bookmark.\n"
+            "Step 5: done with success=true, summary='Bookmarked bing.com'.\n"
+            "IMPORTANT: Ctrl+D opens bookmark dialog, Enter confirms."
+        ),
+        "output": "recordings/v2/demo17_edge_bookmark.gif",
+        "max_steps": 5,
+    },
+    18: {
+        "name": "Demo 18: Edge - Privacy Settings",
+        "app": "edge", "difficulty": "intermediate",
+        "pre_launch": "start msedge --inprivate \"edge://settings/privacy\"",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "View tracking prevention settings in Edge Privacy.\n"
+            "Step 1: wait 2 seconds for settings to load.\n"
+            "Step 2: Verify 'Tracking prevention' section is visible.\n"
+            "Step 3: done with success=true, summary='Viewed Edge privacy settings'.\n"
+            "IMPORTANT: Privacy settings page is already open. Verify and done."
+        ),
+        "output": "recordings/v2/demo18_edge_privacy.gif",
+        "max_steps": 8,
+    },
+    19: {
+        "name": "Demo 19: Edge - Clear Browsing Data",
+        "app": "edge", "difficulty": "intermediate",
+        "pre_launch": "start msedge --inprivate \"edge://settings/clearBrowserData\"",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Open the clear browsing data dialog in Edge.\n"
+            "Step 1: wait 2 seconds for the page to load.\n"
+            "Step 2: Verify clear data options are visible.\n"
+            "Step 3: done with success=true, summary='Opened clear browsing data'.\n"
+            "IMPORTANT: Settings page is already open. Verify and done. Do NOT clear."
+        ),
+        "output": "recordings/v2/demo19_edge_clear_data.gif",
+        "max_steps": 10,
+    },
+    20: {
+        "name": "Demo 20: Edge - Download File",
+        "app": "edge", "difficulty": "intermediate",
+        "pre_launch": "start msedge --inprivate \"https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf\"",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Download a PDF file. Edge has navigated to a PDF.\n"
+            "Step 1: wait 3 seconds for the PDF to load.\n"
+            "Step 2: hotkey ['ctrl','s'] to open Save As dialog.\n"
+            "Step 3: press_key 'enter' to save with default name.\n"
+            "Step 4: wait 2 seconds.\n"
+            "Step 5: done with success=true, summary='Downloaded PDF'.\n"
+            "IMPORTANT: Ctrl+S triggers save. Enter confirms."
+        ),
+        "output": "recordings/v2/demo20_edge_download.gif",
+        "max_steps": 12,
+    },
+    21: {
+        "name": "Demo 21: Edge - Tab Management",
+        "app": "edge", "difficulty": "advanced",
+        "pre_launch": "start msedge --inprivate \"https://www.bing.com\"",
+        "fast_mode": True, "timeout": 120, "min_done_step": 3,
+        "task": (
+            "Open 2 new tabs, close the last, switch to the first.\n"
+            "Step 1: hotkey ['ctrl','t']. type_text 'example.com' then press_key 'enter'.\n"
+            "Step 2: wait 1 second.\n"
+            "Step 3: hotkey ['ctrl','t']. type_text 'github.com' then press_key 'enter'.\n"
+            "Step 4: hotkey ['ctrl','w'] to close current tab.\n"
+            "Step 5: hotkey ['ctrl','1'] to switch to first tab.\n"
+            "Step 6: done with success=true, summary='Managed tabs'.\n"
+            "IMPORTANT: Ctrl+T open, Ctrl+W close, Ctrl+1 select first tab."
+        ),
+        "output": "recordings/v2/demo21_edge_tabs.gif",
+        "max_steps": 12,
+    },
+    22: {
+        "name": "Demo 22: Edge - Collections",
+        "app": "edge", "difficulty": "advanced",
+        "pre_launch": "start msedge --inprivate \"https://www.bing.com\"",
+        "fast_mode": True, "timeout": 120, "min_done_step": 3,
+        "task": (
+            "Open Edge Collections and create a new collection.\n"
+            "Step 1: hotkey ['ctrl','shift','y'] to open Collections.\n"
+            "Step 2: wait 2 seconds.\n"
+            "Step 3: Click 'Start new collection' or '+' button.\n"
+            "Step 4: type_text 'AgenticOS Research'.\n"
+            "Step 5: press_key 'enter' to confirm.\n"
+            "Step 6: done with success=true, summary='Created collection'.\n"
+            "IMPORTANT: Ctrl+Shift+Y opens Collections."
+        ),
+        "output": "recordings/v2/demo22_edge_collections.gif",
+        "max_steps": 15,
+    },
+    # ── Microsoft Teams (23-30) ──
+    23: {
+        "name": "Demo 23: Teams - Change Status",
+        "app": "teams", "difficulty": "beginner",
+        "pre_launch": "start msteams",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Change Teams status to Do Not Disturb.\n"
+            "Step 1: wait 4 seconds for Teams to load.\n"
+            "Step 2: Click your profile picture at top-right.\n"
+            "Step 3: Click status dropdown, select 'Do not disturb'.\n"
+            "Step 4: done with success=true, summary='Changed to DnD'.\n"
+            "IMPORTANT: Profile pic -> status -> Do Not Disturb."
+        ),
+        "output": "recordings/v2/demo23_teams_status.gif",
+        "max_steps": 8,
+    },
+    24: {
+        "name": "Demo 24: Teams - Search Contact",
+        "app": "teams", "difficulty": "beginner",
+        "pre_launch": "start msteams",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Search for a contact in Teams.\n"
+            "Step 1: wait 4 seconds for Teams to load.\n"
+            "Step 2: hotkey ['ctrl','e'] to open search.\n"
+            "Step 3: type_text 'Jiaqi Zou'. wait 2 seconds.\n"
+            "Step 4: done with success=true, summary='Found contact'.\n"
+            "IMPORTANT: Ctrl+E opens search."
+        ),
+        "output": "recordings/v2/demo24_teams_search.gif",
+        "max_steps": 6,
+    },
+    25: {
+        "name": "Demo 25: Teams - View Chats",
+        "app": "teams", "difficulty": "beginner",
+        "pre_launch": "start msteams",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Navigate to Chat section in Teams.\n"
+            "Step 1: wait 4 seconds for Teams to load.\n"
+            "Step 2: Click 'Chat' in the left sidebar.\n"
+            "Step 3: Click the most recent chat.\n"
+            "Step 4: done with success=true, summary='Viewed recent chats'.\n"
+            "IMPORTANT: Click Chat in sidebar."
+        ),
+        "output": "recordings/v2/demo25_teams_chat.gif",
+        "max_steps": 8,
+    },
+    26: {
+        "name": "Demo 26: Teams - View Calendar",
+        "app": "teams", "difficulty": "intermediate",
+        "pre_launch": "start msteams",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "View the calendar in Teams.\n"
+            "Step 1: wait 4 seconds for Teams to load.\n"
+            "Step 2: Click 'Calendar' in left sidebar.\n"
+            "Step 3: wait 2 seconds. Verify calendar is visible.\n"
+            "Step 4: done with success=true, summary='Viewed Teams calendar'.\n"
+            "IMPORTANT: Click Calendar in sidebar."
+        ),
+        "output": "recordings/v2/demo26_teams_calendar.gif",
+        "max_steps": 8,
+    },
+    27: {
+        "name": "Demo 27: Teams - Schedule Meeting",
+        "app": "teams", "difficulty": "intermediate",
+        "pre_launch": "start msteams",
+        "fast_mode": True, "timeout": 150, "min_done_step": 3,
+        "task": (
+            "Schedule a meeting in Teams calendar.\n"
+            "Step 1: wait 4 seconds. Click 'Calendar' in left sidebar.\n"
+            "Step 2: Click '+ New meeting' button.\n"
+            "Step 3: type_text 'AgenticOS Demo Review' in title.\n"
+            "Step 4: Click 'Save'.\n"
+            "Step 5: done with success=true, summary='Scheduled meeting'.\n"
+            "IMPORTANT: Calendar -> New meeting -> title -> Save."
+        ),
+        "output": "recordings/v2/demo27_teams_meeting.gif",
+        "max_steps": 15,
+    },
+    28: {
+        "name": "Demo 28: Teams - Activity Feed",
+        "app": "teams", "difficulty": "beginner",
+        "pre_launch": "start msteams",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "View the activity feed in Teams.\n"
+            "Step 1: wait 4 seconds for Teams to load.\n"
+            "Step 2: Click 'Activity' in left sidebar (bell icon).\n"
+            "Step 3: Verify activity notifications visible.\n"
+            "Step 4: done with success=true, summary='Viewed activity feed'.\n"
+            "IMPORTANT: Click Activity in sidebar."
+        ),
+        "output": "recordings/v2/demo28_teams_activity.gif",
+        "max_steps": 8,
+    },
+    29: {
+        "name": "Demo 29: Teams - Settings",
+        "app": "teams", "difficulty": "advanced",
+        "pre_launch": "start msteams",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Open Teams settings.\n"
+            "Step 1: wait 4 seconds for Teams to load.\n"
+            "Step 2: Click profile picture or '...' menu.\n"
+            "Step 3: Click 'Settings'.\n"
+            "Step 4: Verify settings panel is open.\n"
+            "Step 5: done with success=true, summary='Opened Teams settings'.\n"
+            "IMPORTANT: Profile -> Settings."
+        ),
+        "output": "recordings/v2/demo29_teams_settings.gif",
+        "max_steps": 10,
+    },
+    30: {
+        "name": "Demo 30: Teams - Files Tab",
+        "app": "teams", "difficulty": "advanced",
+        "pre_launch": "start msteams",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Open Files section in a Teams chat.\n"
+            "Step 1: wait 4 seconds. Click 'Chat' in sidebar.\n"
+            "Step 2: Click the most recent chat.\n"
+            "Step 3: Click 'Files' tab near the top.\n"
+            "Step 4: done with success=true, summary='Opened Files tab'.\n"
+            "IMPORTANT: Chat -> conversation -> Files tab."
+        ),
+        "output": "recordings/v2/demo30_teams_files.gif",
+        "max_steps": 12,
+    },
+    # ── Microsoft Outlook (31-38) ──
+    31: {
+        "name": "Demo 31: Outlook - Read Email",
+        "app": "outlook", "difficulty": "beginner",
+        "pre_launch": "start outlook",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Read the latest email in Outlook.\n"
+            "Step 1: wait 5 seconds for Outlook to load.\n"
+            "Step 2: Click the first email in inbox.\n"
+            "Step 3: Verify email content is displayed.\n"
+            "Step 4: done with success=true, summary='Read latest email'.\n"
+            "IMPORTANT: Click first email to read."
+        ),
+        "output": "recordings/v2/demo31_outlook_read.gif",
+        "max_steps": 5,
+    },
+    32: {
+        "name": "Demo 32: Outlook - Compose Email",
+        "app": "outlook", "difficulty": "beginner",
+        "pre_launch": "start outlook",
+        "fast_mode": True, "timeout": 120, "min_done_step": 3,
+        "task": (
+            "Compose a new email draft in Outlook.\n"
+            "Step 1: wait 5 seconds for Outlook to load.\n"
+            "Step 2: hotkey ['ctrl','n'] for new email.\n"
+            "Step 3: type_text 'test@example.com' in To.\n"
+            "Step 4: press_key 'tab'. type_text 'AgenticOS v2 Test'.\n"
+            "Step 5: press_key 'tab'. type_text 'Composed by AI agent.'.\n"
+            "Step 6: done with success=true, summary='Composed email draft'.\n"
+            "IMPORTANT: Ctrl+N new email. Tab between fields. Do NOT send."
+        ),
+        "output": "recordings/v2/demo32_outlook_compose.gif",
+        "max_steps": 8,
+    },
+    33: {
+        "name": "Demo 33: Outlook - Reply",
+        "app": "outlook", "difficulty": "beginner",
+        "pre_launch": "start outlook",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Reply to the latest email.\n"
+            "Step 1: wait 5 seconds. Click first email.\n"
+            "Step 2: hotkey ['ctrl','r'] to Reply.\n"
+            "Step 3: type_text 'Automated reply from AgenticOS v2.'.\n"
+            "Step 4: done with success=true, summary='Composed reply'.\n"
+            "IMPORTANT: Click email, Ctrl+R, type. Do NOT send."
+        ),
+        "output": "recordings/v2/demo33_outlook_reply.gif",
+        "max_steps": 6,
+    },
+    34: {
+        "name": "Demo 34: Outlook - Calendar",
+        "app": "outlook", "difficulty": "intermediate",
+        "pre_launch": "start outlook",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Switch to Calendar view in Outlook.\n"
+            "Step 1: wait 5 seconds for Outlook to load.\n"
+            "Step 2: Click 'Calendar' icon in bottom-left nav.\n"
+            "Step 3: Verify calendar is visible.\n"
+            "Step 4: done with success=true, summary='Opened calendar'.\n"
+            "IMPORTANT: Click Calendar icon."
+        ),
+        "output": "recordings/v2/demo34_outlook_calendar.gif",
+        "max_steps": 8,
+    },
+    35: {
+        "name": "Demo 35: Outlook - Create Folder",
+        "app": "outlook", "difficulty": "intermediate",
+        "pre_launch": "start outlook",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Create a new email folder.\n"
+            "Step 1: wait 5 seconds for Outlook to load.\n"
+            "Step 2: right_click on 'Inbox' in folder pane.\n"
+            "Step 3: Click 'New Folder'.\n"
+            "Step 4: type_text 'AgenticOS Archive'. press_key 'enter'.\n"
+            "Step 5: done with success=true, summary='Created folder'.\n"
+            "IMPORTANT: Right-click Inbox -> New Folder -> name -> Enter."
+        ),
+        "output": "recordings/v2/demo35_outlook_folder.gif",
+        "max_steps": 8,
+    },
+    36: {
+        "name": "Demo 36: Outlook - Search",
+        "app": "outlook", "difficulty": "intermediate",
+        "pre_launch": "start outlook",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Search for emails in Outlook.\n"
+            "Step 1: wait 5 seconds. hotkey ['ctrl','e'] to focus search.\n"
+            "Step 2: type_text 'AgenticOS'. press_key 'enter'.\n"
+            "Step 3: wait 2 seconds for results.\n"
+            "Step 4: done with success=true, summary='Searched emails'.\n"
+            "IMPORTANT: Ctrl+E search, type, Enter."
+        ),
+        "output": "recordings/v2/demo36_outlook_search.gif",
+        "max_steps": 8,
+    },
+    37: {
+        "name": "Demo 37: Outlook - Flag Email",
+        "app": "outlook", "difficulty": "advanced",
+        "pre_launch": "start outlook",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Flag first email for follow-up.\n"
+            "Step 1: wait 5 seconds. Click first email.\n"
+            "Step 2: right_click on the email.\n"
+            "Step 3: Click 'Follow Up' or flag option.\n"
+            "Step 4: done with success=true, summary='Flagged email'.\n"
+            "IMPORTANT: Select -> right-click -> Follow Up."
+        ),
+        "output": "recordings/v2/demo37_outlook_flag.gif",
+        "max_steps": 10,
+    },
+    38: {
+        "name": "Demo 38: Outlook - Rules",
+        "app": "outlook", "difficulty": "advanced",
+        "pre_launch": "start outlook",
+        "fast_mode": True, "timeout": 150, "min_done_step": 3,
+        "task": (
+            "Open email rules in Outlook.\n"
+            "Step 1: wait 5 seconds. Click 'File' tab.\n"
+            "Step 2: Click 'Manage Rules & Alerts'.\n"
+            "Step 3: Verify Rules dialog is open.\n"
+            "Step 4: done with success=true, summary='Opened rules'.\n"
+            "IMPORTANT: File -> Manage Rules & Alerts."
+        ),
+        "output": "recordings/v2/demo38_outlook_rules.gif",
+        "max_steps": 10,
+    },
+    # ── Surface App (39-42) ──
+    39: {
+        "name": "Demo 39: Surface - Device Info",
+        "app": "surface", "difficulty": "beginner",
+        "pre_launch": "start surface:",
+        "fast_mode": True, "timeout": 120, "min_done_step": 1,
+        "task": (
+            "View device info in Surface app.\n"
+            "Step 1: wait 4 seconds for Surface app.\n"
+            "Step 2: Verify device info is shown.\n"
+            "Step 3: done with success=true, summary='Viewed Surface info'.\n"
+            "IMPORTANT: Surface app opens to device info. Verify and done."
+        ),
+        "output": "recordings/v2/demo39_surface_info.gif",
+        "max_steps": 5,
+    },
+    40: {
+        "name": "Demo 40: Surface - Updates",
+        "app": "surface", "difficulty": "beginner",
+        "pre_launch": "start surface:",
+        "fast_mode": True, "timeout": 120, "min_done_step": 1,
+        "task": (
+            "Check for firmware updates in Surface app.\n"
+            "Step 1: wait 4 seconds.\n"
+            "Step 2: Look for 'Updates' link and click it.\n"
+            "Step 3: done with success=true, summary='Checked updates'.\n"
+            "IMPORTANT: Navigate to updates section."
+        ),
+        "output": "recordings/v2/demo40_surface_updates.gif",
+        "max_steps": 6,
+    },
+    41: {
+        "name": "Demo 41: Surface - Pen Settings",
+        "app": "surface", "difficulty": "intermediate",
+        "pre_launch": "start ms-settings:devices-pen",
+        "fast_mode": True, "timeout": 120, "min_done_step": 1,
+        "task": (
+            "View Pen settings.\n"
+            "Step 1: wait 3 seconds for Settings.\n"
+            "Step 2: Verify pen settings visible.\n"
+            "Step 3: done with success=true, summary='Viewed Pen settings'.\n"
+            "IMPORTANT: Already open. Verify and done."
+        ),
+        "output": "recordings/v2/demo41_surface_pen.gif",
+        "max_steps": 8,
+    },
+    42: {
+        "name": "Demo 42: Surface - Keyboard",
+        "app": "surface", "difficulty": "intermediate",
+        "pre_launch": "start ms-settings:devices-typing",
+        "fast_mode": True, "timeout": 120, "min_done_step": 1,
+        "task": (
+            "View keyboard/typing settings.\n"
+            "Step 1: wait 3 seconds for Settings.\n"
+            "Step 2: Verify typing settings visible.\n"
+            "Step 3: done with success=true, summary='Viewed keyboard settings'.\n"
+            "IMPORTANT: Already open. Verify and done."
+        ),
+        "output": "recordings/v2/demo42_surface_keyboard.gif",
+        "max_steps": 8,
+    },
+    # ── Windows Settings (43-50) ──
+    43: {
+        "name": "Demo 43: Settings - Night Light",
+        "app": "settings", "difficulty": "beginner",
+        "pre_launch": "start ms-settings:nightlight",
+        "fast_mode": True, "timeout": 90, "min_done_step": 1,
+        "task": (
+            "Toggle Night Light.\n"
+            "Step 1: wait 2 seconds.\n"
+            "Step 2: Click Night Light toggle.\n"
+            "Step 3: done with success=true, summary='Toggled Night Light'.\n"
+            "IMPORTANT: Find toggle and click."
+        ),
+        "output": "recordings/v2/demo43_settings_nightlight.gif",
+        "max_steps": 4,
+    },
+    44: {
+        "name": "Demo 44: Settings - Display",
+        "app": "settings", "difficulty": "beginner",
+        "pre_launch": "start ms-settings:display",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "View display resolution.\n"
+            "Step 1: wait 2 seconds.\n"
+            "Step 2: scroll down to find 'Display resolution'.\n"
+            "Step 3: done with success=true, summary='Viewed resolution'.\n"
+            "IMPORTANT: Do NOT change resolution."
+        ),
+        "output": "recordings/v2/demo44_settings_display.gif",
+        "max_steps": 6,
+    },
+    45: {
+        "name": "Demo 45: Settings - WiFi",
+        "app": "settings", "difficulty": "intermediate",
+        "pre_launch": "start ms-settings:network-wifi",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "View WiFi networks.\n"
+            "Step 1: wait 2 seconds.\n"
+            "Step 2: Click 'Show available networks' if needed.\n"
+            "Step 3: Verify network list visible.\n"
+            "Step 4: done with success=true, summary='Viewed WiFi networks'.\n"
+            "IMPORTANT: View available networks."
+        ),
+        "output": "recordings/v2/demo45_settings_wifi.gif",
+        "max_steps": 8,
+    },
+    46: {
+        "name": "Demo 46: Settings - Default Apps",
+        "app": "settings", "difficulty": "intermediate",
+        "pre_launch": "start ms-settings:defaultapps",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "View default apps.\n"
+            "Step 1: wait 2 seconds.\n"
+            "Step 2: Verify default apps list visible.\n"
+            "Step 3: done with success=true, summary='Viewed defaults'.\n"
+            "IMPORTANT: Verify and done."
+        ),
+        "output": "recordings/v2/demo46_settings_defaults.gif",
+        "max_steps": 8,
+    },
+    47: {
+        "name": "Demo 47: Settings - Language",
+        "app": "settings", "difficulty": "intermediate",
+        "pre_launch": "start ms-settings:regionlanguage",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "View language settings.\n"
+            "Step 1: wait 2 seconds.\n"
+            "Step 2: Verify installed languages visible.\n"
+            "Step 3: done with success=true, summary='Viewed languages'.\n"
+            "IMPORTANT: Verify and done."
+        ),
+        "output": "recordings/v2/demo47_settings_language.gif",
+        "max_steps": 10,
+    },
+    48: {
+        "name": "Demo 48: Settings - Accounts",
+        "app": "settings", "difficulty": "advanced",
+        "pre_launch": "start ms-settings:otherusers",
+        "fast_mode": True, "timeout": 120, "min_done_step": 1,
+        "task": (
+            "View user accounts.\n"
+            "Step 1: wait 2 seconds.\n"
+            "Step 2: Verify accounts page visible.\n"
+            "Step 3: done with success=true, summary='Viewed accounts'.\n"
+            "IMPORTANT: Verify and done."
+        ),
+        "output": "recordings/v2/demo48_settings_accounts.gif",
+        "max_steps": 6,
+    },
+    49: {
+        "name": "Demo 49: Settings - Windows Update",
+        "app": "settings", "difficulty": "intermediate",
+        "pre_launch": "start ms-settings:windowsupdate",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Check for Windows Updates.\n"
+            "Step 1: wait 2 seconds.\n"
+            "Step 2: Click 'Check for updates'.\n"
+            "Step 3: wait 3 seconds.\n"
+            "Step 4: done with success=true, summary='Checked for updates'.\n"
+            "IMPORTANT: Click Check for updates."
+        ),
+        "output": "recordings/v2/demo49_settings_update.gif",
+        "max_steps": 6,
+    },
+    50: {
+        "name": "Demo 50: Settings - Power",
+        "app": "settings", "difficulty": "beginner",
+        "pre_launch": "start ms-settings:powersleep",
+        "fast_mode": True, "timeout": 90, "min_done_step": 1,
+        "task": (
+            "View power settings.\n"
+            "Step 1: wait 2 seconds.\n"
+            "Step 2: Verify power settings visible.\n"
+            "Step 3: done with success=true, summary='Viewed power settings'.\n"
+            "IMPORTANT: Verify and done."
+        ),
+        "output": "recordings/v2/demo50_settings_power.gif",
+        "max_steps": 5,
+    },
+    # ── File Explorer expanded (51-54) ──
+    51: {
+        "name": "Demo 51: Explorer - Rename",
+        "app": "explorer", "difficulty": "beginner",
+        "pre_launch": 'cmd /c "echo test > %TEMP%\\agenticos_rename_test.txt" & start explorer %TEMP%',
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Rename a file in Explorer.\n"
+            "Step 1: wait 3 seconds.\n"
+            "Step 2: Click 'agenticos_rename_test.txt' to select.\n"
+            "Step 3: press_key 'F2'. type_text 'agenticos_renamed.txt'.\n"
+            "Step 4: press_key 'enter'.\n"
+            "Step 5: done with success=true, summary='Renamed file'.\n"
+            "IMPORTANT: Select -> F2 -> type -> Enter."
+        ),
+        "output": "recordings/v2/demo51_explorer_rename.gif",
+        "max_steps": 8,
+    },
+    52: {
+        "name": "Demo 52: Explorer - Copy File",
+        "app": "explorer", "difficulty": "beginner",
+        "pre_launch": 'cmd /c "echo test > %TEMP%\\agenticos_copy_test.txt" & start explorer %TEMP%',
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Copy a file with Ctrl+C, Ctrl+V.\n"
+            "Step 1: wait 3 seconds.\n"
+            "Step 2: Click 'agenticos_copy_test.txt'.\n"
+            "Step 3: hotkey ['ctrl','c']. hotkey ['ctrl','v'].\n"
+            "Step 4: done with success=true, summary='Copied file'.\n"
+            "IMPORTANT: Select -> Ctrl+C -> Ctrl+V."
+        ),
+        "output": "recordings/v2/demo52_explorer_copy.gif",
+        "max_steps": 8,
+    },
+    53: {
+        "name": "Demo 53: Explorer - Search",
+        "app": "explorer", "difficulty": "beginner",
+        "pre_launch": "start explorer %USERPROFILE%",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Search files in Explorer.\n"
+            "Step 1: wait 3 seconds.\n"
+            "Step 2: hotkey ['ctrl','e'] to focus search.\n"
+            "Step 3: type_text 'agenticos'. press_key 'enter'.\n"
+            "Step 4: wait 3 seconds.\n"
+            "Step 5: done with success=true, summary='Searched files'.\n"
+            "IMPORTANT: Ctrl+E search, type, Enter."
+        ),
+        "output": "recordings/v2/demo53_explorer_search.gif",
+        "max_steps": 6,
+    },
+    54: {
+        "name": "Demo 54: Explorer - View Details",
+        "app": "explorer", "difficulty": "beginner",
+        "pre_launch": "start explorer %USERPROFILE%\\Downloads",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Change folder view to Details.\n"
+            "Step 1: wait 3 seconds.\n"
+            "Step 2: Click 'View' menu. Click 'Details'.\n"
+            "Step 3: Click 'Date modified' column to sort.\n"
+            "Step 4: done with success=true, summary='Changed to Details view'.\n"
+            "IMPORTANT: View -> Details -> Date modified column."
+        ),
+        "output": "recordings/v2/demo54_explorer_view.gif",
+        "max_steps": 6,
+    },
+    # ── Paint & Snipping Tool (55-56) ──
+    55: {
+        "name": "Demo 55: Snipping Tool",
+        "app": "snipping", "difficulty": "beginner",
+        "pre_launch": "start snippingtool",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Take a screenshot with Snipping Tool.\n"
+            "Step 1: wait 3 seconds.\n"
+            "Step 2: Click '+ New' button.\n"
+            "Step 3: wait 2 seconds. Select full screen if prompted.\n"
+            "Step 4: done with success=true, summary='Captured screenshot'.\n"
+            "IMPORTANT: Click New to take a snip."
+        ),
+        "output": "recordings/v2/demo55_snipping.gif",
+        "max_steps": 8,
+    },
+    56: {
+        "name": "Demo 56: Paint - Draw",
+        "app": "paint", "difficulty": "beginner",
+        "pre_launch": "start mspaint",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Draw a shape in Paint.\n"
+            "Step 1: wait 3 seconds.\n"
+            "Step 2: Click rectangle shape tool.\n"
+            "Step 3: drag from x=200, y=300 to x=500, y=500.\n"
+            "Step 4: done with success=true, summary='Drew shape'.\n"
+            "IMPORTANT: Select shape tool, drag to draw."
+        ),
+        "output": "recordings/v2/demo56_paint.gif",
+        "max_steps": 10,
+    },
+    # ── Microsoft Store (57-58) ──
+    57: {
+        "name": "Demo 57: Store - Search",
+        "app": "store", "difficulty": "beginner",
+        "pre_launch": "start ms-windows-store:",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Search for an app in Store.\n"
+            "Step 1: wait 4 seconds.\n"
+            "Step 2: Click search box. type_text 'Visual Studio Code'.\n"
+            "Step 3: press_key 'enter'. wait 2 seconds.\n"
+            "Step 4: done with success=true, summary='Searched Store'.\n"
+            "IMPORTANT: Search box, type, Enter."
+        ),
+        "output": "recordings/v2/demo57_store_search.gif",
+        "max_steps": 6,
+    },
+    58: {
+        "name": "Demo 58: Store - Updates",
+        "app": "store", "difficulty": "beginner",
+        "pre_launch": "start ms-windows-store:",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "Check for app updates in Store.\n"
+            "Step 1: wait 4 seconds.\n"
+            "Step 2: Click 'Library' at bottom-left.\n"
+            "Step 3: Click 'Get updates' if visible.\n"
+            "Step 4: done with success=true, summary='Checked updates'.\n"
+            "IMPORTANT: Store -> Library -> Get updates."
+        ),
+        "output": "recordings/v2/demo58_store_updates.gif",
+        "max_steps": 6,
+    },
+    # ── Office Apps (59-61) ──
+    59: {
+        "name": "Demo 59: Word - Create Doc",
+        "app": "word", "difficulty": "beginner",
+        "pre_launch": "start winword",
+        "fast_mode": True, "timeout": 150, "min_done_step": 2,
+        "task": (
+            "Create a document in Word.\n"
+            "Step 1: wait 5 seconds.\n"
+            "Step 2: Click 'Blank document'.\n"
+            "Step 3: type_text 'AgenticOS Project Report'.\n"
+            "Step 4: done with success=true, summary='Created document'.\n"
+            "IMPORTANT: Blank document -> type."
+        ),
+        "output": "recordings/v2/demo59_word.gif",
+        "max_steps": 10,
+    },
+    60: {
+        "name": "Demo 60: Excel - SUM Formula",
+        "app": "excel", "difficulty": "beginner",
+        "pre_launch": "start excel",
+        "fast_mode": True, "timeout": 150, "min_done_step": 3,
+        "task": (
+            "Enter data and SUM formula in Excel.\n"
+            "Step 1: wait 5 seconds. Click 'Blank workbook'.\n"
+            "Step 2: type_text '10' press_key 'enter'.\n"
+            "Step 3: type_text '20' press_key 'enter'.\n"
+            "Step 4: type_text '30' press_key 'enter'.\n"
+            "Step 5: type_text '=SUM(A1:A3)' press_key 'enter'.\n"
+            "Step 6: done with success=true, summary='SUM=60'.\n"
+            "IMPORTANT: Blank workbook -> numbers -> SUM."
+        ),
+        "output": "recordings/v2/demo60_excel.gif",
+        "max_steps": 10,
+    },
+    61: {
+        "name": "Demo 61: PowerPoint - Title Slide",
+        "app": "powerpoint", "difficulty": "beginner",
+        "pre_launch": "start powerpnt",
+        "fast_mode": True, "timeout": 150, "min_done_step": 2,
+        "task": (
+            "Create a title slide in PowerPoint.\n"
+            "Step 1: wait 5 seconds. Click 'Blank Presentation'.\n"
+            "Step 2: Click 'Click to add title'.\n"
+            "Step 3: type_text 'AgenticOS - AI Desktop Automation'.\n"
+            "Step 4: Click 'Click to add subtitle'.\n"
+            "Step 5: type_text 'Mastering Windows Apps with AI'.\n"
+            "Step 6: done with success=true, summary='Created slide'.\n"
+            "IMPORTANT: Title -> subtitle -> type."
+        ),
+        "output": "recordings/v2/demo61_powerpoint.gif",
+        "max_steps": 8,
+    },
+    # ── Other Apps (62-64) ──
+    62: {
+        "name": "Demo 62: Windows Security",
+        "app": "security", "difficulty": "intermediate",
+        "pre_launch": "start windowsdefender:",
+        "fast_mode": True, "timeout": 120, "min_done_step": 2,
+        "task": (
+            "View virus protection in Windows Security.\n"
+            "Step 1: wait 3 seconds.\n"
+            "Step 2: Click 'Virus & threat protection'.\n"
+            "Step 3: Verify protection status displayed.\n"
+            "Step 4: done with success=true, summary='Viewed security'.\n"
+            "IMPORTANT: Do NOT start a scan."
+        ),
+        "output": "recordings/v2/demo62_security.gif",
+        "max_steps": 8,
+    },
+    63: {
+        "name": "Demo 63: Clipboard History",
+        "app": "clipboard", "difficulty": "beginner",
+        "pre_launch": "",
+        "fast_mode": True, "timeout": 90, "min_done_step": 2,
+        "task": (
+            "Open Clipboard History.\n"
+            "Step 1: hotkey ['win','v'] to open Clipboard History.\n"
+            "Step 2: Verify clipboard panel visible.\n"
+            "Step 3: done with success=true, summary='Opened clipboard'.\n"
+            "IMPORTANT: Win+V opens clipboard history."
+        ),
+        "output": "recordings/v2/demo63_clipboard.gif",
+        "max_steps": 6,
+    },
+    64: {
+        "name": "Demo 64: Feedback Hub",
+        "app": "feedback", "difficulty": "beginner",
+        "pre_launch": "start feedback-hub:",
+        "fast_mode": True, "timeout": 120, "min_done_step": 1,
+        "task": (
+            "Open Feedback Hub.\n"
+            "Step 1: wait 4 seconds.\n"
+            "Step 2: Verify main page visible.\n"
+            "Step 3: done with success=true, summary='Opened Feedback Hub'.\n"
+            "IMPORTANT: Verify and done."
+        ),
+        "output": "recordings/v2/demo64_feedback.gif",
+        "max_steps": 5,
+    },
 }
 
-# â”€â”€ Fast Demo IDs â”€â”€
-FAST_DEMO_IDS = list(range(5, 15))  # Demos 5-14
+# -- App Groups for --app filter --
+APP_GROUPS = {
+    "edge": list(range(15, 23)),
+    "teams": list(range(23, 31)),
+    "outlook": list(range(31, 39)),
+    "surface": list(range(39, 43)),
+    "settings": [8] + list(range(43, 51)),
+    "explorer": [4] + list(range(51, 55)),
+    "paint": [56],
+    "snipping": [55],
+    "store": [57, 58],
+    "word": [59],
+    "excel": [60],
+    "powerpoint": [61],
+    "office": [59, 60, 61],
+    "security": [62],
+    "clipboard": [63],
+    "feedback": [64],
+    "notepad": [5, 9, 10, 13],
+    "calculator": [6, 11],
+    "cmd": [7],
+    "powershell": [12],
+    "taskmgr": [14],
+}
+
+# -- Difficulty filter --
+DIFFICULTY_MAP = {"beginner": [], "intermediate": [], "advanced": []}
+for _did, _dcfg in DEMOS.items():
+    _diff = _dcfg.get("difficulty", "beginner")
+    if _diff in DIFFICULTY_MAP:
+        DIFFICULTY_MAP[_diff].append(_did)
+
+# -- Fast Demo IDs --
+FAST_DEMO_IDS = list(range(5, 15))  # Original fast demos
+V2_DEMO_IDS = list(range(15, 65))   # All new v2 demos
 
 
 def preseed_rl(rl: QLearner) -> int:
@@ -444,6 +1290,20 @@ def preseed_rl(rl: QLearner) -> int:
         "powershell": {"type_text": 0.5, "press_key": 0.4, "click": 0.0},
         "settings": {"click": 0.3, "scroll": 0.2, "press_key": 0.1},
         "task manager": {"click": 0.3, "scroll": 0.2, "press_key": 0.1},
+        # v2 app priors
+        "edge": {"hotkey": 0.5, "type_text": 0.4, "press_key": 0.3, "click": 0.2},
+        "teams": {"click": 0.4, "type_text": 0.3, "hotkey": 0.3, "wait": 0.3},
+        "outlook": {"click": 0.4, "hotkey": 0.4, "type_text": 0.3, "press_key": 0.2},
+        "surface": {"click": 0.3, "scroll": 0.2, "wait": 0.2},
+        "explorer": {"click": 0.4, "hotkey": 0.3, "press_key": 0.3, "type_text": 0.2},
+        "paint": {"click": 0.4, "drag": 0.3, "type_text": 0.1},
+        "snipping": {"click": 0.4, "wait": 0.2},
+        "store": {"click": 0.4, "type_text": 0.3, "press_key": 0.2},
+        "word": {"click": 0.3, "type_text": 0.4, "hotkey": 0.3},
+        "excel": {"click": 0.3, "type_text": 0.4, "press_key": 0.3},
+        "powerpoint": {"click": 0.4, "type_text": 0.3},
+        "security": {"click": 0.4, "scroll": 0.2, "wait": 0.2},
+        "feedback": {"click": 0.3, "wait": 0.2},
     }
     seeded = 0
     for app, actions in priors.items():
@@ -1039,16 +1899,26 @@ def main():
     global _log_fh
 
     import argparse
-    parser = argparse.ArgumentParser(description="AgenticOS Demo Runner v7")
-    parser.add_argument("--demo", default="all", help="Demo number (1,2,3) or 'all'")
+    parser = argparse.ArgumentParser(description="AgenticOS Demo Runner v8")
+    parser.add_argument("--demo", default="all", help="Demo number (1,2,3), 'all', 'fast', 'v2', 'v2fast'")
     parser.add_argument("--supervise", action="store_true",
                         help="Enable human supervision: pause after each demo for review & feedback")
+    parser.add_argument("--app", default=None,
+                        help="Filter by app: edge, teams, outlook, surface, settings, explorer, etc.")
+    parser.add_argument("--difficulty", default=None, choices=["beginner", "intermediate", "advanced"],
+                        help="Filter by difficulty level")
+    parser.add_argument("--iterations", type=int, default=1,
+                        help="Run each demo N times for iterative refinement (default: 1)")
     args = parser.parse_args()
 
     _log_fh = open(LOG_FILE, "w", encoding="utf-8")
 
+    # Ensure v2 recordings directory exists
+    v2_dir = ROOT / "recordings" / "v2"
+    v2_dir.mkdir(parents=True, exist_ok=True)
+
     log("=" * 64)
-    log("  AgenticOS Demo Runner v7 (Human-Supervised Amortization)")
+    log("  AgenticOS Demo Runner v8 (64-Demo Multi-App Edition)")
     log("  State Validation | Recovery | RL | Supervision | Optimizer")
     log("=" * 64)
 
@@ -1081,6 +1951,12 @@ def main():
         demo_nums = FAST_DEMO_IDS[:5]  # First 5 fast demos
     elif args.demo == "fast10":
         demo_nums = FAST_DEMO_IDS  # All 10 fast demos
+    elif args.demo == "v2":
+        demo_nums = V2_DEMO_IDS   # All new v2 demos (15-64)
+    elif args.demo == "v2fast":
+        demo_nums = V2_DEMO_IDS[:10]  # First 10 v2 demos
+    elif args.demo == "v2all":
+        demo_nums = FAST_DEMO_IDS + V2_DEMO_IDS  # All demos 5-64
     else:
         # Support ranges like '5-14' and comma-separated '5,6,7'
         if '-' in args.demo:
@@ -1089,58 +1965,85 @@ def main():
         else:
             demo_nums = [int(x.strip()) for x in args.demo.split(",")]
 
+    # Apply --app filter
+    if args.app:
+        app_key = args.app.lower()
+        if app_key in APP_GROUPS:
+            app_ids = set(APP_GROUPS[app_key])
+            demo_nums = [d for d in demo_nums if d in app_ids]
+            log(f"  Filter --app={app_key}: {len(demo_nums)} demos")
+        else:
+            log(f"  WARNING: Unknown app '{app_key}'. Available: {', '.join(sorted(APP_GROUPS.keys()))}")
+
+    # Apply --difficulty filter
+    if args.difficulty:
+        diff_ids = set(DIFFICULTY_MAP.get(args.difficulty, []))
+        demo_nums = [d for d in demo_nums if d in diff_ids]
+        log(f"  Filter --difficulty={args.difficulty}: {len(demo_nums)} demos")
+
+    if not demo_nums:
+        log("  ERROR: No demos match the selected filters.")
+        return
+
     results = []
-    for i, num in enumerate(demo_nums):
-        demo = dict(DEMOS[num])  # Copy so we can modify
-        demo["_demo_id"] = num   # Tag for optimizer lookup
+    total_iterations = args.iterations
+    for iteration in range(1, total_iterations + 1):
+        if total_iterations > 1:
+            log(f"\n{'#' * 64}")
+            log(f"  ITERATION {iteration}/{total_iterations}")
+            log(f"{'#' * 64}")
 
-        # Apply optimizer-learned config adjustments
-        demo = optimizer.get_optimized_config(num, demo)
-        opt_note = demo.pop("_opt_note", None)
-        if opt_note:
-            log(f"  Optimizer: {opt_note}")
+        for i, num in enumerate(demo_nums):
+            demo = dict(DEMOS[num])  # Copy so we can modify
+            demo["_demo_id"] = num   # Tag for optimizer lookup
 
-        log("")
-        log("=" * 64)
-        log(f"  [{i + 1}/{len(demo_nums)}] {demo['name']}")
-        log("=" * 64)
+            # Apply optimizer-learned config adjustments
+            demo = optimizer.get_optimized_config(num, demo)
+            opt_note = demo.pop("_opt_note", None)
+            if opt_note:
+                log(f"  Optimizer: {opt_note}")
 
-        ok, nsteps, elapsed, gif, step_log = run_demo(demo, token, memory, rl, optimizer)
-        results.append((num, demo["name"], ok, nsteps, elapsed, gif, step_log))
+            log("")
+            log("=" * 64)
+            log(f"  [{i + 1}/{len(demo_nums)}] {demo['name']}")
+            log("=" * 64)
 
-        # -- Human supervision: collect feedback after each demo --
-        if args.supervise:
-            feedback = supervisor.collect_feedback(
-                demo_id=num,
-                demo_name=demo["name"],
-                success=ok,
-                steps=nsteps,
-                elapsed=elapsed,
-                gif_path=gif,
-                step_log=step_log,
-            )
+            ok, nsteps, elapsed, gif, step_log = run_demo(demo, token, memory, rl, optimizer)
+            results.append((num, demo["name"], ok, nsteps, elapsed, gif, step_log))
 
-            # Feed human reward into RL (weighted heavily)
-            human_reward = feedback.rl_reward
-            if human_reward != 0:
-                rl.end_episode(human_reward)  # Extra episode signal from human
-                log(f"  RL human reward: {human_reward:+.2f}")
+            # -- Human supervision: collect feedback after each demo --
+            if args.supervise:
+                feedback = supervisor.collect_feedback(
+                    demo_id=num,
+                    demo_name=demo["name"],
+                    success=ok,
+                    steps=nsteps,
+                    elapsed=elapsed,
+                    gif_path=gif,
+                    step_log=step_log,
+                )
 
-            # Update optimizer profile from feedback
-            optimizer.update_from_feedback(
-                demo_id=num,
-                demo_name=demo["name"],
-                step_log=step_log,
-                feedback_score=feedback.overall_score,
-                human_notes=feedback.notes,
-                correct_approach=feedback.correct_approach,
-            )
-            log(f"  Optimizer updated: {optimizer.stats}")
+                # Feed human reward into RL (weighted heavily)
+                human_reward = feedback.rl_reward
+                if human_reward != 0:
+                    rl.end_episode(human_reward)  # Extra episode signal from human
+                    log(f"  RL human reward: {human_reward:+.2f}")
 
-        if i < len(demo_nums) - 1:
-            gap = 2 if demo.get("fast_mode") else 5
-            log(f"\n  Waiting {gap}s before next demo...\n")
-            time.sleep(gap)
+                # Update optimizer profile from feedback
+                optimizer.update_from_feedback(
+                    demo_id=num,
+                    demo_name=demo["name"],
+                    step_log=step_log,
+                    feedback_score=feedback.overall_score,
+                    human_notes=feedback.notes,
+                    correct_approach=feedback.correct_approach,
+                )
+                log(f"  Optimizer updated: {optimizer.stats}")
+
+            if i < len(demo_nums) - 1:
+                gap = 2 if demo.get("fast_mode") else 5
+                log(f"\n  Waiting {gap}s before next demo...\n")
+                time.sleep(gap)
 
     log("")
     log("=" * 64)

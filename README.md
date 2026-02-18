@@ -8,10 +8,12 @@
 [![GPT-4o](https://img.shields.io/badge/GPT--4o-Vision-412991?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com/)
 [![Windows](https://img.shields.io/badge/Windows_11-0078D4?style=for-the-badge&logo=windows11&logoColor=white)](https://www.microsoft.com/windows)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
+[![Demos](https://img.shields.io/badge/Demos-64-success?style=for-the-badge)](scripts/run_demo_detached.py)
+[![Apps](https://img.shields.io/badge/Apps-15+-blue?style=for-the-badge)](#-v2-multi-app-expansion)
 
 **A modular Python framework for deep OS integration and intelligent desktop automation using multi-modal LLMs, Windows UI Automation, and human-supervised reinforcement learning.**
 
-[🎬 Demo Showcase](#-demo-showcase) · [🚀 Quick Start](#-quick-start) · [🏗️ Architecture](#%EF%B8%8F-architecture) · [📊 Presentation](#-presentation)
+[🎬 Demo Showcase](#-demo-showcase-v1--core-demos-1-14) · [🚀 v2 Multi-App](#-v2-multi-app-expansion) · [🏗️ Architecture](#%EF%B8%8F-architecture) · [📊 Presentation](#-presentation)
 
 ---
 
@@ -39,7 +41,7 @@ AgenticOS is an **AI desktop automation agent** that can see your screen, unders
 
 ---
 
-## 🎬 Demo Showcase
+## 🎬 Demo Showcase (v1 — Core Demos 1-14)
 
 Real demos running on **Windows 11** with **GPT-4o** (Azure OpenAI). Every GIF below was recorded live.
 
@@ -300,11 +302,107 @@ Real demos running on **Windows 11** with **GPT-4o** (Azure OpenAI). Every GIF b
 
 ---
 
+## � v2 Multi-App Expansion (Demos 15-64)
+
+### 50 New Demos Across 15 Applications
+
+v2 massively expands coverage with **50 new demos** across real-world Windows applications, organized by difficulty level (beginner → advanced):
+
+<div align="center">
+
+| App Category | App | Demo Range | Count | Difficulty Spread |
+|:---:|:---|:---:|:---:|:---|
+| 🌐 | **Microsoft Edge** | 15-22 | 8 | Beginner → Advanced |
+| 💬 | **Microsoft Teams** | 23-30 | 8 | Beginner → Advanced |
+| 📧 | **Microsoft Outlook** | 31-38 | 8 | Beginner → Advanced |
+| 📱 | **Surface App** | 39-42 | 4 | Beginner → Intermediate |
+| ⚙️ | **Windows Settings** | 43-50 | 8 | Beginner → Advanced |
+| 📁 | **File Explorer** | 51-54 | 4 | Beginner |
+| ✂️ | **Snipping Tool** | 55 | 1 | Beginner |
+| 🎨 | **Paint** | 56 | 1 | Beginner |
+| 🏪 | **Microsoft Store** | 57-58 | 2 | Beginner |
+| 📝 | **Word / Excel / PowerPoint** | 59-61 | 3 | Beginner |
+| 🔒 | **Windows Security** | 62 | 1 | Intermediate |
+| 📋 | **Clipboard / Feedback** | 63-64 | 2 | Beginner |
+
+</div>
+
+### ⚙️ v2 Highlight — Settings Demos
+
+<details open>
+<summary><strong>8 demos: Night Light, Display, WiFi, Defaults, Language, Accounts, Update, Power</strong></summary>
+
+<div align="center">
+<img src="recordings/v2/demo44_settings_display.gif" width="700" alt="Demo 44: Settings Display">
+</div>
+
+*▲ Demo 44: AI agent opens Display settings and verifies screen resolution — 2 steps, 55s ✅*
+
+<div align="center">
+<img src="recordings/v2/demo50_settings_power.gif" width="700" alt="Demo 50: Settings Power">
+</div>
+
+*▲ Demo 50: AI agent navigates to Power & Battery settings — 2 steps, 58s ✅*
+
+| # | Demo | Steps | Time | Status |
+|---|------|-------|------|--------|
+| 43 | Night Light | 4 | 98s | ⚠️ |
+| 44 | Display Resolution | 2 | 55s | ✅ |
+| 45 | WiFi Networks | — | — | 🔄 |
+| 46 | Default Apps | — | — | 🔄 |
+| 47 | Language Settings | — | — | 🔄 |
+| 48 | Accounts | — | — | 🔄 |
+| 49 | Windows Update | — | — | 🔄 |
+| 50 | Power Settings | 2 | 58s | ✅ |
+
+</details>
+
+### 🌐 v2 Highlight — Edge Browser
+
+<details>
+<summary><strong>8 demos: Navigate, Search, Bookmark, Privacy, Clear Data, Download, Tabs, Collections</strong></summary>
+
+<div align="center">
+<img src="recordings/v2/demo15_edge_navigate.gif" width="700" alt="Demo 15: Edge Navigate">
+</div>
+
+*▲ Demo 15: AI agent navigates Edge to a URL — 5 steps, 89s ⚠️*
+
+| # | Demo | Steps | Time | Status |
+|---|------|-------|------|--------|
+| 15 | Navigate to URL | 5 | 89s | ⚠️ |
+| 16 | New Tab and Search | — | — | 🔄 |
+| 17 | Bookmark Page | — | — | 🔄 |
+| 18 | Privacy Settings | — | — | 🔄 |
+| 19 | Clear Browsing Data | — | — | 🔄 |
+| 20 | Download File | — | — | 🔄 |
+| 21 | Tab Management | — | — | 🔄 |
+| 22 | Collections | — | — | 🔄 |
+
+</details>
+
+### 📊 v2 New Capabilities
+
+| Feature | Before (v1) | After (v2) |
+|---------|:-----------:|:----------:|
+| **Total Demos** | 14 | **64** |
+| **Apps Covered** | 8 | **15+** |
+| **RL Pre-seed Priors** | 6 | **19** |
+| **Recovery Strategies** | 13 | **21** |
+| **Teaching Topics** | 11 | **17** |
+| **Q-Table Entries** | 63 | **120** |
+| **RL Episodes** | 43 | **66** |
+| **Filtering** | None | `--app`, `--difficulty` |
+| **Iteration Mode** | None | `--iterations N` |
+
+---
+
 ## 📊 Results Summary
 
 <div align="center">
 
-### 14 Demos · 10 Pass · 2 Partial · 1 Fail · 1 WIP
+### v1: 14 Demos · 10 Pass · 2 Partial · 1 Fail · 1 WIP
+### v2: 50 New Demos · 3 Pass · 2 Partial · 45 Pending 🔄
 
 </div>
 
@@ -328,6 +426,27 @@ Real demos running on **Windows 11** with **GPT-4o** (Azure OpenAI). Every GIF b
 <div align="center">
 
 **63** Q-table entries · **43** RL episodes · **10** human-supervised reviews
+
+</div>
+
+### v2 Results by App (Demos 15-64)
+
+| App | Demo Range | Tested | Pass | Partial | Status |
+|-----|-----------|:------:|:----:|:-------:|--------|
+| Edge | 15-22 | 1 | 0 | 1 | ⚠️ |
+| Teams | 23-30 | 0 | 0 | 0 | 🔄 Pending |
+| Outlook | 31-38 | 0 | 0 | 0 | 🔄 Pending |
+| Surface | 39-42 | 0 | 0 | 0 | 🔄 Pending |
+| Settings | 43-50 | 3 | 2 | 1 | ✅ 67% |
+| Explorer | 51-54 | 1 | 1 | 0 | ✅ 100% |
+| Snipping/Paint | 55-56 | 0 | 0 | 0 | 🔄 Pending |
+| Store | 57-58 | 0 | 0 | 0 | 🔄 Pending |
+| Office | 59-61 | 0 | 0 | 0 | 🔄 Pending |
+| Security/Other | 62-64 | 0 | 0 | 0 | 🔄 Pending |
+
+<div align="center">
+
+**v2 cumulative:** 120 Q-table entries · 66 RL episodes · RL trend: improving 📈
 
 </div>
 
@@ -389,15 +508,15 @@ Real demos running on **Windows 11** with **GPT-4o** (Azure OpenAI). Every GIF b
 |-----------|--------|
 | **Algorithm** | Tabular Q-learning with TD update |
 | **State** | Hash of window title + UI element context |
-| **Actions** | 16 action types (click, type, hotkey, etc.) |
+| **Actions** | 17 action types (click, type, hotkey, drag, etc.) |
 | **Learning Rate (α)** | 0.15 |
 | **Discount (γ)** | 0.9 |
 | **Rewards** | +2.0 done, +0.3 progress, -0.7 drift, -1.2 wrong content |
 | **Persistence** | Q-table saved to `recordings/rl_qtable.json` |
-| **Pre-seeding** | Commonsense priors for known apps |
-| **Episodes** | 43 completed, 63 Q-table entries |
+| **Pre-seeding** | Commonsense priors for 19 known apps |
+| **Episodes** | 66 completed, 120 Q-table entries |
 
-### 👤 Human Supervision (NEW in v7)
+### 👤 Human Supervision
 
 Run demos with `--supervise` to enable human review after each task:
 
@@ -434,6 +553,7 @@ Human ratings flow into:
 | Step budget | ~30% | Tighten max_steps from best runs |
 | Golden replay | Skip LLM | Replay best action sequences |
 | Prompt hints | Quality | Human notes prevent repeated mistakes |
+| Iteration mode | 5× | `--iterations 5` reruns each demo to refine |
 
 ---
 
@@ -450,17 +570,32 @@ pip install -e ".[dev]"
 ### Run Demos
 
 ```bash
-# Run all fast demos (5-14)
-python scripts/run_demo_detached.py --demo fast
+# ── v1 demos (original 14) ──
+python scripts/run_demo_detached.py --demo fast     # Demos 5-14
+python scripts/run_demo_detached.py --demo 1         # Single demo
 
-# Run with human supervision
-python scripts/run_demo_detached.py --demo fast --supervise
+# ── v2 demos (50 new multi-app demos) ──
+python scripts/run_demo_detached.py --demo v2        # All v2 demos (15-64)
+python scripts/run_demo_detached.py --demo v2fast    # First 10 v2 demos
 
-# Run a specific demo
-python scripts/run_demo_detached.py --demo 1
+# ── Filter by app ──
+python scripts/run_demo_detached.py --demo v2 --app edge
+python scripts/run_demo_detached.py --demo v2 --app settings
+python scripts/run_demo_detached.py --demo v2 --app teams
 
-# Run a range
-python scripts/run_demo_detached.py --demo 5-14
+# ── Filter by difficulty ──
+python scripts/run_demo_detached.py --demo v2 --difficulty beginner
+python scripts/run_demo_detached.py --demo v2 --difficulty advanced
+
+# ── Iterative refinement (run each N times) ──
+python scripts/run_demo_detached.py --demo 50 --iterations 5
+
+# ── Human supervision ──
+python scripts/run_demo_detached.py --demo v2 --app edge --supervise
+
+# ── Range / comma-separated ──
+python scripts/run_demo_detached.py --demo 15-22     # Edge demos
+python scripts/run_demo_detached.py --demo 43,44,50  # Specific demos
 
 # Interactive chat mode
 agenticos --task "Open Notepad and type Hello World"
@@ -487,30 +622,35 @@ AgenticOS/
 │   │   ├── reinforcement.py     # Tabular Q-learning
 │   │   ├── human_supervisor.py  # 👤 Post-demo human review
 │   │   ├── demo_optimizer.py    # ⚡ Per-demo amortization engine
-│   │   ├── human_teacher.py     # Learning from Demonstration
+│   │   ├── human_teacher.py     # Learning from Demonstration (17 topics)
 │   │   ├── state_validator.py   # Post-action state validation
-│   │   ├── recovery.py          # Per-app recovery strategies
+│   │   ├── recovery.py          # Per-app recovery strategies (21 apps)
 │   │   └── step_memory.py       # Cached step patterns
 │   ├── grounding/
 │   │   ├── accessibility.py     # pywinauto UIA grounding
 │   │   ├── visual.py            # VLM-based visual grounding
 │   │   └── ocr.py               # RapidOCR text detection
 │   ├── actions/
-│   │   └── compositor.py        # 16 action types with retry
+│   │   └── compositor.py        # 17 action types with retry
 │   ├── observation/
 │   │   ├── screenshot.py        # mss-based screen capture
 │   │   └── recorder.py          # GIF session recorder
 │   └── mcp/
 │       └── server.py            # FastMCP server (11 tools)
 ├── scripts/
-│   ├── run_demo_detached.py     # Demo runner v7 (14 demos)
+│   ├── run_demo_detached.py     # Demo runner v8 (64 demos, 15 apps)
 │   └── human_teach.py           # Human teaching CLI
 ├── recordings/                  # GIF recordings & persistent data
-│   ├── demo*.gif                # 15 demo GIF recordings
-│   ├── rl_qtable.json           # Persistent Q-table (63 entries)
+│   ├── demo*.gif                # v1 demo GIF recordings (14)
+│   ├── v2/                      # 🆕 v2 demo GIF recordings (50)
+│   │   ├── demo15_edge_navigate.gif
+│   │   ├── demo44_settings_display.gif
+│   │   ├── demo50_settings_power.gif
+│   │   └── ...                  # More GIFs as demos run
+│   ├── rl_qtable.json           # Persistent Q-table (116 entries)
 │   └── supervision/             # Human feedback & optimizer state
 ├── docs/
-│   └── presentation.html        # 📊 14-slide interactive presentation
+│   └── presentation.html        # 📊 Interactive presentation
 ├── paper/                       # Academic paper (LaTeX)
 └── tests/                       # Unit test suite
 ```
@@ -519,35 +659,39 @@ AgenticOS/
 
 ## 📊 Presentation
 
-An interactive **14-slide HTML presentation** covering the full project is available:
+An interactive presentation covering the full project is available in two formats:
 
-```bash
-start docs/presentation.html
-```
+- 📄 **[Markdown Presentation](docs/PRESENTATION.md)** — Renders directly on GitHub ✅
+- 🎨 **[HTML Presentation](docs/presentation.html)** — Rich interactive version (open locally)
 
-Covers: project motivation, architecture, ReAct loop, demo results, human supervision system, RL & amortization, development timeline, comparison with existing systems, and roadmap.
+Covers: project motivation, architecture, ReAct loop, demo results, v2 expansion, human supervision system, RL & amortization, comparison with existing systems, and roadmap.
 
 ---
 
 ## 🏆 Comparison with Existing Systems
 
-| System | Architecture | Grounding | Learning | Open Source |
-|--------|-------------|-----------|----------|:---:|
-| **AgenticOS** | Modular ReAct | UIA + Vision + OCR | Q-learning + Human | ✅ |
-| UFO² | Dual-agent | UIA + Vision | — | ✅ |
-| Operator | CUA | Vision only | — | ❌ |
-| Navi | Foundation model | Vision only | — | ❌ |
-| Claude Computer Use | ReAct | Vision only | — | ❌ |
+| System | Architecture | Grounding | Learning | Apps | Open Source |
+|--------|-------------|-----------|----------|:----:|:---:|
+| **AgenticOS v2** | Modular ReAct | UIA + Vision + OCR | Q-learning + Human | **15+** | ✅ |
+| UFO² | Dual-agent | UIA + Vision | — | — | ✅ |
+| Operator | CUA | Vision only | — | — | ❌ |
+| Navi | Foundation model | Vision only | — | — | ❌ |
+| Claude Computer Use | ReAct | Vision only | — | — | ❌ |
 
 ---
 
 ## 🔮 Roadmap
 
+- [x] **v1: Core Demos** — 14 demos across 8 apps
+- [x] **Human Supervision** — Review, rate, and correct demos
+- [x] **Demo Optimizer** — Per-demo amortization with golden sequences
+- [x] **v2: Multi-App Expansion** — 50 new demos across 15 apps
+- [x] **App Filtering** — `--app edge`, `--difficulty beginner`
+- [x] **Iteration Mode** — `--iterations 5` for iterative refinement
 - [ ] **Vision QA Mode** — Ask the agent questions about what's on screen
-- [ ] **Playback Recorder** — Deterministic replay on other machines for bug reproduction
-- [ ] **Human-Speed Interaction** — Character-by-character typing with visible cursor movement
-- [ ] **Confidence Dashboard** — Real-time visualization of per-demo optimization
-- [ ] **Multi-DUT Support** — Run the same automation across multiple test machines
+- [ ] **Playback Recorder** — Deterministic replay for bug reproduction
+- [ ] **Multi-DUT Support** — Run automation across multiple machines
+- [ ] **Confidence Dashboard** — Real-time visualization of optimization
 
 ---
 

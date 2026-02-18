@@ -52,6 +52,15 @@ APP_RECOVERY_MAP: dict[str, list[RecoveryStrategy]] = {
     "settings": [RecoveryStrategy.ESCAPE, RecoveryStrategy.ALT_LEFT, RecoveryStrategy.CLICK_BACK],
     "explorer": [],  # No auto-recovery — Escape cancels rename, Alt+Left navigates back
     "file explorer": [],  # Same as explorer
+    # v2 apps
+    "surface": [RecoveryStrategy.ESCAPE, RecoveryStrategy.CLICK_BACK],
+    "paint": [RecoveryStrategy.ESCAPE, RecoveryStrategy.CTRL_Z],
+    "snipping": [RecoveryStrategy.ESCAPE],
+    "store": [RecoveryStrategy.ESCAPE, RecoveryStrategy.ALT_LEFT],
+    "powerpoint": [RecoveryStrategy.ESCAPE, RecoveryStrategy.CTRL_Z],
+    "security": [RecoveryStrategy.ESCAPE, RecoveryStrategy.ALT_LEFT],
+    "feedback": [RecoveryStrategy.ESCAPE],
+    "clipboard": [],  # Win+V panel — Escape closes it
     # Generic
     "default": [RecoveryStrategy.ESCAPE, RecoveryStrategy.ALT_LEFT, RecoveryStrategy.CTRL_Z],
 }
