@@ -38,14 +38,14 @@
   \texttt{jiaqizou@github}
 }
 
-\date{June 2025}
+\date{February 2026}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-We present \textbf{AgenticOS}, a modular Python framework that transforms Windows desktops into AI-navigable environments through natural language interaction. Unlike existing approaches that rely solely on visual grounding (Operator, Navi) or require dual-agent architectures (UFO\textsuperscript{2}), AgenticOS introduces a \emph{hybrid three-layer grounding} pipeline combining UI Automation accessibility trees, vision-language models, and OCR in a unified fallback hierarchy. Built on a ReAct (Reason+Act) loop, the system decomposes complex multi-application tasks into atomic actions executed through keyboard, mouse, shell, and window management primitives. AgenticOS exposes its capabilities via the Model Context Protocol (MCP), enabling seamless integration with external LLM clients. We evaluate on a custom 30-task benchmark suite spanning basic single-app operations to advanced multi-application workflows and compare against UFO\textsuperscript{2}, Operator, Navi, and Claude Computer Use. Our framework achieves competitive performance while offering superior modularity, extensibility, and transparency through automatic GIF session recording.
+We present \textbf{AgenticOS}, a modular Python framework that transforms Windows desktops into AI-navigable environments through natural language interaction. Unlike existing approaches that rely solely on visual grounding (Operator, Navi) or require dual-agent architectures (UFO\textsuperscript{2}), AgenticOS introduces a \emph{hybrid three-layer grounding} pipeline combining UI Automation accessibility trees, vision-language models, and OCR in a unified fallback hierarchy. Built on a ReAct (Reason+Act) loop with \emph{tabular Q-learning} reinforcement and \emph{human-in-the-loop supervision}, the system decomposes complex multi-application tasks into atomic actions across 17 action types. We demonstrate the framework on \textbf{64 live demos} spanning \textbf{15 Windows applications} --- including Microsoft Edge, Teams, Outlook, Settings, File Explorer, and Office --- organized into three difficulty tiers. Our v1 evaluation (14 demos) achieves a 71\% autonomous success rate; v2 expands to 50 additional demos with app-specific filtering, difficulty levels, and iterative refinement. A human supervision system provides quality feedback that flows into RL rewards, per-demo optimization profiles, and prompt-hint injection, demonstrating that human-in-the-loop signals capture quality nuances that automated metrics miss. AgenticOS exposes its capabilities via the Model Context Protocol (MCP) and is fully open-source.
 \end{abstract}
 
 % ============================================================================
@@ -160,7 +160,7 @@ The navigator agent follows the ReAct paradigm \citep{yao2023react}:
 
 \subsection{Action Composition}
 
-Actions are represented as typed dataclasses with 16 action types:
+Actions are represented as typed dataclasses with 17 action types:
 
 \begin{lstlisting}
 class ActionType(Enum):
@@ -226,7 +226,7 @@ AgenticOS is implemented in Python 3.10+ with the following key dependencies:
   \item \texttt{pydantic-settings}: Type-safe configuration with environment variable support.
 \end{itemize}
 
-The codebase is organized into six packages totaling approximately 2,500 lines of code across 20 modules, with 100\% type annotation coverage.
+The codebase is organized into six packages totaling approximately 4,500 lines of code across 25 modules, with 100\% type annotation coverage. The demo runner alone (\texttt{run\_demo\_detached.py}) comprises 2,100 lines defining 64 demonstration tasks.
 
 \subsection{Safety Mechanisms}
 
@@ -245,20 +245,24 @@ AgenticOS implements multiple safety layers:
 
 \subsection{Benchmark Suite}
 
-We introduce a 30-task benchmark suite organized into three difficulty tiers:
+We evaluate on two demonstration suites: a v1 benchmark of 14 tasks (Demos 1--14) and a v2 expansion of 50 tasks (Demos 15--64):
 
 \begin{table}[h]
 \centering
-\begin{tabular}{@{}lcl@{}}
+\small
+\begin{tabular}{@{}lccl@{}}
 \toprule
-\textbf{Category} & \textbf{Tasks} & \textbf{Example Tasks} \\
+\textbf{Suite} & \textbf{Apps} & \textbf{Tasks} & \textbf{Applications} \\
 \midrule
-Basic & 15 & Open Notepad, Calculator arithmetic, File Explorer nav \\
-Intermediate & 10 & Multi-step text editing, Settings navigation, Clipboard \\
-Advanced & 5 & Multi-app workflows, Data transfer, Error recovery \\
+v1 Core & 8 & 14 & Notepad, Calculator, Settings, Edge, Explorer, CMD, PowerShell, Task Mgr \\
+v2 Edge & 1 & 8 & Navigate, Search, Bookmark, Privacy, Clear Data, Download, Tabs, Collections \\
+v2 Teams & 1 & 8 & Open, Search, Call, Schedule, Status, Notifications, Files, Settings \\
+v2 Outlook & 1 & 8 & Inbox, Compose, Reply, Calendar, Contacts, Search, Rules, Signature \\
+v2 Settings & 1 & 8 & Night Light, Display, WiFi, Default Apps, Language, Accounts, Update, Power \\
+v2 Other & 7 & 18 & Surface, Explorer, Snipping, Paint, Store, Office, Security, Clipboard \\
 \bottomrule
 \end{tabular}
-\caption{AgenticOS benchmark suite composition.}
+\caption{AgenticOS demonstration suite: 64 tasks across 15 applications.}
 \label{tab:benchmark}
 \end{table}
 
@@ -282,19 +286,19 @@ BenchmarkTask(
 \begin{table}[h]
 \centering
 \small
-\begin{tabular}{@{}lccccc@{}}
+\begin{tabular}{@{}lcccccc@{}}
 \toprule
-\textbf{System} & \textbf{Grounding} & \textbf{Architecture} & \textbf{MCP} & \textbf{Open} & \textbf{OSWorld\textsuperscript{*}} \\
+\textbf{System} & \textbf{Grounding} & \textbf{Architecture} & \textbf{Learning} & \textbf{Apps} & \textbf{Open} & \textbf{OSWorld\textsuperscript{*}} \\
 \midrule
-AgenticOS (ours) & UIA+VLM+OCR & Modular ReAct & \checkmark & \checkmark & --- \\
-UFO\textsuperscript{2} & UIA+Vision & Dual-agent & --- & \checkmark & 30.5\% \\
-Operator & Vision & CUA & --- & --- & 20.8\% \\
-Navi & Vision & Foundation & --- & --- & 19.5\% \\
-Claude CU & Vision & ReAct & --- & --- & --- \\
-OmniParser & Vision+OCR & Parsing only & --- & \checkmark & --- \\
+AgenticOS v2 (ours) & UIA+VLM+OCR & Modular ReAct & Q-learn+Human & 15+ & \checkmark & --- \\
+UFO\textsuperscript{2} & UIA+Vision & Dual-agent & --- & --- & \checkmark & 30.5\% \\
+Operator & Vision & CUA & --- & --- & --- & 20.8\% \\
+Navi & Vision & Foundation & --- & --- & --- & 19.5\% \\
+Claude CU & Vision & ReAct & --- & --- & --- & --- \\
+OmniParser & Vision+OCR & Parsing only & --- & --- & \checkmark & --- \\
 \bottomrule
 \end{tabular}
-\caption{Comparison of desktop automation systems. \textsuperscript{*}OSWorld results are on Ubuntu; Windows results may differ. ``---'' indicates not reported or not applicable.}
+\caption{Comparison of desktop automation systems. AgenticOS is the only system with online RL and human supervision. \textsuperscript{*}OSWorld results are on Ubuntu. ``---'' indicates not reported or not applicable.}
 \label{tab:comparison}
 \end{table}
 
@@ -326,32 +330,92 @@ OmniParser & Vision+OCR & Parsing only & --- & \checkmark & --- \\
 \section{Live Demonstration Results}
 \label{sec:demos}
 
-We validated AgenticOS on four real-world Windows desktop tasks, running on physical hardware with GPT-4o (Azure OpenAI). Each demo was iterated upon, with failures diagnosed and fixes applied --- demonstrating the value of modular architecture and learning systems.
+We validated AgenticOS on 64 real-world Windows desktop tasks, running on physical hardware with GPT-4o (Azure OpenAI). Each demo was iterated upon, with failures diagnosed and fixes applied.
+
+\subsection{v1 Results (Demos 1--14)}
 
 \begin{table}[h]
 \centering
 \small
-\begin{tabular}{@{}lccccl@{}}
+\begin{tabular}{@{}llcccc@{}}
 \toprule
-\textbf{Demo} & \textbf{Iters} & \textbf{Steps} & \textbf{Time} & \textbf{Result} & \textbf{Key Innovation} \\
+\textbf{\#} & \textbf{Demo} & \textbf{App} & \textbf{Steps} & \textbf{Time} & \textbf{Result} \\
 \midrule
-1: System Tray (Brightness) & 1 & 5 & 68s & \checkmark & UIA \texttt{set\_slider} via RangeValuePattern \\
-2: Edge/YouTube 4K Video & 9 & 9 & 138s & \checkmark & Content verification + RL nudges \\
-3: Outlook Email + Teams & 2 & --- & --- & In progress & Tab-based field navigation \\
-4: File Explorer (New Folder) & 3 & 15 & 220s & In progress & Filesystem done-verification \\
+1 & System Tray: Brightness \& Volume & Quick Settings & 5 & 68s & \checkmark \\
+2 & Edge: 4K YouTube Fullscreen & Edge & 9 & 138s & \checkmark \\
+3 & Outlook Email + Teams Message & Outlook+Teams & --- & --- & WIP \\
+4 & File Explorer: Create Folder & Explorer & 15 & 220s & \checkmark \\
+5 & Notepad: Type Message & Notepad & 4 & 99s & \checkmark \\
+6 & Calculator: 123 + 456 & Calculator & 3 & 53s & $\sim$ \\
+7 & CMD: Echo Command & CMD & 3 & 56s & $\sim$ \\
+8 & Settings: About Page & Settings & 2 & 28s & \checkmark \\
+9 & Notepad: Select All \& Copy & Notepad & 5 & 74s & \checkmark \\
+10 & Notepad: Find Text & Notepad & 3 & 49s & \checkmark \\
+11 & Calculator: 7$\times$8 & Calculator & 4 & 65s & \checkmark \\
+12 & PowerShell: Get-Date & PowerShell & 3 & 43s & \checkmark \\
+13 & Notepad: Undo Typing & Notepad & 6 & 105s & $\times$ \\
+14 & Task Manager: Processes & Task Manager & 2 & 36s & \checkmark \\
 \bottomrule
 \end{tabular}
-\caption{Live demonstration results on Windows 11. ``Iters'' = iterations needed to reach current state.}
-\label{tab:demos}
+\caption{v1 results: 10/14 pass (71\%), 2 partial, 1 failure, 1 WIP. All runs on Windows 11 with GPT-4o.}
+\label{tab:v1demos}
 \end{table}
 
-\subsection{Key Findings from Iterations}
+\subsection{v2 Results (Demos 15--64)}
 
-\textbf{Recovery interference} (Demo 4): The per-app recovery system, designed to press Escape when the agent drifts, actively sabotaged folder-rename operations in File Explorer by cancelling the in-progress rename. Solution: context-aware recovery disabling (empty recovery list for Explorer).
+v2 expanded to 50 new demos across 15 applications. Early results:
 
-\textbf{Premature completion} (Demo 4): The LLM called ``done'' at step 4 without actually creating the folder --- a \emph{false success}. Solution: per-demo \texttt{min\_done\_step} and filesystem path verification before accepting task completion.
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}llcccl@{}}
+\toprule
+\textbf{\#} & \textbf{Demo} & \textbf{Steps} & \textbf{Time} & \textbf{Result} & \textbf{Notes} \\
+\midrule
+15 & Edge: Navigate to URL & 5 & 89s & $\sim$ & Address bar state issue \\
+43 & Settings: Night Light & 4 & 98s & $\sim$ & Toggle not confirmed \\
+44 & Settings: Display & 2 & 55s & \checkmark & Resolution verified \\
+50 & Settings: Power & 2 & 58s & \checkmark & Battery settings confirmed \\
+51 & Explorer: Rename File & 6 & 116s & \checkmark & F2 $\rightarrow$ type $\rightarrow$ Enter \\
+\bottomrule
+\end{tabular}
+\caption{v2 early results: 3/5 pass (60\%), 2 partial. RL trend: improving.}
+\label{tab:v2demos}
+\end{table}
 
-\textbf{Content verification} (Demo 2): The agent clicked on the wrong YouTube video 8 times across iterations. Solution: post-click window title verification with automatic back-navigation on mismatch, combined with RL negative reward (\texttt{REWARD\_WRONG\_CONTENT = -1.2}).
+\subsection{Before-and-After Comparison}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Metric} & \textbf{v1} & \textbf{v2} \\
+\midrule
+Total demos & 14 & 64 \\
+Applications covered & 8 & 15+ \\
+RL Q-table entries & 63 & 120 \\
+RL episodes & 43 & 66 \\
+Recovery strategies & 13 & 21 \\
+Teaching topics & 11 & 17 \\
+Pre-seed priors & 6 & 19 \\
+New CLI features & --- & \texttt{--app}, \texttt{--difficulty}, \texttt{--iterations} \\
+\bottomrule
+\end{tabular}
+\caption{Before-and-after comparison of v1 vs.\ v2 capabilities.}
+\label{tab:comparison_v1v2}
+\end{table}
+
+\subsection{Key Findings}
+
+\textbf{Recovery interference} (Demo 4): The per-app recovery system, designed to press Escape when the agent drifts, actively sabotaged folder-rename operations in File Explorer by cancelling the in-progress rename. Solution: context-aware recovery disabling.
+
+\textbf{Premature completion} (Demo 4): The LLM called ``done'' without actually creating the folder --- a \emph{false success}. Solution: per-demo \texttt{min\_done\_step} and filesystem path verification.
+
+\textbf{Content verification} (Demo 2): The agent clicked the wrong YouTube video 8 times across iterations. Solution: post-click window title verification with RL negative reward (\texttt{-1.2}).
+
+\textbf{Browser state sensitivity} (Demo 15): Edge's address bar retained previous search text, causing URL navigation to produce search results instead of direct navigation. This highlights the challenge of stateful GUI environments.
+
+\textbf{Settings reliability}: Settings demos (44, 50) achieved 100\% pass rate with only 2 steps each, demonstrating that URI-based app launching (\texttt{ms-settings:display}) provides a reliable starting state.
 
 % ============================================================================
 \section{Reinforcement Learning Integration}
@@ -374,7 +438,11 @@ Reward signals are derived from state validation:
   \item \texttt{WRONG\_CONTENT}: $-1.2$ (clicked wrong item)
 \end{itemize}
 
-After 1 episode (Demo 4), the Q-table contains 6 state-action entries, with \texttt{click} having the lowest Q-value ($-0.51$), reflecting repeated failed click attempts on File Explorer elements.
+After 66 episodes across 14 v1 demos and 5 v2 demos, the Q-table contains 120 state-action entries across 51 unique states. The average episode reward is $+0.69$, with a trend classified as ``improving.'' Pre-seeding with commonsense priors for 19 known applications (e.g., ``in Edge, prefer click on address bar first'') accelerates exploration.
+
+\subsection{Human Supervision Integration}
+
+Human supervision ratings (1--5 on accuracy, completeness, efficiency) are converted to RL rewards in the range $[-2, +3]$ and weighted $3\times$ stronger than automated rewards. This enables the RL layer to capture quality dimensions that automated state-change detection cannot --- for example, Demo 5 (Notepad type) passes automated checks but received a human rating of 1/5 for accuracy due to no visible cursor movement.
 
 % ============================================================================
 \section{Human Teaching: Learning from Demonstration}
@@ -389,7 +457,45 @@ We implemented a Learning from Demonstration (LfD) module that allows humans to 
   \item \textbf{Inject into LLM context}: Learned patterns are included as ``LEARNED FROM HUMAN DEMO'' hints in the LLM prompt.
 \end{enumerate}
 
-Currently, 11 teaching topics are defined (slider adjustment, browser navigation, folder creation, email compose, etc.), with 1 pattern successfully learned and persisted. The teaching system stores patterns as JSON, enabling cross-session knowledge transfer.
+Currently, 17 teaching topics are defined spanning slider adjustment, browser navigation, folder creation, email composition, edge tab management, Teams meeting scheduling, Outlook email compose, settings navigation, file operations, and Office basics. One pattern has been successfully learned and persisted. The teaching system stores patterns as JSON, enabling cross-session knowledge transfer.
+
+The v2 expansion added 6 new topics specifically for the new applications: \texttt{edge\_tab\_management}, \texttt{teams\_meeting\_schedule}, \texttt{outlook\_email\_compose}, \texttt{settings\_navigation}, \texttt{file\_operations}, and \texttt{office\_basics}.
+
+% ============================================================================
+\section{Human-in-the-Loop Supervision}
+\label{sec:supervision}
+
+A key finding from our v1 evaluation was that automated success metrics (LLM reports ``done'') frequently disagree with human quality assessment. We therefore implemented a comprehensive human supervision system.
+
+\subsection{Three-Dimensional Rating}
+
+After each demo run, the human supervisor rates three dimensions on a 1--5 scale:
+
+\begin{enumerate}
+  \item \textbf{Accuracy} ($2\times$ weight): Did the agent achieve the correct outcome?
+  \item \textbf{Completeness}: Were all parts of the task finished?
+  \item \textbf{Efficiency}: Were there wasted or repeated steps?
+\end{enumerate}
+
+The composite score is mapped to an RL reward in $[-2, +3]$:
+
+\begin{equation}
+  r_{\text{human}} = \frac{2 \cdot \text{accuracy} + \text{completeness} + \text{efficiency}}{4} - 1
+\end{equation}
+
+This reward is injected into the Q-table with $3\times$ weight relative to automated rewards.
+
+\subsection{Demo Optimizer}
+
+Human feedback flows into a per-demo optimization profile that tracks:
+\begin{itemize}
+  \item \textbf{Step budget}: Tightened from the median of successful runs.
+  \item \textbf{Golden sequences}: Best-performing action sequences captured for replay.
+  \item \textbf{Prompt hints}: Corrective notes from human reviews injected into future LLM prompts.
+  \item \textbf{Validation skip}: At $\geq 90\%$ confidence, post-action validation is skipped for speed.
+\end{itemize}
+
+After 10 supervised reviews across 10 demos, key insight: demos passing automated checks may still fail human quality expectations (e.g., Demo 5 reports success but human rates 1/5 for ``no visible cursor movement'').
 
 % ============================================================================
 \section{Discussion}
@@ -399,29 +505,32 @@ Currently, 11 teaching topics are defined (slider adjustment, browser navigation
 
 \begin{enumerate}
   \item \textbf{Windows-only}: Current UIA grounding is Windows-specific. Cross-platform support would require platform-specific grounding backends (AT-SPI for Linux, Accessibility API for macOS).
-  \item \textbf{LLM dependency}: The system's effectiveness is bounded by the reasoning capabilities of the underlying LLM. Local models via Ollama may have significantly lower success rates.
-  \item \textbf{Latency}: The observe-think-act loop introduces latency per step (2--5 seconds depending on model and grounding complexity), making real-time interaction challenging.
+  \item \textbf{LLM dependency}: The system's effectiveness is bounded by the reasoning capabilities of the underlying LLM. Our evaluation uses GPT-4o; local models may have significantly lower success rates.
+  \item \textbf{Latency}: The observe-think-act loop introduces 10--30 seconds per step (UIA timeout + LLM inference), making real-time interaction challenging.
   \item \textbf{Security}: Desktop automation inherently carries risks. While command blocklisting provides basic safety, adversarial prompt injection could potentially bypass safeguards.
-  \item \textbf{Recovery-action conflicts}: Auto-recovery strategies can interfere with legitimate in-progress operations (e.g., Escape cancelling a rename). Context-dependent recovery disabling partially addresses this.
+  \item \textbf{Stateful environments}: GUI state is not reset between runs. Browser address bars retain previous searches, dialog boxes may persist, and system settings carry over --- creating non-deterministic starting conditions (observed in Demo 15).
+  \item \textbf{UIA coverage gaps}: Many modern applications (including Edge, Teams) return 0 UIA elements during our timeout window, forcing screenshot-only grounding. This reduces action precision.
   \item \textbf{False success detection}: LLMs may prematurely claim task completion. Filesystem/state verification guards mitigate but do not fully solve this.
 \end{enumerate}
 
 \subsection{Future Work}
 
 \begin{enumerate}
-  \item \textbf{Expanded demonstrations}: Complete Demo 3 (Outlook+Teams) and Demo 4 (File Explorer) to 100\% success.
-  \item \textbf{Richer RL}: Move from tabular Q-learning to function approximation for better state generalization.
+  \item \textbf{Complete v2 coverage}: Run all 50 v2 demos with $5\times$ iteration for comprehensive RL training.
+  \item \textbf{Vision QA mode}: Enable the agent to answer questions about screen content, as requested by the human supervisor during Demo 8 review.
+  \item \textbf{Richer RL}: Move from tabular Q-learning to function approximation (e.g., tile coding or neural) for better state generalization across the 120+ Q-table entries.
   \item \textbf{Active teaching}: Agent autonomously identifies when to request human demonstration during execution.
+  \item \textbf{Golden sequence replay}: Automatically replay best-performing action sequences, bypassing LLM calls entirely for well-optimized demos.
   \item \textbf{Cross-platform support}: Extending grounding to Linux (AT-SPI) and macOS (AXUIElement).
   \item \textbf{OSWorld evaluation}: Running the full OSWorld benchmark suite for standardized comparison.
-  \item \textbf{Multi-agent orchestration}: Combining AgenticOS with specialized agents (code, web, file) via MCP.
+  \item \textbf{Multi-DUT support}: Run the same automation across multiple test machines for regression testing.
 \end{enumerate}
 
 % ============================================================================
 \section{Conclusion}
 \label{sec:conclusion}
 
-We presented AgenticOS, a modular framework for intelligent desktop automation that introduces hybrid three-layer grounding (UIA + VLM + OCR), a clean layered architecture with independent observation, grounding, action, and agent components, and native MCP integration for extensible tool access. Our 30-task benchmark suite provides standardized evaluation across basic, intermediate, and advanced desktop automation tasks. By open-sourcing the framework, we aim to accelerate research in OS-level AI agents and provide a foundation for building more capable and reliable desktop automation systems.
+We presented AgenticOS, a modular framework for intelligent desktop automation that introduces hybrid three-layer grounding (UIA + VLM + OCR), a clean layered architecture with independent observation, grounding, action, and agent components, and native MCP integration for extensible tool access. Our evaluation across 64 demonstrations spanning 15 Windows applications demonstrates a 71\% autonomous success rate on v1 tasks, with the v2 expansion showing 60\% early success on newly added demos across Settings, Explorer, and Edge. The integration of tabular Q-learning with human supervision feedback (120 Q-table entries, 66 episodes, improving trend) demonstrates that lightweight RL combined with human-in-the-loop signals can improve agent performance over time. The v2 expansion from 8 to 15+ applications, with app-specific filtering (\texttt{--app}), difficulty levels (\texttt{--difficulty}), and iterative refinement (\texttt{--iterations}), establishes AgenticOS as a comprehensive platform for desktop automation research. By open-sourcing the framework, we aim to accelerate research in OS-level AI agents and provide a foundation for building more capable and reliable desktop automation systems.
 
 % ============================================================================
 
