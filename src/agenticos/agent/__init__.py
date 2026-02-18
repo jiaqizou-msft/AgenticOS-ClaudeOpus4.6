@@ -14,6 +14,8 @@ from agenticos.agent.recovery import RecoveryManager, RecoveryStrategy, Recovery
 from agenticos.agent.step_memory import StepMemory, CachedStep, Episode
 from agenticos.agent.reinforcement import QLearner, RewardSignal, Transition, ActionStats
 from agenticos.agent.human_teacher import HumanTeacher, LearnedPattern, DemoRecording, TEACHING_TOPICS
+from agenticos.agent.human_supervisor import HumanSupervisor, DemoFeedback, DemoHistory
+from agenticos.agent.demo_optimizer import DemoOptimizer, DemoProfile, GoldenSequence
 
 __all__ = [
     "BaseAgent",
@@ -39,4 +41,10 @@ __all__ = [
     "LearnedPattern",
     "DemoRecording",
     "TEACHING_TOPICS",
+    "HumanSupervisor",
+    "DemoFeedback",
+    "DemoHistory",
+    "DemoOptimizer",
+    "DemoProfile",
+    "GoldenSequence",
 ]

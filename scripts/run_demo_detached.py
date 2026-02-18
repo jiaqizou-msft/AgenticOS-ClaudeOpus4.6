@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """AgenticOS Demo Runner v2 â€” with state validation, recovery, and memory.
 
 Key improvements over v1:
@@ -47,6 +47,8 @@ from agenticos.agent.recovery import RecoveryManager, RecoveryStrategy  # noqa: 
 from agenticos.agent.step_memory import StepMemory, CachedStep  # noqa: E402
 from agenticos.agent.reinforcement import QLearner, RewardSignal, Transition  # noqa: E402
 from agenticos.agent.human_teacher import HumanTeacher, TEACHING_TOPICS  # noqa: E402
+from agenticos.agent.human_supervisor import HumanSupervisor, DemoFeedback  # noqa: E402
+from agenticos.agent.demo_optimizer import DemoOptimizer  # noqa: E402
 
 LOG_FILE = ROOT / "recordings" / "demo_log.txt"
 MEMORY_FILE = ROOT / "recordings" / "step_memory.json"
@@ -589,7 +591,8 @@ def execute_action(compositor: ActionCompositor, action_type: str, params: dict)
         return False, f"ERROR: {e}"
 
 
-def run_demo(demo_cfg: dict, token: str, memory: StepMemory, rl: QLearner) -> tuple[bool, int, float, str | None]:
+def run_demo(demo_cfg: dict, token: str, memory: StepMemory, rl: QLearner,
+             optimizer: DemoOptimizer | None = None) -> tuple[bool, int, float, str | None, list[dict]]:
     """Run a single demo with state validation, recovery, RL, and memory."""
     task = demo_cfg["task"]
     output = demo_cfg["output"]
@@ -771,6 +774,15 @@ def run_demo(demo_cfg: dict, token: str, memory: StepMemory, rl: QLearner) -> tu
                     "- Call done as soon as the objective is met.\n"
                     "- NEVER use wait action. NEVER click to focus."
                 )
+
+            # Inject optimizer prompt hints (from human supervision)
+            demo_id = demo_cfg.get("_demo_id", 0)
+            if optimizer and demo_id:
+                opt_hints = optimizer.get_prompt_enhancement(demo_id)
+                if opt_hints:
+                    sys_prompt += opt_hints
+                    if step_num == 1:
+                        log(f"    Optimizer: injected prompt hints for demo {demo_id}")
 
             messages = [
                 {"role": "system", "content": sys_prompt},
@@ -1020,22 +1032,24 @@ def run_demo(demo_cfg: dict, token: str, memory: StepMemory, rl: QLearner) -> tu
     except Exception:
         pass
 
-    return success, len(steps), elapsed, gif_path
+    return success, len(steps), elapsed, gif_path, steps
 
 
 def main():
     global _log_fh
 
     import argparse
-    parser = argparse.ArgumentParser(description="AgenticOS Demo Runner v2")
+    parser = argparse.ArgumentParser(description="AgenticOS Demo Runner v7")
     parser.add_argument("--demo", default="all", help="Demo number (1,2,3) or 'all'")
+    parser.add_argument("--supervise", action="store_true",
+                        help="Enable human supervision: pause after each demo for review & feedback")
     args = parser.parse_args()
 
     _log_fh = open(LOG_FILE, "w", encoding="utf-8")
 
     log("=" * 64)
-    log("  AgenticOS Demo Runner v6 (Amortized)")
-    log("  State Validation | Recovery | RL | Step Memory | Amortization")
+    log("  AgenticOS Demo Runner v7 (Human-Supervised Amortization)")
+    log("  State Validation | Recovery | RL | Supervision | Optimizer")
     log("=" * 64)
 
     token = get_azure_ad_token()
@@ -1043,11 +1057,21 @@ def main():
     rl = QLearner(persist_path=str(RL_FILE))
     teacher = HumanTeacher(persist_dir=str(ROOT / "recordings" / "teaching"))
 
+    # Human supervision + optimizer
+    supervisor = HumanSupervisor(persist_dir=str(ROOT / "recordings" / "supervision"))
+    optimizer = DemoOptimizer(supervisor, persist_dir=str(ROOT / "recordings" / "supervision"))
+
     # Pre-seed RL with commonsense priors (amortization)
     seeded = preseed_rl(rl)
     log(f"  Memory loaded: {memory.size} episodes")
     log(f"  RL loaded: {rl.stats} (pre-seeded {seeded} entries)")
     log(f"  Teaching: {teacher.get_stats()}")
+    log(f"  Supervisor: {supervisor.stats}")
+    log(f"  Optimizer: {optimizer.stats}")
+    if args.supervise:
+        log("  MODE: Human supervision ENABLED -- will pause after each demo for review")
+    else:
+        log("  MODE: Autonomous (use --supervise to enable human review)")
 
     if args.demo == "all":
         demo_nums = [1, 2, 3]
@@ -1067,14 +1091,51 @@ def main():
 
     results = []
     for i, num in enumerate(demo_nums):
-        demo = DEMOS[num]
+        demo = dict(DEMOS[num])  # Copy so we can modify
+        demo["_demo_id"] = num   # Tag for optimizer lookup
+
+        # Apply optimizer-learned config adjustments
+        demo = optimizer.get_optimized_config(num, demo)
+        opt_note = demo.pop("_opt_note", None)
+        if opt_note:
+            log(f"  Optimizer: {opt_note}")
+
         log("")
         log("=" * 64)
         log(f"  [{i + 1}/{len(demo_nums)}] {demo['name']}")
         log("=" * 64)
 
-        ok, nsteps, elapsed, gif = run_demo(demo, token, memory, rl)
-        results.append((demo["name"], ok, nsteps, elapsed, gif))
+        ok, nsteps, elapsed, gif, step_log = run_demo(demo, token, memory, rl, optimizer)
+        results.append((num, demo["name"], ok, nsteps, elapsed, gif, step_log))
+
+        # -- Human supervision: collect feedback after each demo --
+        if args.supervise:
+            feedback = supervisor.collect_feedback(
+                demo_id=num,
+                demo_name=demo["name"],
+                success=ok,
+                steps=nsteps,
+                elapsed=elapsed,
+                gif_path=gif,
+                step_log=step_log,
+            )
+
+            # Feed human reward into RL (weighted heavily)
+            human_reward = feedback.rl_reward
+            if human_reward != 0:
+                rl.end_episode(human_reward)  # Extra episode signal from human
+                log(f"  RL human reward: {human_reward:+.2f}")
+
+            # Update optimizer profile from feedback
+            optimizer.update_from_feedback(
+                demo_id=num,
+                demo_name=demo["name"],
+                step_log=step_log,
+                feedback_score=feedback.overall_score,
+                human_notes=feedback.notes,
+                correct_approach=feedback.correct_approach,
+            )
+            log(f"  Optimizer updated: {optimizer.stats}")
 
         if i < len(demo_nums) - 1:
             gap = 2 if demo.get("fast_mode") else 5
@@ -1085,15 +1146,36 @@ def main():
     log("=" * 64)
     log("  RESULTS SUMMARY")
     log("=" * 64)
-    for name, ok, nsteps, elapsed, gif in results:
+    for num, name, ok, nsteps, elapsed, gif, _ in results:
         status = "PASS" if ok else "WARN"
         log(f"  [{status}] {name} -- {nsteps} steps, {elapsed:.1f}s")
         if gif:
             log(f"           GIF: {gif}")
+
+        # Show supervisor history if available
+        hist = supervisor.get_history(num)
+        if hist and hist.attempts > 0:
+            log(f"           Supervisor: {hist.attempts} reviews, "
+                f"avg score {hist.avg_score:.0%}, trend: {hist.trend()}")
+
     log(f"  Memory final: {memory.stats}")
     log(f"  RL final: {rl.stats}")
+    log(f"  Supervisor final: {supervisor.stats}")
+    log(f"  Optimizer final: {optimizer.stats}")
 
-    # â”€â”€ Teaching suggestions â”€â”€
+    # Show per-demo optimization profiles
+    profiles = optimizer._profiles
+    if profiles:
+        log("")
+        log("  OPTIMIZATION PROFILES:")
+        for did, prof in sorted(profiles.items()):
+            conf_bar = "#" * int(prof.confidence_level * 10)
+            log(f"    Demo {did}: confidence=[{conf_bar:<10}] {prof.confidence_level:.0%} "
+                f"| runs={prof.total_runs} "
+                f"| golden_seqs={len(prof.golden_sequences)}"
+                f"{'  | skip_validation' if prof.skip_validation else ''}")
+
+    # Teaching suggestions
     suggestions = teacher.get_suggested_topics(max_topics=3)
     if suggestions:
         log("")
@@ -1114,4 +1196,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
