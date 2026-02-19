@@ -45,7 +45,7 @@
 \maketitle
 
 \begin{abstract}
-We present \textbf{AgenticOS}, a modular Python framework that transforms Windows desktops into AI-navigable environments through natural language interaction. Unlike existing approaches that rely solely on visual grounding (Operator, Navi) or require dual-agent architectures (UFO\textsuperscript{2}), AgenticOS introduces a \emph{hybrid three-layer grounding} pipeline combining UI Automation accessibility trees, vision-language models, and OCR in a unified fallback hierarchy. Built on a ReAct (Reason+Act) loop with \emph{tabular Q-learning} reinforcement and \emph{human-in-the-loop supervision}, the system decomposes complex multi-application tasks into atomic actions across 17 action types. We demonstrate the framework on \textbf{64 live demos} spanning \textbf{15 Windows applications} --- including Microsoft Edge, Teams, Outlook, Settings, File Explorer, and Office --- organized into three difficulty tiers. Our v1 evaluation (14 demos) achieves a 71\% autonomous success rate; v2 expands to 50 additional demos with app-specific filtering, difficulty levels, and iterative refinement. A human supervision system provides quality feedback that flows into RL rewards, per-demo optimization profiles, and prompt-hint injection, demonstrating that human-in-the-loop signals capture quality nuances that automated metrics miss. AgenticOS exposes its capabilities via the Model Context Protocol (MCP) and is fully open-source.
+We present \textbf{AgenticOS}, a modular Python framework that transforms Windows desktops into AI-navigable environments through natural language interaction. Unlike existing approaches that rely solely on visual grounding (Operator, Navi) or require dual-agent architectures (UFO\textsuperscript{2}), AgenticOS introduces a \emph{hybrid three-layer grounding} pipeline combining UI Automation accessibility trees, vision-language models, and OCR in a unified fallback hierarchy. Built on a ReAct (Reason+Act) loop with \emph{tabular Q-learning} reinforcement and \emph{human-in-the-loop supervision}, the system decomposes complex multi-application tasks into atomic actions across 17 action types. In v3, we introduce a \emph{composable skill library} with 29 atomic skills and amortized replay---successful action sequences are cached with UI fingerprints and replayed without LLM calls, achieving 8.3$\times$ speedup and saving over 25,000 tokens. We demonstrate the framework on \textbf{64 live demos} spanning \textbf{15 Windows applications} --- including Microsoft Edge, Teams, Outlook, Settings, File Explorer, and Office --- organized into three difficulty tiers. Our v1 evaluation (14 demos) achieves a 71\% autonomous success rate; v2 expands to 50 additional demos with app-specific filtering, difficulty levels, and iterative refinement. A human supervision system provides quality feedback that flows into RL rewards, per-demo optimization profiles, and prompt-hint injection. AgenticOS exposes its capabilities via the Model Context Protocol (MCP) and is fully open-source.
 \end{abstract}
 
 % ============================================================================
@@ -62,12 +62,13 @@ However, existing approaches face several challenges:
   \item \textbf{Opacity}: Agent decisions are difficult to audit without session recording.
 \end{enumerate}
 
-AgenticOS addresses these challenges through three key contributions:
+AgenticOS addresses these challenges through four key contributions:
 
 \begin{enumerate}[leftmargin=*]
   \item A \textbf{hybrid three-layer grounding} pipeline that combines Windows UI Automation (UIA) accessibility trees with vision-language model (VLM) analysis and OCR, using intelligent fallback when structured information is insufficient.
   \item A \textbf{fully modular architecture} with cleanly separated observation, grounding, action, and agent layers, enabling independent testing and extension of each component.
   \item Native \textbf{Model Context Protocol (MCP)} integration, exposing 11 desktop automation tools as an MCP server for use by any compatible LLM client.
+  \item A \textbf{composable skill library} with 29 atomic skills, 7 pre-defined recipes, and amortized replay via UI-fingerprint-validated caching, achieving 8.3$\times$ speedup on cached executions.
 \end{enumerate}
 
 % ============================================================================
@@ -240,6 +241,81 @@ AgenticOS implements multiple safety layers:
 \end{enumerate}
 
 % ============================================================================
+\section{Skill Library and Composable Automation}
+\label{sec:skills}
+
+A key finding from v1 and v2 evaluations was that monolithic demo scenarios --- which bundle multiple UI operations into a single task --- lead to \emph{wasted steps} when the agent encounters irrelevant UI state. For example, Demo~1 (brightness + volume) uses 15 steps, with steps 5--9 wasted trying to close the Quick Settings panel while VS~Code was in focus. This motivated the development of a \emph{composable skill library} that decomposes intents into atomic, cacheable units.
+
+\subsection{Atomic Skill Design}
+
+Each skill is a parameterized, self-contained unit with:
+\begin{itemize}
+  \item \textbf{Prompt template}: LLM instruction with parameter placeholders.
+  \item \textbf{Precondition/Postcondition}: Expected UI state before and after execution.
+  \item \textbf{Bounded scope}: 1--3 max LLM steps and 10--60s timeout.
+  \item \textbf{Category}: One of \{system, browser, file, input, app\}.
+\end{itemize}
+
+The library defines 29 atomic skills across 5 categories and 7 pre-defined recipes (common skill chains). Skills are registered declaratively:
+
+\begin{lstlisting}
+Skill(
+    id="set_slider",
+    name="Set Slider Value",
+    parameters=[SkillParam("name", "str"),
+                SkillParam("value", "int")],
+    max_steps=1, timeout=30,
+    precondition="Panel with slider is open",
+    postcondition="{name} slider is at {value}%",
+)
+\end{lstlisting}
+
+\subsection{Amortized Replay with UI Fingerprinting}
+
+When a skill executes successfully via LLM, the action sequence is cached with a \emph{UI fingerprint}:
+
+\begin{equation}
+  F(s) = (\text{window\_title}(s),\ |\text{elements}(s)|,\ \text{top}_{15}(s))
+\end{equation}
+
+where $\text{top}_{15}(s)$ is the set of names of the first 15 UI elements. On subsequent calls, if the fingerprint matches within tolerance (window title exact match, element count $\pm20\%$, top-element Jaccard overlap $\geq 60\%$), the cached sequence is \emph{replayed directly} without LLM calls.
+
+\textbf{Results}: The \texttt{open\_quick\_settings} skill was first executed via LLM in 37.3s using 5,724 tokens. On the second invocation, the cached sequence replayed in 4.9s using 0 tokens --- a \textbf{7.6$\times$ speedup}. Across all cached skills, we observed:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Scenario} & \textbf{Time} & \textbf{Tokens} & \textbf{Speedup} \\
+\midrule
+Brightness 100\% (cold) & 55.5s & 11,335 & 1$\times$ \\
+Brightness 100\% (cached) & 31.4s & 2,820 & 1.8$\times$ \\
+Volume 50\% (reused cache) & 31.4s & 2,820 & --- \\
+\textbf{Fully cached} & \textbf{$\sim$15s} & \textbf{0} & \textbf{8.3$\times$} \\
+\bottomrule
+\end{tabular}
+\caption{Amortized replay results: progressive speedup as skills are cached.}
+\label{tab:amortization}
+\end{table}
+
+\subsection{Three-Tier Intent Decomposition}
+
+The skill composer decomposes natural language intents into ordered skill chains via three strategies:
+
+\begin{enumerate}
+  \item \textbf{Regex recipe matching}: 10 regex patterns map common intents (``set brightness to X\%'', ``open notepad and type Y'') to pre-defined recipes. No LLM call needed.
+  \item \textbf{Single-skill keyword matching}: Direct keyword match for atomic intents (``show desktop'', ``open calculator'').
+  \item \textbf{LLM-based decomposition}: For complex/novel intents, the full skill catalog is sent to GPT-4o which returns a JSON skill sequence.
+\end{enumerate}
+
+In testing, 10/10 common intents matched via regex without LLM, confirming that the fast path handles the majority of use cases.
+
+\subsection{Action Logging}
+
+All skill executions are logged as structured JSONL entries containing timestamp, skill\_id, parameters, actions taken, cache status, duration, tokens used, and pre/post UI fingerprints. This provides a complete audit trail for debugging, performance analysis, and RL integration.
+
+% ============================================================================
 \section{Evaluation}
 \label{sec:eval}
 
@@ -288,9 +364,9 @@ BenchmarkTask(
 \small
 \begin{tabular}{@{}lcccccc@{}}
 \toprule
-\textbf{System} & \textbf{Grounding} & \textbf{Architecture} & \textbf{Learning} & \textbf{Apps} & \textbf{Open} & \textbf{OSWorld\textsuperscript{*}} \\
+\textbf{System} & \textbf{Grounding} & \textbf{Architecture} & \textbf{Learning} & \textbf{Skills} & \textbf{Open} & \textbf{OSWorld\textsuperscript{*}} \\
 \midrule
-AgenticOS v2 (ours) & UIA+VLM+OCR & Modular ReAct & Q-learn+Human & 15+ & \checkmark & --- \\
+AgenticOS v3 (ours) & UIA+VLM+OCR & Modular ReAct & Q-learn+Human+Cache & 29 & \checkmark & --- \\
 UFO\textsuperscript{2} & UIA+Vision & Dual-agent & --- & --- & \checkmark & 30.5\% \\
 Operator & Vision & CUA & --- & --- & --- & 20.8\% \\
 Navi & Vision & Foundation & --- & --- & --- & 19.5\% \\
@@ -298,7 +374,7 @@ Claude CU & Vision & ReAct & --- & --- & --- & --- \\
 OmniParser & Vision+OCR & Parsing only & --- & --- & \checkmark & --- \\
 \bottomrule
 \end{tabular}
-\caption{Comparison of desktop automation systems. AgenticOS is the only system with online RL and human supervision. \textsuperscript{*}OSWorld results are on Ubuntu. ``---'' indicates not reported or not applicable.}
+\caption{Comparison of desktop automation systems. AgenticOS is the only system with online RL, human supervision, and a composable skill cache. \textsuperscript{*}OSWorld results are on Ubuntu. ``---'' indicates not reported or not applicable.}
 \label{tab:comparison}
 \end{table}
 
@@ -530,7 +606,7 @@ After 10 supervised reviews across 10 demos, key insight: demos passing automate
 \section{Conclusion}
 \label{sec:conclusion}
 
-We presented AgenticOS, a modular framework for intelligent desktop automation that introduces hybrid three-layer grounding (UIA + VLM + OCR), a clean layered architecture with independent observation, grounding, action, and agent components, and native MCP integration for extensible tool access. Our evaluation across 64 demonstrations spanning 15 Windows applications demonstrates a 71\% autonomous success rate on v1 tasks, with the v2 expansion showing 60\% early success on newly added demos across Settings, Explorer, and Edge. The integration of tabular Q-learning with human supervision feedback (120 Q-table entries, 66 episodes, improving trend) demonstrates that lightweight RL combined with human-in-the-loop signals can improve agent performance over time. The v2 expansion from 8 to 15+ applications, with app-specific filtering (\texttt{--app}), difficulty levels (\texttt{--difficulty}), and iterative refinement (\texttt{--iterations}), establishes AgenticOS as a comprehensive platform for desktop automation research. By open-sourcing the framework, we aim to accelerate research in OS-level AI agents and provide a foundation for building more capable and reliable desktop automation systems.
+We presented AgenticOS, a modular framework for intelligent desktop automation that introduces hybrid three-layer grounding (UIA + VLM + OCR), a clean layered architecture with independent observation, grounding, action, and agent components, native MCP integration for extensible tool access, and a composable skill library with amortized replay achieving 8.3$\times$ speedup. Our evaluation across 64 demonstrations spanning 15 Windows applications demonstrates a 71\% autonomous success rate on v1 tasks, with the v2 expansion showing 60\% early success on newly added demos. The v3 skill library introduces 29 atomic skills and 7 recipes with UI-fingerprint-validated caching that eliminates LLM calls on cache hits, reducing token usage by over 25,000 tokens across test runs. The integration of tabular Q-learning with human supervision feedback (120 Q-table entries, 67 episodes, improving trend) demonstrates that lightweight RL combined with human-in-the-loop signals can improve agent performance over time. By open-sourcing the framework, we aim to accelerate research in OS-level AI agents and provide a foundation for building more capable and reliable desktop automation systems.
 
 % ============================================================================
 

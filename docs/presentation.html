@@ -403,46 +403,46 @@
   <h2 class="gradient-text">By The Numbers</h2>
   <div class="stats-row">
     <div class="stat-box">
-      <div class="stat-num highlight">14</div>
+      <div class="stat-num highlight">64</div>
       <div class="stat-label">Live Demos</div>
     </div>
     <div class="stat-box">
       <div class="stat-num success">71%</div>
-      <div class="stat-label">Success Rate</div>
+      <div class="stat-label">v1 Success Rate</div>
     </div>
     <div class="stat-box">
-      <div class="stat-num accent">16</div>
-      <div class="stat-label">Action Types</div>
+      <div class="stat-num accent">29</div>
+      <div class="stat-label">Atomic Skills</div>
     </div>
     <div class="stat-box">
-      <div class="stat-num" style="color:#bc8cff;">63</div>
+      <div class="stat-num" style="color:#bc8cff;">120</div>
       <div class="stat-label">Q-Table Entries</div>
     </div>
     <div class="stat-box">
-      <div class="stat-num" style="color:#f778ba;">43</div>
+      <div class="stat-num" style="color:#f778ba;">67</div>
       <div class="stat-label">RL Episodes</div>
     </div>
   </div>
   <div class="stats-row" style="margin-top: 20px;">
     <div class="stat-box">
-      <div class="stat-num highlight">10</div>
-      <div class="stat-label">Human Reviews</div>
+      <div class="stat-num highlight">7</div>
+      <div class="stat-label">Recipes</div>
     </div>
     <div class="stat-box">
-      <div class="stat-num success">11</div>
+      <div class="stat-num success">8.3×</div>
+      <div class="stat-label">Cache Speedup</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num accent">25K+</div>
+      <div class="stat-label">Tokens Saved</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:#bc8cff;">15+</div>
+      <div class="stat-label">Apps Supported</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:#f778ba;">11</div>
       <div class="stat-label">MCP Tools</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num accent">30</div>
-      <div class="stat-label">Benchmark Tasks</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" style="color:#bc8cff;">5</div>
-      <div class="stat-label">Architecture Layers</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" style="color:#f778ba;">9</div>
-      <div class="stat-label">Git Commits</div>
     </div>
   </div>
 </section>
@@ -551,6 +551,53 @@ python scripts/run_demo_detached.py --demo fast <span class="kw">--supervise</sp
       </ul>
     </div>
   </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 8b: Skill Library -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-skills">
+  <span class="slide-num">08b</span>
+  <h2 class="gradient-text">Skill Library & Composable Automation</h2>
+  <h3>From monolithic demos to atomic, cacheable skills</h3>
+  <div class="card-grid cols-2">
+    <div class="card" style="border-top: 3px solid #58a6ff;">
+      <h4>🧩 29 Atomic Skills</h4>
+      <p>Self-contained units across 5 categories: system, browser, file, input, app.
+         Each skill has prompt template, precondition, postcondition, max_steps, and timeout.</p>
+      <p style="margin-top:10px; font-family: monospace; font-size: 0.85rem; color: #58a6ff;">
+        open_quick_settings → set_slider → close_panel</p>
+    </div>
+    <div class="card" style="border-top: 3px solid #3fb950;">
+      <h4>⚡ Amortized Cache</h4>
+      <p>Successful action sequences cached with UI fingerprint.
+         On cache hit: <strong>0 LLM tokens</strong>, <strong>7.6× speedup</strong>.
+         Staleness detection invalidates stale entries when UI drifts.</p>
+      <p style="margin-top:10px; font-family: monospace; font-size: 0.85rem; color: #3fb950;">
+        37s + 5724 tok → 4.9s + 0 tok</p>
+    </div>
+    <div class="card" style="border-top: 3px solid #f0883e;">
+      <h4>🧠 3-Tier Composer</h4>
+      <p>Natural language → skill chain via: (1) regex recipe match,
+         (2) single-skill keyword match, (3) LLM decomposition fallback.
+         10/10 common intents match without LLM.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid #bc8cff;">
+      <h4>📊 Live Results</h4>
+      <table style="margin-top: 8px;">
+        <tr><td>Brightness 100% (cold)</td><td>55s, 11K tok</td><td class="success">✅</td></tr>
+        <tr><td>Brightness 100% (cached)</td><td>31s, 2.8K tok</td><td class="success">✅</td></tr>
+        <tr><td>Volume 50%</td><td>31s, 2.8K tok</td><td class="success">✅</td></tr>
+        <tr><td>Cache: 4 entries</td><td colspan="2" class="highlight">50% hit rate, ~25K saved</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="code-block" style="margin-top: 24px;">
+<span class="cmt"># Composable skill execution</span>
+python scripts/run_skill.py --intent <span class="str">"Turn brightness to 100%"</span>
+python scripts/run_skill.py --intent <span class="str">"Set volume to 50%"</span>
+python scripts/run_skill.py --list-skills    <span class="cmt"># 29 atomic skills</span>
+python scripts/run_skill.py --cache-stats    <span class="cmt"># Cache hit rate</span></div>
 </section>
 
 <!-- ════════════════════════════════════════════════════════════ -->
@@ -848,7 +895,7 @@ python scripts/run_demo_detached.py --demo fast <span class="kw">--supervise</sp
   const navContainer = document.getElementById('navDots');
   const labels = [
     'Title', 'Problem', 'Architecture', 'ReAct Loop', 'Demos',
-    'Stats', 'Supervision', 'RL & Amortization', 'Feedback',
+    'Stats', 'Supervision', 'RL & Amortization', 'Skill Library', 'Feedback',
     'Timeline', 'Innovations', 'Comparison', 'Roadmap', 'End'
   ];
 

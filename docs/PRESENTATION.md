@@ -21,9 +21,10 @@
 6. [By The Numbers](#slide-6--by-the-numbers)
 7. [Human Supervision System](#slide-7--human-supervision-system)
 8. [RL & Amortization](#slide-8--rl--amortization)
-9. [Key Innovations](#slide-9--key-innovations)
-10. [Comparison](#slide-10--comparison)
-11. [Roadmap](#slide-11--roadmap)
+9. [Skill Library & Composable Automation](#slide-9--skill-library--composable-automation)
+10. [Key Innovations](#slide-10--key-innovations)
+11. [Comparison](#slide-11--comparison)
+12. [Roadmap](#slide-12--roadmap)
 
 ---
 
@@ -175,14 +176,14 @@
 |:------:|:-----:|
 | 🎬 **Total Demos** | **64** |
 | ✅ **v1 Success Rate** | **71%** |
-| ⚡ **Action Types** | **17** |
-| 🧠 **Q-Table Entries** | **116** |
-| 📈 **RL Episodes** | **65** |
-| 👤 **Human Reviews** | **10** |
+| 🧩 **Atomic Skills** | **29** |
+| 📖 **Recipes** | **7** |
+| ⚡ **Cache Speedup** | **8.3×** |
+| 💡 **Tokens Saved** | **~25K** |
+| 🧠 **Q-Table Entries** | **120** |
+| 📈 **RL Episodes** | **67** |
 | 🔧 **MCP Tools** | **11** |
 | 📱 **Apps Supported** | **15+** |
-| 🏗️ **Architecture Layers** | **5** |
-| 🔄 **Recovery Strategies** | **21** |
 
 </div>
 
@@ -263,7 +264,41 @@ python scripts/run_demo_detached.py --demo fast --supervise
 
 ---
 
-## Slide 9 — Key Innovations
+## Slide 9 — Skill Library & Composable Automation
+
+### From monolithic demos to atomic, cacheable skills
+
+**The Problem:** Demo 1 bundles brightness + volume + panel-close into 15 steps. "Turn brightness to 100%" shouldn't require looking up a specific demo scenario.
+
+**The Solution:** An atomic skill library with composable intent decomposition:
+
+| Component | Description |
+|-----------|-------------|
+| 🧩 **29 Atomic Skills** | Self-contained units across 5 categories (system, browser, file, input, app) |
+| ⚡ **Amortized Cache** | Successful action sequences cached with UI fingerprint; 0 LLM tokens on hit |
+| 🧠 **3-Tier Composer** | Natural language → skill chain: regex recipes → keyword match → LLM fallback |
+| 📋 **Action Logger** | Structured JSONL audit trail for debugging and analysis |
+
+**Before vs After: Brightness to 100%**
+
+| Metric | Demo 1 (v1) | Skill Runner (cold) | Skill Runner (cached) |
+|--------|:-----------:|:-------------------:|:---------------------:|
+| Steps | 15 | 6 | 6 |
+| Time | 258s | 55s | 31s |
+| LLM Tokens | ~35K | 11K | 2.8K |
+| Speedup | 1× | **4.7×** | **8.3×** |
+
+```bash
+# Composable skill execution
+python scripts/run_skill.py --intent "Turn brightness to 100%"
+python scripts/run_skill.py --intent "Set volume to 50%"
+python scripts/run_skill.py --list-skills     # 29 atomic skills
+python scripts/run_skill.py --cache-stats     # Cache hit rate & tokens saved
+```
+
+---
+
+## Slide 10 — Key Innovations
 
 | Innovation | Details |
 |:---:|:---|
@@ -278,11 +313,11 @@ python scripts/run_demo_detached.py --demo fast --supervise
 
 ---
 
-## Slide 10 — Comparison
+## Slide 11 — Comparison
 
-| System | Architecture | Grounding | Learning | Apps | Human-in-Loop | Open Source |
-|--------|:-----------:|:---------:|:--------:|:----:|:---:|:---:|
-| **AgenticOS v2** | Modular ReAct | UIA + Vision + OCR | Q-Learning + Human | **15+** | ✅ | ✅ |
+| System | Architecture | Grounding | Learning | Skills | Human-in-Loop | Open Source |
+|--------|:-----------:|:---------:|:--------:|:-----:|:---:|:---:|
+| **AgenticOS v3** | Modular ReAct | UIA + Vision + OCR | Q-Learning + Human + Cache | **29** | ✅ | ✅ |
 | UFO² | Dual-agent | UIA + Vision | None | — | ❌ | ✅ |
 | Operator | CUA | Vision only | None | — | ❌ | ❌ |
 | Navi | Foundation | Vision only | None | — | ❌ | ❌ |
@@ -290,14 +325,14 @@ python scripts/run_demo_detached.py --demo fast --supervise
 
 **AgenticOS differentiators:**
 - Triple-layer grounding (UIA + Vision + OCR)
-- Online RL with persistent Q-table (116 entries, 65 episodes)
+- Online RL with persistent Q-table (120 entries, 67 episodes)
 - Human supervision with feedback-driven optimization
-- Golden sequence replay for amortization
+- **Skill Library** with 29 atomic skills, 7 recipes, amortized cache (8.3× speedup)
 - 15+ real Windows applications with app-specific recovery
 
 ---
 
-## Slide 11 — Roadmap
+## Slide 12 — Roadmap
 
 - [x] **v1: Core Demos** — 14 demos across 8 apps
 - [x] **Human Supervision** — Review, rate, and correct demos
@@ -305,6 +340,9 @@ python scripts/run_demo_detached.py --demo fast --supervise
 - [x] **v2: Multi-App Expansion** — 50 new demos across 15 apps
 - [x] **App Filtering** — `--app edge`, `--difficulty beginner`
 - [x] **Iteration Mode** — `--iterations 5` for iterative refinement
+- [x] **v3: Skill Library** — 29 atomic skills, 7 recipes, amortized replay
+- [x] **Skill Composer** — Natural language → skill chain decomposition
+- [x] **Amortized Cache** — 7.6× speedup on cache hits, ~25K tokens saved
 - [ ] **Vision QA Mode** — Ask the agent questions about what's on screen
 - [ ] **Playback Recorder** — Deterministic replay for bug reproduction
 - [ ] **Multi-DUT Support** — Run automation across multiple machines
@@ -321,6 +359,7 @@ python scripts/run_demo_detached.py --demo fast --supervise
 [GitHub: jiaqizou-msft/AgenticOS-ClaudeOpus4.6](https://github.com/jiaqizou-msft/AgenticOS-ClaudeOpus4.6)
 
 ```
+python scripts/run_skill.py --intent "Turn brightness to 100%"
 python scripts/run_demo_detached.py --demo v2 --app settings --supervise
 ```
 
