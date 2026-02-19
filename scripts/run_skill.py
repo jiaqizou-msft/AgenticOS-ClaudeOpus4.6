@@ -101,11 +101,13 @@ Available action types and their params:
 
 CRITICAL RULES:
 1. Complete ONLY the specific skill task described. Do NOT do more.
-2. Use EXACT coordinates from the UI element tree.
+2. Use coordinates from the UI element tree when available.
+   For Electron apps (Teams, VS Code, Slack, etc.) the element tree may NOT expose all interactive content.
+   In that case, look at the SCREENSHOT carefully to find the target visually and estimate click coordinates from what you see.
 3. Use "set_slider" for ALL slider controls — much more reliable than drag.
-4. Call done with success=true as soon as the skill objective is met.
+4. Call done ONLY when the FULL task objective is achieved. Read the TASK carefully.
 5. If stuck, try a different approach (keyboard shortcut, etc).
-6. Minimize steps — each skill should complete in 1-3 actions."""
+6. Simple skills (press key, set slider) need 1-2 actions. Complex skills (search + navigate + interact) may need many more. Do NOT say done prematurely."""
 
 
 def ts() -> str:
@@ -210,6 +212,28 @@ def run_skill_step(
     t_start = time.time()
     tokens_used = 0
 
+    # ── 0. Pre-launch command (if any) ──
+    if skill.pre_launch:
+        try:
+            cmd = skill.pre_launch.format(**params)
+            log(f"    Pre-launch: {cmd}")
+            import subprocess
+            result = subprocess.run(
+                cmd, shell=True, capture_output=True, text=True, timeout=30
+            )
+            if result.stdout.strip():
+                for line in result.stdout.strip().splitlines():
+                    log(f"    Pre-launch: {line}")
+            if result.returncode != 0:
+                log(f"    Pre-launch FAILED (exit {result.returncode})")
+                if result.stderr.strip():
+                    log(f"    Pre-launch stderr: {result.stderr.strip()[:200]}")
+            time.sleep(4.0)  # Extra settle time after pre-launch
+        except subprocess.TimeoutExpired:
+            log(f"    Pre-launch TIMEOUT (30s)")
+        except Exception as e:
+            log(f"    Pre-launch error: {e}")
+
     # ── 1. Observe current state ──
     screenshot = screen.grab()
     b64 = screenshot.to_base64()
@@ -291,7 +315,7 @@ def run_skill_step(
         elem_text = "\n".join(
             getattr(el, 'description', lambda: str(el))()
             if callable(getattr(el, 'description', None)) else str(el)
-            for el in elements[:60]
+            for el in elements[:120]
         )
 
         # Build history
@@ -359,6 +383,20 @@ def run_skill_step(
         )
 
         if action_type == "done":
+            # Count non-done, non-wait actions taken so far
+            real_actions = sum(1 for a in actions_taken if a.action_type not in ("done", "wait", "nudge"))
+            if real_actions < skill.min_steps:
+                log(f"    REJECTED DONE: only {real_actions}/{skill.min_steps} real actions completed. Nudging LLM to continue.")
+                # Record a nudge so the LLM sees it was rejected
+                nudge = CachedAction(
+                    action_type="nudge",
+                    params={"message": f"Done rejected: only {real_actions}/{skill.min_steps} steps completed. The task is NOT finished. Continue with the next step."},
+                    thought="System: premature done rejected",
+                    step_index=step_num,
+                    exec_time=time.time(),
+                )
+                actions_taken.append(nudge)
+                continue
             success = action_params.get("success", True)
             actions_taken.append(cached_action)
             log(f"    DONE: {'SUCCESS' if success else 'FAILED'}")

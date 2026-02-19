@@ -12,21 +12,21 @@
           },
           "thought": "The Quick Settings panel can be accessed by clicking on the system tray icons near the clock, battery, volume, and WiFi ",
           "step_index": 1,
-          "exec_time": 1771528126.868132
+          "exec_time": 1771530724.032177
         },
         {
           "action_type": "done",
           "params": {},
-          "thought": "The Quick Settings panel is already open after the previous click. The task is complete.",
+          "thought": "The Quick Settings panel is already open. The task is complete.",
           "step_index": 2,
-          "exec_time": 1771528145.7546349
+          "exec_time": 1771530742.2185068
         }
       ],
       "pre_fingerprint": {
-        "window_title": "skill_composer.py - AgenticOS - Visual Studio Code",
-        "element_count": 154,
+        "window_title": "skill_library.py (Working Tree) (skill_library.py) - AgenticOS - Visual Studio Code",
+        "element_count": 292,
         "top_elements": [
-          "Widgets 1\u00b0C Cloudy",
+          "Widgets 2\u00b0C Rain and snow",
           "Start",
           "Search",
           "Task View",
@@ -42,11 +42,11 @@
           "PowerPoint - 2 running windows",
           "Calendar - 1 running window"
         ],
-        "timestamp": 1771528119.3395932
+        "timestamp": 1771530716.2789824
       },
       "post_fingerprint": {
-        "window_title": "skill_composer.py - AgenticOS - Visual Studio Code",
-        "element_count": 174,
+        "window_title": "skill_library.py (Working Tree) (skill_library.py) - AgenticOS - Visual Studio Code",
+        "element_count": 300,
         "top_elements": [
           "Wi-Fi",
           "Manage Wi-Fi connections",
@@ -64,85 +64,15 @@
           "Next Page",
           "Brightness"
         ],
-        "timestamp": 1771528145.7548769
+        "timestamp": 1771530742.2186894
       },
       "success": true,
-      "total_time": 29.97071099281311,
-      "llm_tokens_saved": 5734,
-      "replay_count": 1,
-      "created_at": 1771528145.7549174,
-      "last_used": 1771528761.9192598,
-      "last_validated": 1771528761.9192603
-    },
-    "712c6bd3802f33f7": {
-      "skill_id": "set_slider",
-      "params": {
-        "name": "Brightness",
-        "value": 100
-      },
-      "actions": [
-        {
-          "action_type": "done",
-          "params": {
-            "success": true,
-            "summary": "The Brightness slider was already set to 100%."
-          },
-          "thought": "The Brightness slider is already at 100%. I will confirm the action as complete.",
-          "step_index": 1,
-          "exec_time": 1771528063.1881244
-        }
-      ],
-      "pre_fingerprint": {
-        "window_title": "Quick settings",
-        "element_count": 174,
-        "top_elements": [
-          "Wi-Fi",
-          "Manage Wi-Fi connections",
-          "Bluetooth",
-          "Manage Bluetooth devices",
-          "VPN",
-          "Studio effects",
-          "Rotation lock",
-          "Accessibility",
-          "Pager",
-          "Previous Page",
-          "Page 1",
-          "Page 2",
-          "Page 3",
-          "Next Page",
-          "Brightness"
-        ],
-        "timestamp": 1771528055.9000204
-      },
-      "post_fingerprint": {
-        "window_title": "Quick settings",
-        "element_count": 174,
-        "top_elements": [
-          "Wi-Fi",
-          "Manage Wi-Fi connections",
-          "Bluetooth",
-          "Manage Bluetooth devices",
-          "VPN",
-          "Studio effects",
-          "Rotation lock",
-          "Accessibility",
-          "Pager",
-          "Previous Page",
-          "Page 1",
-          "Page 2",
-          "Page 3",
-          "Next Page",
-          "Brightness"
-        ],
-        "timestamp": 1771528063.1883116
-      },
-      "success": true,
-      "total_time": 11.127862453460693,
-      "llm_tokens_saved": 2820,
-      "replay_count": 1,
-      "created_at": 1771528063.1883729,
-      "last_used": 1771528148.9792466,
-      "last_validated": 1771528148.9792473
+      "total_time": 32.10630774497986,
+      "llm_tokens_saved": 5754,
+      "replay_count": 0,
+      "created_at": 1771530742.2187364,
+      "last_used": 1771530742.2187364,
+      "last_validated": 1771530742.2187366
     },
     "6b375af1801ca1bd": {
       "skill_id": "close_panel",
@@ -155,17 +85,7 @@
           },
           "thought": "Pressing the Escape key should close the Quick Settings panel.",
           "step_index": 1,
-          "exec_time": 1771528072.2878277
-        },
-        {
-          "action_type": "click",
-          "params": {
-            "x": 500,
-            "y": 500
-          },
-          "thought": "The Escape key did not close the Quick Settings panel. I will click on an empty area of the desktop to dismiss it.",
-          "step_index": 2,
-          "exec_time": 1771528085.4934976
+          "exec_time": 1771530766.9251213
         },
         {
           "action_type": "click",
@@ -173,14 +93,14 @@
             "x": 100,
             "y": 100
           },
-          "thought": "The panel or flyout is still open. I will click on an empty area of the desktop to close it.",
-          "step_index": 3,
-          "exec_time": 1771528099.1667097
+          "thought": "The Escape key did not close the Quick Settings panel. Clicking on an empty area of the desktop should dismiss it.",
+          "step_index": 2,
+          "exec_time": 1771530781.352495
         }
       ],
       "pre_fingerprint": {
         "window_title": "Quick settings",
-        "element_count": 174,
+        "element_count": 300,
         "top_elements": [
           "Wi-Fi",
           "Manage Wi-Fi connections",
@@ -198,13 +118,13 @@
           "Next Page",
           "Brightness"
         ],
-        "timestamp": 1771528066.4235225
+        "timestamp": 1771530759.4066596
       },
       "post_fingerprint": {
         "window_title": "Quick settings",
-        "element_count": 154,
+        "element_count": 292,
         "top_elements": [
-          "Widgets 1\u00b0C Cloudy",
+          "Widgets 2\u00b0C Rain and snow",
           "Start",
           "Search",
           "Task View",
@@ -220,15 +140,15 @@
           "PowerPoint - 2 running windows",
           "Calendar - 1 running window"
         ],
-        "timestamp": 1771528103.1768215
+        "timestamp": 1771530786.572879
       },
       "success": true,
-      "total_time": 39.4827835559845,
-      "llm_tokens_saved": 8515,
-      "replay_count": 2,
-      "created_at": 1771528103.1768668,
-      "last_used": 1771528784.3618884,
-      "last_validated": 1771528784.3618891
+      "total_time": 31.178086519241333,
+      "llm_tokens_saved": 5652,
+      "replay_count": 0,
+      "created_at": 1771530786.5729454,
+      "last_used": 1771530786.5729456,
+      "last_validated": 1771530786.5729458
     },
     "b4c10dd382d1f202": {
       "skill_id": "set_slider",
@@ -299,14 +219,989 @@
       "created_at": 1771528781.1453583,
       "last_used": 1771528781.1453583,
       "last_validated": 1771528781.1453586
+    },
+    "712c6bd3802f33f7": {
+      "skill_id": "set_slider",
+      "params": {
+        "name": "Brightness",
+        "value": 100
+      },
+      "actions": [
+        {
+          "action_type": "set_slider",
+          "params": {
+            "name": "Brightness",
+            "value": 100
+          },
+          "thought": "The Brightness slider is identified, and the task is to set its value to 100%.",
+          "step_index": 1,
+          "exec_time": 1771529261.3854048
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "Quick settings",
+        "element_count": 174,
+        "top_elements": [
+          "Wi-Fi",
+          "Manage Wi-Fi connections",
+          "Bluetooth",
+          "Manage Bluetooth devices",
+          "VPN",
+          "Studio effects",
+          "Rotation lock",
+          "Accessibility",
+          "Pager",
+          "Previous Page",
+          "Page 1",
+          "Page 2",
+          "Page 3",
+          "Next Page",
+          "Brightness"
+        ],
+        "timestamp": 1771529252.777981
+      },
+      "post_fingerprint": {
+        "window_title": "Quick settings",
+        "element_count": 174,
+        "top_elements": [
+          "Wi-Fi",
+          "Manage Wi-Fi connections",
+          "Bluetooth",
+          "Manage Bluetooth devices",
+          "VPN",
+          "Studio effects",
+          "Rotation lock",
+          "Accessibility",
+          "Pager",
+          "Previous Page",
+          "Page 1",
+          "Page 2",
+          "Page 3",
+          "Next Page",
+          "Brightness"
+        ],
+        "timestamp": 1771529261.8474236
+      },
+      "success": true,
+      "total_time": 12.702614784240723,
+      "llm_tokens_saved": 2812,
+      "replay_count": 1,
+      "created_at": 1771529261.8474832,
+      "last_used": 1771529338.6864245,
+      "last_validated": 1771529338.6864254
+    },
+    "2f687e23b7780324": {
+      "skill_id": "open_notepad",
+      "params": {},
+      "actions": [
+        {
+          "action_type": "open_app",
+          "params": {
+            "app_name": "notepad"
+          },
+          "thought": "The task requires launching a new Notepad instance using the open_app action.",
+          "step_index": 1,
+          "exec_time": 1771530144.8372836
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "skill_library.py (Working Tree) (skill_library.py) - AgenticOS - Visual Studio Code",
+        "element_count": 226,
+        "top_elements": [
+          "Widgets Precip to stop 11:44 AM",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771530136.859718
+      },
+      "post_fingerprint": {
+        "window_title": "skill_library.py (Working Tree) (skill_library.py) - AgenticOS - Visual Studio Code",
+        "element_count": 226,
+        "top_elements": [
+          "Widgets Precip to stop 11:44 AM",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771530146.388767
+      },
+      "success": true,
+      "total_time": 14.468729257583618,
+      "llm_tokens_saved": 2880,
+      "replay_count": 2,
+      "created_at": 1771530146.38884,
+      "last_used": 1771530471.5939398,
+      "last_validated": 1771530471.5939403
+    },
+    "9151a60ed45dfbcd": {
+      "skill_id": "notepad_type",
+      "params": {
+        "text": "hello world"
+      },
+      "actions": [
+        {
+          "action_type": "click",
+          "params": {
+            "x": 960,
+            "y": 540
+          },
+          "thought": "Click on the Notepad text area to ensure focus, then type the text.",
+          "step_index": 1,
+          "exec_time": 1771529682.67403
+        },
+        {
+          "action_type": "type_text",
+          "params": {
+            "text": "hello world"
+          },
+          "thought": "The Notepad text area is already focused. Proceeding to type the text.",
+          "step_index": 2,
+          "exec_time": 1771529694.8599815
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "Untitled - Notepad",
+        "element_count": 204,
+        "top_elements": [
+          "Widgets 2\u00b0C Snow",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771529677.3561194
+      },
+      "post_fingerprint": {
+        "window_title": "Untitled - Notepad",
+        "element_count": 204,
+        "top_elements": [
+          "Widgets 2\u00b0C Snow",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771529698.771735
+      },
+      "success": true,
+      "total_time": 24.190233945846558,
+      "llm_tokens_saved": 5687,
+      "replay_count": 0,
+      "created_at": 1771529698.7717943,
+      "last_used": 1771529698.7717948,
+      "last_validated": 1771529698.7717948
+    },
+    "d10c3b91044caede": {
+      "skill_id": "notepad_new_tab",
+      "params": {},
+      "actions": [
+        {
+          "action_type": "hotkey",
+          "params": {
+            "keys": [
+              "ctrl",
+              "n"
+            ]
+          },
+          "thought": "The task is to create a new blank tab in Notepad using the Ctrl+N hotkey.",
+          "step_index": 1,
+          "exec_time": 1771530394.0338085
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "Untitled - Notepad",
+        "element_count": 270,
+        "top_elements": [
+          "Widgets 2\u00b0C Rain and snow",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771530387.5396817
+      },
+      "post_fingerprint": {
+        "window_title": "Untitled - Notepad",
+        "element_count": 270,
+        "top_elements": [
+          "Widgets 2\u00b0C Rain and snow",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771530394.560817
+      },
+      "success": true,
+      "total_time": 10.83900785446167,
+      "llm_tokens_saved": 2840,
+      "replay_count": 1,
+      "created_at": 1771530394.560885,
+      "last_used": 1771530478.2442489,
+      "last_validated": 1771530478.2442493
+    },
+    "e56a2a4ed206e78e": {
+      "skill_id": "notepad_select_all",
+      "params": {},
+      "actions": [
+        {
+          "action_type": "hotkey",
+          "params": {
+            "keys": [
+              "ctrl",
+              "a"
+            ]
+          },
+          "thought": "The task is to select all text in Notepad using Ctrl+A.",
+          "step_index": 1,
+          "exec_time": 1771530418.9752567
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "*Why did the AI cross the road To op - Notepad",
+        "element_count": 270,
+        "top_elements": [
+          "Widgets 2\u00b0C Rain and snow",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771530412.741016
+      },
+      "post_fingerprint": {
+        "window_title": "*Why did the AI cross the road To op - Notepad",
+        "element_count": 270,
+        "top_elements": [
+          "Widgets 2\u00b0C Rain and snow",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771530419.5018253
+      },
+      "success": true,
+      "total_time": 10.34220576286316,
+      "llm_tokens_saved": 2840,
+      "replay_count": 1,
+      "created_at": 1771530419.501887,
+      "last_used": 1771530491.7905579,
+      "last_validated": 1771530491.7905588
+    },
+    "7a6386855d77dffc": {
+      "skill_id": "notepad_copy",
+      "params": {},
+      "actions": [
+        {
+          "action_type": "hotkey",
+          "params": {
+            "keys": [
+              "ctrl",
+              "c"
+            ]
+          },
+          "thought": "The selected text needs to be copied using the Ctrl+C hotkey.",
+          "step_index": 1,
+          "exec_time": 1771530431.152733
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "*Why did the AI cross the road To op - Notepad",
+        "element_count": 270,
+        "top_elements": [
+          "Widgets 2\u00b0C Rain and snow",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771530423.7460463
+      },
+      "post_fingerprint": {
+        "window_title": "*Why did the AI cross the road To op - Notepad",
+        "element_count": 270,
+        "top_elements": [
+          "Widgets 2\u00b0C Rain and snow",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771530431.680741
+      },
+      "success": true,
+      "total_time": 11.672778367996216,
+      "llm_tokens_saved": 2835,
+      "replay_count": 1,
+      "created_at": 1771530431.6808326,
+      "last_used": 1771530497.0371,
+      "last_validated": 1771530497.0371003
+    },
+    "0c0fcd25537431fd": {
+      "skill_id": "notepad_type",
+      "params": {
+        "text": "Why did the AI cross the road? To optimize the other side!"
+      },
+      "actions": [
+        {
+          "action_type": "type_text",
+          "params": {
+            "text": "Why did the AI cross the road? To optimize the other side!"
+          },
+          "thought": "The Notepad window is already focused, so I can directly type the required text.",
+          "step_index": 1,
+          "exec_time": 1771530405.0387692
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "Untitled - Notepad",
+        "element_count": 271,
+        "top_elements": [
+          "Widgets 2\u00b0C Rain and snow",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771530398.4306827
+      },
+      "post_fingerprint": {
+        "window_title": "Untitled - Notepad",
+        "element_count": 271,
+        "top_elements": [
+          "Widgets 2\u00b0C Rain and snow",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Microsoft Teams - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window"
+        ],
+        "timestamp": 1771530408.6536436
+      },
+      "success": true,
+      "total_time": 13.585294723510742,
+      "llm_tokens_saved": 2881,
+      "replay_count": 1,
+      "created_at": 1771530408.6537113,
+      "last_used": 1771530483.3059392,
+      "last_validated": 1771530483.3059394
+    },
+    "3891f296cfabadbf": {
+      "skill_id": "press_hotkey",
+      "params": {
+        "keys": "ctrl+e"
+      },
+      "actions": [
+        {
+          "action_type": "hotkey",
+          "params": {
+            "keys": [
+              "ctrl",
+              "e"
+            ]
+          },
+          "thought": "The task is to press the hotkey combination Ctrl+E.",
+          "step_index": 1,
+          "exec_time": 1771533655.8264735
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "Chat | Mike Liu \u5289\u5efa\u5e73 (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771533647.1679976
+      },
+      "post_fingerprint": {
+        "window_title": "Chat | Mike Liu \u5289\u5efa\u5e73 (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771533656.3545337
+      },
+      "success": true,
+      "total_time": 14.323250770568848,
+      "llm_tokens_saved": 3935,
+      "replay_count": 0,
+      "created_at": 1771533656.3545992,
+      "last_used": 1771533656.3545995,
+      "last_validated": 1771533656.3545995
+    },
+    "ce06726640c501fd": {
+      "skill_id": "type_text",
+      "params": {
+        "text": "Miguel Huerta"
+      },
+      "actions": [
+        {
+          "action_type": "type_text",
+          "params": {
+            "text": "Miguel Huerta"
+          },
+          "thought": "The task is to type the text 'Miguel Huerta'. I will proceed to type it.",
+          "step_index": 1,
+          "exec_time": 1771534093.318752
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534085.966298
+      },
+      "post_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534094.1372213
+      },
+      "success": true,
+      "total_time": 14.14703106880188,
+      "llm_tokens_saved": 3938,
+      "replay_count": 2,
+      "created_at": 1771534094.1372888,
+      "last_used": 1771534350.8870893,
+      "last_validated": 1771534350.8870902
+    },
+    "c4f6cde5e7c1b4ca": {
+      "skill_id": "press_key",
+      "params": {
+        "key": "enter"
+      },
+      "actions": [
+        {
+          "action_type": "press_key",
+          "params": {
+            "key": "enter"
+          },
+          "thought": "The task is to press the Enter key. This can be done directly.",
+          "step_index": 1,
+          "exec_time": 1771534106.0528288
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534099.790401
+      },
+      "post_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534106.205433
+      },
+      "success": true,
+      "total_time": 11.561975240707397,
+      "llm_tokens_saved": 3922,
+      "replay_count": 1,
+      "created_at": 1771534106.2054844,
+      "last_used": 1771534204.9402099,
+      "last_validated": 1771534204.9402103
+    },
+    "080e7f42f1e3d243": {
+      "skill_id": "press_key",
+      "params": {
+        "key": "down"
+      },
+      "actions": [
+        {
+          "action_type": "press_key",
+          "params": {
+            "key": "down"
+          },
+          "thought": "The task is to press the down key. This can be achieved with a single action.",
+          "step_index": 1,
+          "exec_time": 1771534198.2634377
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534189.4244173
+      },
+      "post_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534198.4173653
+      },
+      "success": true,
+      "total_time": 14.435826063156128,
+      "llm_tokens_saved": 3925,
+      "replay_count": 0,
+      "created_at": 1771534198.4174366,
+      "last_used": 1771534198.4174366,
+      "last_validated": 1771534198.417437
+    },
+    "3f07f730a6f3a6d6": {
+      "skill_id": "press_hotkey",
+      "params": {
+        "keys": "ctrl+n"
+      },
+      "actions": [
+        {
+          "action_type": "hotkey",
+          "params": {
+            "keys": [
+              "ctrl",
+              "n"
+            ]
+          },
+          "thought": "The task is to press the hotkey combination Ctrl+N. This can be done directly.",
+          "step_index": 1,
+          "exec_time": 1771534078.9442258
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534072.1876278
+      },
+      "post_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534079.4746058
+      },
+      "success": true,
+      "total_time": 12.55802845954895,
+      "llm_tokens_saved": 3936,
+      "replay_count": 2,
+      "created_at": 1771534079.474683,
+      "last_used": 1771534343.6517897,
+      "last_validated": 1771534343.6517906
+    },
+    "2b463d88443ad329": {
+      "skill_id": "press_hotkey",
+      "params": {
+        "keys": "ctrl+shift+c"
+      },
+      "actions": [
+        {
+          "action_type": "hotkey",
+          "params": {
+            "keys": [
+              "ctrl",
+              "shift",
+              "c"
+            ]
+          },
+          "thought": "The task requires pressing the hotkey combination ctrl+shift+c.",
+          "step_index": 1,
+          "exec_time": 1771534377.113469
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534370.0660284
+      },
+      "post_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534377.8046415
+      },
+      "success": true,
+      "total_time": 12.697658061981201,
+      "llm_tokens_saved": 3938,
+      "replay_count": 0,
+      "created_at": 1771534377.8047132,
+      "last_used": 1771534377.8047135,
+      "last_validated": 1771534377.8047137
+    },
+    "6ad2088774eebbc9": {
+      "skill_id": "press_key",
+      "params": {
+        "key": "tab"
+      },
+      "actions": [
+        {
+          "action_type": "press_key",
+          "params": {
+            "key": "tab"
+          },
+          "thought": "The task is to press the Tab key. This can be achieved with a single action.",
+          "step_index": 1,
+          "exec_time": 1771534364.4474037
+        }
+      ],
+      "pre_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534357.6554706
+      },
+      "post_fingerprint": {
+        "window_title": "Chat | New Message (Guest) | Microsoft Teams",
+        "element_count": 295,
+        "top_elements": [
+          "Widgets 2\u00b0C Cloudy",
+          "Start",
+          "Search",
+          "Task View",
+          "File Explorer - 5 running windows pinned",
+          "Microsoft Edge - 5 running windows pinned",
+          "Microsoft Store pinned",
+          "Microsoft 365 Copilot pinned",
+          "Visual Studio Code - 3 running windows",
+          "Outlook - 1 running window",
+          "Task Manager - 1 running window",
+          "OneNote - 1 running window",
+          "PowerPoint - 2 running windows",
+          "Calendar - 1 running window",
+          "People - 1 running window"
+        ],
+        "timestamp": 1771534364.600249
+      },
+      "success": true,
+      "total_time": 11.880489826202393,
+      "llm_tokens_saved": 3925,
+      "replay_count": 0,
+      "created_at": 1771534364.6003199,
+      "last_used": 1771534364.60032,
+      "last_validated": 1771534364.60032
     }
   },
   "stats": {
-    "hits": 5,
-    "misses": 4,
-    "stale": 1,
-    "stores": 5,
+    "hits": 36,
+    "misses": 49,
+    "stale": 16,
+    "stores": 55,
     "replays": 0
   },
-  "saved_at": 1771528784.362483
+  "saved_at": 1771534899.2758753
 }

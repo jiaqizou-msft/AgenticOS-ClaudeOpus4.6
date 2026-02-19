@@ -51,12 +51,22 @@ class Skill:
     precondition: str = ""           # Expected UI state description
     postcondition: str = ""          # Expected result description
     max_steps: int = 3               # Maximum LLM steps allowed
+    min_steps: int = 0                # Minimum actions before done is accepted
     timeout: int = 60                # Timeout in seconds
     tags: list[str] = field(default_factory=list)
     depends_on: list[str] = field(default_factory=list)  # Skill IDs this depends on
 
     def format_prompt(self, **kwargs) -> str:
-        """Format the prompt template with parameters."""
+        """Format the prompt template with parameters.
+        
+        Auto-derives special formatted variables:
+        - keys_formatted: Converts "ctrl+v" or "ctrl,v" → '"ctrl", "v"'
+        """
+        # Auto-derive keys_formatted for hotkey skills
+        if "keys" in kwargs and "keys_formatted" not in kwargs:
+            raw = str(kwargs["keys"])
+            parts = [k.strip() for k in raw.replace("+", ",").split(",")]
+            kwargs["keys_formatted"] = ", ".join(f'"{k}"' for k in parts)
         return self.prompt_template.format(**kwargs)
 
     def validate_params(self, params: dict) -> tuple[bool, str]:
@@ -636,6 +646,52 @@ _register(Skill(
 ))
 
 
+# ── Microsoft Teams ──────────────────────────────────────────────────────
+
+_register(Skill(
+    id="open_teams",
+    name="Open Microsoft Teams",
+    description="Bring Microsoft Teams to the foreground",
+    category="app",
+    prompt_template=(
+        'Verify Microsoft Teams is in the foreground. '
+        'If the window title contains "Microsoft Teams" or you can see Teams, '
+        'the task is complete. Teams was just activated by a pre-launch command.'
+    ),
+    precondition="Any state",
+    postcondition="Microsoft Teams window is in the foreground and focused",
+    pre_launch='powershell -ExecutionPolicy Bypass -File scripts/activate_teams.ps1',
+    max_steps=1,
+    timeout=20,
+    tags=["app", "teams", "communication"],
+))
+
+_register(Skill(
+    id="teams_call_person",
+    name="Call Someone in Teams",
+    description="Start a Teams call to a person by name using Graph API + deep link",
+    category="app",
+    parameters=[
+        SkillParam("name", "Person name to call", "str",
+                   examples=["Miguel Huerta", "John Smith"]),
+        SkillParam("call_type", "Type of call: audio or video", "str",
+                   required=False, default="audio",
+                   examples=["audio", "video"]),
+    ],
+    prompt_template=(
+        'A Teams {call_type} call to {name} has been initiated via deep link. '
+        'Verify that the call screen is visible — you should see the person\'s name '
+        'and a ringing/calling indicator. If the call screen is showing, report success.'
+    ),
+    pre_launch='powershell -ExecutionPolicy Bypass -File scripts/teams_call.ps1 -Name "{name}" -CallType {call_type}',
+    precondition="Any state — Teams should be running",
+    postcondition="An {call_type} call to {name} is ringing",
+    max_steps=2,
+    timeout=30,
+    tags=["teams", "call", "communication"],
+))
+
+
 # ── Task Manager ─────────────────────────────────────────────────────────
 
 _register(Skill(
@@ -802,6 +858,16 @@ _register_recipe(Recipe(
         ("calculator_compute", {}),  # expression filled at runtime
     ],
     tags=["calculator", "math"],
+))
+
+_register_recipe(Recipe(
+    id="teams_call",
+    name="Call a Contact in Teams",
+    description="Start a Teams call to a person by name (uses Graph API + deep link)",
+    skills=[
+        ("teams_call_person", {}),  # name and call_type filled at runtime
+    ],
+    tags=["teams", "call", "communication"],
 ))
 
 
