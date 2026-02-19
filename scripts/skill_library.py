@@ -408,17 +408,36 @@ _register(Skill(
 _register(Skill(
     id="open_notepad",
     name="Open Notepad",
-    description="Launch Notepad text editor",
+    description="Launch a NEW Notepad instance via open_app (never click taskbar)",
     category="app",
     prompt_template=(
-        'Open Notepad. '
-        'The action is: {{"type": "open_app", "params": {{"app_name": "notepad"}}}}'
+        'Launch a NEW Notepad window. '
+        'IMPORTANT: Do NOT click the taskbar icon — that shows a picker when multiple windows exist. '
+        'Instead use the open_app action which launches a fresh instance. '
+        'The EXACT action is: {{"type": "open_app", "params": {{"app_name": "notepad"}}}}'
     ),
     precondition="Any state",
-    postcondition="Notepad window is open and focused",
+    postcondition="A new Notepad window is open and focused",
     max_steps=1,
     timeout=15,
     tags=["app", "notepad", "text"],
+))
+
+_register(Skill(
+    id="notepad_new_tab",
+    name="New Tab in Notepad",
+    description="Create a new blank tab in Notepad (Ctrl+N) to avoid overwriting existing content",
+    category="app",
+    prompt_template=(
+        'Create a new blank tab in Notepad by pressing Ctrl+N. '
+        'The action is: {{"type": "hotkey", "params": {{"keys": ["ctrl", "n"]}}}}'
+    ),
+    precondition="Notepad is open and focused",
+    postcondition="A new blank Untitled tab is active in Notepad",
+    max_steps=1,
+    timeout=10,
+    tags=["notepad", "tab", "new"],
+    depends_on=["open_notepad"],
 ))
 
 _register(Skill(
@@ -430,12 +449,13 @@ _register(Skill(
         SkillParam("text", "Text to type in Notepad", "str"),
     ],
     prompt_template=(
-        'Click on the Notepad text area to ensure focus, then type: "{text}". '
+        'Type the following text directly into Notepad (the text area already has focus): "{text}". '
+        'Do NOT click anywhere first — just type immediately. '
         'The action is: {{"type": "type_text", "params": {{"text": "{text}"}}}}'
     ),
-    precondition="Notepad is open and focused",
+    precondition="Notepad is open and focused with cursor in text area",
     postcondition="Text '{text}' has been typed in Notepad",
-    max_steps=2,
+    max_steps=1,
     timeout=15,
     tags=["notepad", "type", "text"],
     depends_on=["open_notepad"],
@@ -743,9 +763,10 @@ _register_recipe(Recipe(
 _register_recipe(Recipe(
     id="notepad_hello_world",
     name="Open Notepad and Type Hello World",
-    description="Launch Notepad and type a message",
+    description="Launch Notepad, open a new tab, and type a message",
     skills=[
         ("open_notepad", {}),
+        ("notepad_new_tab", {}),
         ("notepad_type", {"text": "Hello World"}),
     ],
     tags=["notepad", "text"],
