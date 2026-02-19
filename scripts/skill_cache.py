@@ -238,6 +238,16 @@ class SkillCache:
             self._stats["misses"] += 1
             return None
 
+        # Reject no-op entries (only 'done' actions — not replayable)
+        real_actions = [a for a in entry.actions if a.action_type != "done"]
+        if not real_actions:
+            self._stats["misses"] += 1
+            # Auto-invalidate the bad entry
+            del self._cache[key]
+            self._save()
+            print(f"[SkillCache] Purged no-op cache for {entry.skill_id}")
+            return None
+
         # Check fingerprint staleness
         if entry.pre_fingerprint.matches(current_fingerprint, self._tolerance):
             self._stats["hits"] += 1
@@ -256,8 +266,18 @@ class SkillCache:
               success: bool = True, total_time: float = 0.0, llm_tokens: int = 0) -> str:
         """Store a successful skill execution in the cache.
         
-        Returns the cache key.
+        Returns the cache key, or empty string if not cached.
+        
+        NOTE: Entries where the only action is 'done' are NOT cached because
+        they represent state-dependent observations ("already done") that are
+        not replayable — the state may be different on the next invocation.
         """
+        # Refuse to cache no-op entries (only 'done' actions, no real UI interaction)
+        real_actions = [a for a in actions if a.action_type != "done"]
+        if not real_actions:
+            print(f"[SkillCache] Skipping cache for {skill_id}: no-op (only 'done' actions)")
+            return ""
+
         param_str = json.dumps(params, sort_keys=True)
         raw = f"{skill_id}:{param_str}"
         key = hashlib.sha256(raw.encode()).hexdigest()[:16]
