@@ -292,6 +292,162 @@ _register(Skill(
     tags=["browser", "tab", "close"],
 ))
 
+_register(Skill(
+    id="browser_search",
+    name="Search the Web",
+    description="Open Microsoft Edge and search for a query using Bing",
+    category="browser",
+    parameters=[
+        SkillParam("query", "The search query", "str",
+                   examples=["weather today", "Python tutorial", "latest news"]),
+    ],
+    prompt_template=(
+        'Microsoft Edge has been opened with a Bing search for "{query}". '
+        'Wait for search results to fully load. '
+        'Report what you see in the search results.'
+    ),
+    pre_launch='powershell -ExecutionPolicy Bypass -Command "Start-Process msedge \'https://www.bing.com/search?q={query}\'; Start-Sleep -Seconds 3"',
+    precondition="Any state",
+    postcondition="Edge is open showing Bing search results for '{query}'",
+    max_steps=2,
+    timeout=30,
+    tags=["browser", "search", "bing", "web"],
+))
+
+_register(Skill(
+    id="take_screenshot",
+    name="Take a Screenshot",
+    description="Take a screenshot and save it to a file using Snipping Tool or Print Screen",
+    category="system",
+    parameters=[
+        SkillParam("mode", "Screenshot mode: full, window, or snip", "str",
+                   required=False, default="full",
+                   examples=["full", "window", "snip"]),
+    ],
+    prompt_template=(
+        'Take a {mode} screenshot. '
+        'If mode is "full": press Print Screen (PrtSc) key to capture the entire screen. '
+        'If mode is "window": press Alt+Print Screen to capture the active window. '
+        'If mode is "snip": press Win+Shift+S to open Snipping Tool for a region capture. '
+        'The screenshot will be copied to the clipboard or opened in Snipping Tool.'
+    ),
+    precondition="Any state",
+    postcondition="Screenshot captured to clipboard or Snipping Tool",
+    max_steps=2,
+    timeout=15,
+    tags=["screenshot", "capture", "snip"],
+))
+
+_register(Skill(
+    id="lock_screen",
+    name="Lock the Screen",
+    description="Lock the Windows screen",
+    category="system",
+    prompt_template=(
+        'Lock the screen. Press Win+L. '
+        'The action is: {{"type": "hotkey", "params": {{"keys": ["win", "l"]}}}}'
+    ),
+    precondition="Any state",
+    postcondition="Screen is locked",
+    max_steps=1,
+    timeout=10,
+    tags=["lock", "security", "system"],
+))
+
+_register(Skill(
+    id="toggle_wifi",
+    name="Toggle WiFi On/Off",
+    description="Toggle WiFi on or off via Quick Settings",
+    category="system",
+    parameters=[
+        SkillParam("state", "Desired state: on or off", "str",
+                   examples=["on", "off"]),
+    ],
+    prompt_template=(
+        'Step 1: Press Win+A to open Quick Settings panel. '
+        'Step 2: Look at the WiFi button/tile in the Quick Settings panel. '
+        'Step 3: Click the WiFi button to turn it {state}. '
+        'You MUST open Quick Settings first before reporting done.'
+    ),
+    precondition="Any state",
+    postcondition="WiFi is turned {state}",
+    min_steps=2,
+    max_steps=4,
+    timeout=30,
+    tags=["wifi", "network", "toggle", "system"],
+))
+
+_register(Skill(
+    id="toggle_bluetooth",
+    name="Toggle Bluetooth On/Off",
+    description="Toggle Bluetooth on or off via Quick Settings",
+    category="system",
+    parameters=[
+        SkillParam("state", "Desired state: on or off", "str",
+                   examples=["on", "off"]),
+    ],
+    prompt_template=(
+        'Step 1: Press Win+A to open Quick Settings panel. '
+        'Step 2: Look at the Bluetooth button/tile in the Quick Settings panel. '
+        'Step 3: Click the Bluetooth button to turn it {state}. '
+        'You MUST open Quick Settings first before reporting done.'
+    ),
+    precondition="Any state",
+    postcondition="Bluetooth is turned {state}",
+    min_steps=2,
+    max_steps=4,
+    timeout=30,
+    tags=["bluetooth", "toggle", "system"],
+))
+
+_register(Skill(
+    id="set_timer",
+    name="Set a Timer",
+    description="Set a timer using the Windows Clock app",
+    category="app",
+    parameters=[
+        SkillParam("minutes", "Timer duration in minutes", "str",
+                   examples=["5", "10", "30"]),
+    ],
+    prompt_template=(
+        'The Clock app has been opened. '
+        'Navigate to the Timer tab if not already there. '
+        'Edit the timer duration to {minutes} minutes and 0 seconds. '
+        'Then click the Start/Play button to start the timer.'
+    ),
+    pre_launch='powershell -ExecutionPolicy Bypass -Command "Start-Process ms-clock:; Start-Sleep -Seconds 3"',
+    precondition="Any state",
+    postcondition="Timer set for {minutes} minutes and running",
+    max_steps=6,
+    timeout=60,
+    tags=["timer", "clock", "alarm"],
+))
+
+_register(Skill(
+    id="set_alarm",
+    name="Set an Alarm",
+    description="Set an alarm using the Windows Clock app",
+    category="app",
+    parameters=[
+        SkillParam("time", "Alarm time in HH:MM format", "str",
+                   examples=["07:00", "14:30", "09:15"]),
+        SkillParam("label", "Alarm label", "str", required=False, default="Alarm",
+                   examples=["Wake up", "Meeting", "Lunch"]),
+    ],
+    prompt_template=(
+        'The Clock app has been opened. '
+        'Navigate to the Alarm tab if not already there. '
+        'Add a new alarm set for {time}. '
+        'Set the label to "{label}" and save it.'
+    ),
+    pre_launch='powershell -ExecutionPolicy Bypass -Command "Start-Process ms-clock:; Start-Sleep -Seconds 3"',
+    precondition="Any state",
+    postcondition="Alarm set for {time} with label '{label}'",
+    max_steps=8,
+    timeout=60,
+    tags=["alarm", "clock", "reminder"],
+))
+
 # ── Text Input ───────────────────────────────────────────────────────────
 
 _register(Skill(
@@ -680,8 +836,9 @@ _register(Skill(
     ],
     prompt_template=(
         'A Teams {call_type} call to {name} has been initiated via deep link. '
-        'Verify that the call screen is visible — you should see the person\'s name '
-        'and a ringing/calling indicator. If the call screen is showing, report success.'
+        'The call should be ringing. Verify that the call screen is visible — '
+        'you should see the person\'s name and a ringing/calling indicator or call controls. '
+        'If the call is ringing or connected, report success.'
     ),
     pre_launch='powershell -ExecutionPolicy Bypass -File scripts/teams_call.ps1 -Name "{name}" -CallType {call_type}',
     precondition="Any state — Teams should be running",
@@ -689,6 +846,61 @@ _register(Skill(
     max_steps=2,
     timeout=30,
     tags=["teams", "call", "communication"],
+))
+
+_register(Skill(
+    id="teams_send_message",
+    name="Send a Teams Message",
+    description="Send a Teams chat message to a person by name using Graph API + deep link",
+    category="app",
+    parameters=[
+        SkillParam("name", "Person name to message", "str",
+                   examples=["Miguel Huerta", "John Smith"]),
+        SkillParam("message", "Message text to send", "str",
+                   examples=["Hello!", "Meeting at 3pm?"]),
+    ],
+    prompt_template=(
+        'A Teams chat message to {name} has been sent via deep link. '
+        'The message was: "{message}". '
+        'Verify that the chat window is visible and the message appears in the conversation. '
+        'If you can see the chat with {name} and the message was sent, report success.'
+    ),
+    pre_launch='powershell -ExecutionPolicy Bypass -File scripts/teams_message.ps1 -Name "{name}" -Message "{message}"',
+    precondition="Any state — Teams should be running",
+    postcondition="Message sent to {name} in Teams chat",
+    max_steps=2,
+    timeout=45,
+    tags=["teams", "message", "chat", "communication"],
+))
+
+
+# ── Email ────────────────────────────────────────────────────────────────
+
+_register(Skill(
+    id="send_email",
+    name="Send an Email",
+    description="Send an email to a person by name or email address via Outlook",
+    category="app",
+    parameters=[
+        SkillParam("to", "Recipient name or email address", "str",
+                   examples=["Miguel Huerta", "john@example.com"]),
+        SkillParam("subject", "Email subject line", "str",
+                   examples=["Meeting tomorrow", "Quick question"]),
+        SkillParam("body", "Email body text", "str",
+                   examples=["Hi, can we meet at 3pm?", "Please review the doc."]),
+    ],
+    prompt_template=(
+        'An email has been sent to {to} via Outlook. '
+        'Subject: "{subject}". '
+        'The email was sent successfully by the pre-launch script. '
+        'Report success — no UI action needed.'
+    ),
+    pre_launch='powershell -ExecutionPolicy Bypass -File scripts/send_email.ps1 -To "{to}" -Subject "{subject}" -Body "{body}"',
+    precondition="Any state — requires Outlook desktop installed and configured",
+    postcondition="Email sent to {to} with subject '{subject}'",
+    max_steps=1,
+    timeout=45,
+    tags=["email", "outlook", "communication"],
 ))
 
 
@@ -868,6 +1080,36 @@ _register_recipe(Recipe(
         ("teams_call_person", {}),  # name and call_type filled at runtime
     ],
     tags=["teams", "call", "communication"],
+))
+
+_register_recipe(Recipe(
+    id="web_search",
+    name="Search the Web",
+    description="Open Edge and search the web for a query",
+    skills=[
+        ("browser_search", {}),  # query filled at runtime
+    ],
+    tags=["browser", "search", "web"],
+))
+
+_register_recipe(Recipe(
+    id="send_email_to",
+    name="Send an Email to Someone",
+    description="Send an email to a person by name via Outlook",
+    skills=[
+        ("send_email", {}),  # to, subject, body filled at runtime
+    ],
+    tags=["email", "outlook", "communication"],
+))
+
+_register_recipe(Recipe(
+    id="teams_message",
+    name="Send a Teams Message",
+    description="Send a Teams chat message to a person by name",
+    skills=[
+        ("teams_send_message", {}),  # name and message filled at runtime
+    ],
+    tags=["teams", "message", "communication"],
 ))
 
 

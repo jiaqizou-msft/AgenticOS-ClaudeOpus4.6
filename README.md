@@ -9,7 +9,7 @@
 [![Windows](https://img.shields.io/badge/Windows_11-0078D4?style=for-the-badge&logo=windows11&logoColor=white)](https://www.microsoft.com/windows)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 [![Demos](https://img.shields.io/badge/Demos-64-success?style=for-the-badge)](scripts/run_demo_detached.py)
-[![Skills](https://img.shields.io/badge/Skills-29-blueviolet?style=for-the-badge)](scripts/skill_library.py)
+[![Skills](https://img.shields.io/badge/Skills-41-blueviolet?style=for-the-badge)](scripts/skill_library.py)
 [![Apps](https://img.shields.io/badge/Apps-15+-blue?style=for-the-badge)](#-v2-multi-app-expansion)
 
 **A modular Python framework for deep OS integration and intelligent desktop automation using multi-modal LLMs, Windows UI Automation, and human-supervised reinforcement learning.**
@@ -570,21 +570,36 @@ In v1/v2, running "turn brightness to 100%" required looking up Demo 1 which bun
 
 | Component | File | Description |
 |-----------|------|-------------|
-| 🧩 **Skill Library** | `scripts/skill_library.py` | 29 atomic skills across 5 categories + 7 pre-defined recipes |
+| 🧩 **Skill Library** | `scripts/skill_library.py` | 41 atomic skills across 5 categories + 11 pre-defined recipes |
 | ⚡ **Skill Cache** | `scripts/skill_cache.py` | Amortized replay with UI fingerprint staleness detection |
 | 🧠 **Skill Composer** | `scripts/skill_composer.py` | 3-tier intent decomposition: regex → keyword → LLM |
 | 📋 **Action Logger** | `scripts/action_logger.py` | Structured JSONL audit trail for debugging |
 | 🚀 **Skill Runner** | `scripts/run_skill.py` | CLI entry point with `--intent`, `--skills`, `--plan-only` |
 
-### Skill Categories (29 Skills)
+### Skill Categories (41 Skills)
 
 | Category | Skills | Examples |
 |----------|:------:|----------|
-| **System** | 10 | `open_quick_settings`, `set_slider`, `show_desktop`, `close_panel`, `open_task_manager` |
-| **Browser** | 4 | `open_edge`, `navigate_url`, `browser_new_tab`, `browser_close_tab` |
+| **System** | 14 | `open_quick_settings`, `set_slider`, `show_desktop`, `toggle_wifi`, `toggle_bluetooth`, `lock_screen`, `take_screenshot` |
+| **Browser** | 5 | `open_edge`, `navigate_url`, `browser_search`, `browser_new_tab`, `browser_close_tab` |
 | **File** | 3 | `open_explorer`, `create_folder`, `rename_file` |
 | **Input** | 5 | `type_text`, `press_hotkey`, `press_key`, `click_element`, `scroll_down` |
-| **App** | 7 | `open_notepad`, `notepad_type`, `open_calculator`, `calculator_compute`, `open_app` |
+| **App** | 14 | `open_notepad`, `notepad_type`, `open_calculator`, `send_email`, `teams_call_person`, `teams_send_message`, `set_timer`, `set_alarm` |
+
+### 🆕 v4 Communication & Productivity Skills
+
+| Skill | Method | Pre-launch | Tested |
+|-------|--------|------------|:------:|
+| `send_email` | Outlook COM + Graph API name lookup | `send_email.ps1` | ✅ |
+| `teams_call_person` | Graph API + Teams deep link + Enter | `teams_call.ps1` | ✅ |
+| `teams_send_message` | Graph API + Teams chat deep link + Enter | `teams_message.ps1` | ✅ |
+| `browser_search` | Edge + Bing URL | Pre-launch opens Edge | ✅ |
+| `toggle_wifi` | Quick Settings UI | LLM clicks WiFi tile | ✅ |
+| `toggle_bluetooth` | Quick Settings UI | LLM clicks BT tile | 🆕 |
+| `take_screenshot` | Win+Shift+S / PrtSc | Hotkey press | ✅ |
+| `lock_screen` | Win+L hotkey | Single hotkey | 🆕 |
+| `set_timer` | Clock app (ms-clock: URI) | Pre-launch opens Clock | ✅ |
+| `set_alarm` | Clock app (ms-clock: URI) | Pre-launch opens Clock | 🆕 |
 
 ### Before vs After: Brightness to 100%
 
@@ -626,6 +641,14 @@ python scripts/run_skill.py --intent "Set volume to 50%"
 python scripts/run_skill.py --intent "Open notepad and type Hello World"
 python scripts/run_skill.py --intent "Calculate 123 + 456"
 
+# ── v4 Communication & Productivity skills ──
+python scripts/run_skill.py --skills "send_email:to:Miguel Huerta:subject:Hello:body:Hi there!"
+python scripts/run_skill.py --skills "teams_call_person:name:John Doe:call_type:audio"
+python scripts/run_skill.py --skills "teams_send_message:name:Jane Doe:message:Hello from AgenticOS"
+python scripts/run_skill.py --skills "browser_search:query:Python tutorial"
+python scripts/run_skill.py --skills "toggle_wifi:state:off"
+python scripts/run_skill.py --skills "set_timer:minutes:5"
+
 # ── Explicit skill sequence ──
 python scripts/run_skill.py --skills open_quick_settings,set_slider:name:Brightness:value:100,close_panel
 
@@ -633,8 +656,8 @@ python scripts/run_skill.py --skills open_quick_settings,set_slider:name:Brightn
 python scripts/run_skill.py --intent "Set volume to 50%" --plan-only
 
 # ── Diagnostics ──
-python scripts/run_skill.py --list-skills     # 29 atomic skills
-python scripts/run_skill.py --list-recipes    # 7 pre-defined recipes
+python scripts/run_skill.py --list-skills     # 41 atomic skills
+python scripts/run_skill.py --list-recipes    # 11 pre-defined recipes
 python scripts/run_skill.py --show-log        # Recent action log
 python scripts/run_skill.py --cache-stats     # Cache hit rate & tokens saved
 ```
@@ -647,6 +670,21 @@ python scripts/run_skill.py --cache-stats     # Cache hit rate & tokens saved
 | Brightness 100% (warm) | 3 skills | 6 | 38.8s | 5,734 | 2 | ✅ SUCCESS |
 | Volume 50% | 3 skills | 6 | 31.4s | 2,820 | 2 | ✅ SUCCESS |
 | **Cache Stats** | **4 entries** | — | — | — | **50% hit rate** | **~25K tokens saved** |
+
+### v4 Communication & Productivity Test Results (Feb 19, 2026)
+
+| Test | Steps | Time | Tokens | Result |
+|------|:-----:|:----:|:------:|:------:|
+| Send Email (Jiaqi Zou) | 1 | 40.7s | 4,104 | ✅ |
+| Send Email (Miguel Huerta) | 1 | 36.8s | 1,714 | ✅ |
+| Teams Call (Miguel Huerta) | 1 | 30.5s | 4,133 | ✅ |
+| Teams Message (Miguel Huerta) | 1 | 36.7s | 4,093 | ✅ |
+| Teams Message (Zoltan Urge) | 1 | 53.8s | 4,148 | ✅ |
+| Browser Search (AgenticOS) | 1 | 32.1s | 4,147 | ✅ |
+| Toggle WiFi Off | 2 | 39.6s | 8,381 | ✅ |
+| Take Screenshot (Snip) | 1 | — | 4,164 | ✅ |
+| Set Timer (1 min) | 2 | 66.8s | 8,075 | ✅ |
+| Brightness 20% | 5 | 73.9s | 20,543 | ✅ |
 
 ---
 
@@ -738,7 +776,7 @@ AgenticOS/
 ├── scripts/
 │   ├── run_demo_detached.py     # Demo runner v8 (64 demos, 15 apps)
 │   ├── run_skill.py             # 🧩 Skill runner v1 (composable skills)
-│   ├── skill_library.py         # 🧩 29 atomic skills + 7 recipes
+│   ├── skill_library.py         # 🧩 41 atomic skills + 11 recipes
 │   ├── skill_cache.py           # ⚡ Amortized replay with fingerprints
 │   ├── skill_composer.py        # 🧠 Intent → skill decomposition
 │   ├── action_logger.py         # 📋 JSONL action audit trail
@@ -775,7 +813,7 @@ Covers: project motivation, architecture, ReAct loop, demo results, v2 expansion
 
 | System | Architecture | Grounding | Learning | Skills | Apps | Open Source |
 |--------|-------------|-----------|----------|:------:|:----:|:---:|
-| **AgenticOS v3** | Modular ReAct | UIA + Vision + OCR | Q-learning + Human + Cache | **29** | **15+** | ✅ |
+| **AgenticOS v4** | Modular ReAct | UIA + Vision + OCR | Q-learning + Human + Cache | **41** | **15+** | ✅ |
 | UFO² | Dual-agent | UIA + Vision | — | — | — | ✅ |
 | Operator | CUA | Vision only | — | — | — | ❌ |
 | Navi | Foundation model | Vision only | — | — | — | ❌ |
@@ -794,6 +832,7 @@ Covers: project motivation, architecture, ReAct loop, demo results, v2 expansion
 - [x] **v3: Skill Library** — 29 atomic skills, 7 recipes, amortized replay
 - [x] **Skill Composer** — Natural language → skill chain decomposition
 - [x] **Amortized Cache** — 7.6× speedup on cache hits, ~25K tokens saved
+- [x] **v4: Communication & Productivity** — Email (Outlook COM), Teams call/message (Graph API + deep links), browser search, WiFi/BT toggle, screenshot, timer/alarm — 41 skills, 11 recipes
 - [ ] **Vision QA Mode** — Ask the agent questions about what's on screen
 - [ ] **Playback Recorder** — Deterministic replay for bug reproduction
 - [ ] **Multi-DUT Support** — Run automation across multiple machines

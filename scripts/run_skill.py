@@ -219,7 +219,7 @@ def run_skill_step(
             log(f"    Pre-launch: {cmd}")
             import subprocess
             result = subprocess.run(
-                cmd, shell=True, capture_output=True, text=True, timeout=30
+                cmd, shell=True, capture_output=True, text=True, timeout=60
             )
             if result.stdout.strip():
                 for line in result.stdout.strip().splitlines():
@@ -230,7 +230,7 @@ def run_skill_step(
                     log(f"    Pre-launch stderr: {result.stderr.strip()[:200]}")
             time.sleep(4.0)  # Extra settle time after pre-launch
         except subprocess.TimeoutExpired:
-            log(f"    Pre-launch TIMEOUT (30s)")
+            log(f"    Pre-launch TIMEOUT (60s)")
         except Exception as e:
             log(f"    Pre-launch error: {e}")
 

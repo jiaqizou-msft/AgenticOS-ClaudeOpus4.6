@@ -1,22 +1,22 @@
 <# 
 .SYNOPSIS
-    Start a Teams call to a person by name using Microsoft Graph API + deep link.
+    Send a Teams message to a person by name using Microsoft Graph API + deep link.
 .DESCRIPTION
     1. Gets a Graph API token via Azure CLI
     2. Looks up the person's email via Microsoft Graph (Invoke-RestMethod)
-    3. Starts a Teams audio/video call via deep link protocol
+    3. Opens a Teams chat with the message pre-filled via deep link
+    4. Presses Enter to send the message
 .PARAMETER Name
     The person's display name to search for
-.PARAMETER CallType
-    "audio" (default) or "video"
+.PARAMETER Message
+    The message text to send
 #>
 param(
     [Parameter(Mandatory=$true)]
     [string]$Name,
     
-    [Parameter(Mandatory=$false)]
-    [ValidateSet("audio", "video")]
-    [string]$CallType = "audio"
+    [Parameter(Mandatory=$true)]
+    [string]$Message
 )
 
 # Step 1: Get a Graph API token via Azure CLI
@@ -56,19 +56,16 @@ try {
     exit 1
 }
 
-# Step 3: Start the call via Teams deep link
-if ($CallType -eq "video") {
-    $link = "msteams:/l/call/0/0?users=$email&withVideo=true"
-} else {
-    $link = "msteams:/l/call/0/0?users=$email"
-}
+# Step 3: Open chat with pre-filled message via Teams deep link
+$encodedMessage = [System.Uri]::EscapeDataString($Message)
+$link = "msteams:/l/chat/0/0?users=$email&message=$encodedMessage"
 
-Write-Host "Starting $CallType call to $displayName..."
+Write-Host "Opening chat with $displayName..."
 Start-Process $link
 
-# Step 4: Wait for the call dialog to appear, then press Enter to confirm
-Start-Sleep -Seconds 3
+# Step 4: Wait for the chat to open, then press Enter to send
+Start-Sleep -Seconds 4
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
 Start-Sleep -Seconds 1
-Write-Host "Call initiated successfully"
+Write-Host "Message sent successfully"
