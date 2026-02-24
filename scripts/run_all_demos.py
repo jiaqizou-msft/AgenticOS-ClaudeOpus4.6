@@ -232,8 +232,8 @@ def main():
     print("OK")
     print()
 
-    API_BASE = "https://bugtotest-resource.cognitiveservices.azure.com/"
-    API_VERSION = "2024-12-01-preview"
+    API_BASE = os.environ.get("AZURE_API_BASE", os.environ.get("AGENTICOS_LLM_BASE_URL", ""))
+    API_VERSION = os.environ.get("AZURE_API_VERSION", os.environ.get("AGENTICOS_LLM_API_VERSION", "2024-12-01-preview"))
 
     demos = [
         {
@@ -261,10 +261,10 @@ def main():
             "name": "Demo 3: Outlook Email and Teams Message",
             "task": (
                 "Step 1: Open Microsoft Outlook. Click 'New mail' or 'New message' to compose a new email. "
-                "Set the To field to jiaqizou@microsoft.com. Set the Subject to 'Sent from AgenticOS-Opus4.6'. "
+                "Set the To field to a recipient email. Set the Subject to 'Sent from AgenticOS'. "
                 "Type 'hello' in the email body. Click Send. "
-                "Step 2: Open Microsoft Teams. Use the search bar to find 'Jiaqi Zou'. "
-                "Open a chat with Jiaqi Zou. Type 'Hi' in the message box and send it."
+                "Step 2: Open Microsoft Teams. Use the search bar to find a contact. "
+                "Open a chat with the contact. Type 'Hi' in the message box and send it."
             ),
             "output": "recordings/demo3_outlook_teams.gif",
             "max_steps": 25,

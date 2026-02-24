@@ -306,7 +306,7 @@ _register(Skill(
         'Wait for search results to fully load. '
         'Report what you see in the search results.'
     ),
-    pre_launch='powershell -ExecutionPolicy Bypass -Command "Start-Process msedge \'https://www.bing.com/search?q={query}\'; Start-Sleep -Seconds 3"',
+    pre_launch='powershell -ExecutionPolicy Bypass -Command "Start-Process msedge \'https://www.bing.com/search?q={query_encoded}\'; Start-Sleep -Seconds 3"',
     precondition="Any state",
     postcondition="Edge is open showing Bing search results for '{query}'",
     max_steps=2,
@@ -419,7 +419,7 @@ _register(Skill(
     precondition="Any state",
     postcondition="Timer set for {minutes} minutes and running",
     max_steps=6,
-    timeout=60,
+    timeout=90,
     tags=["timer", "clock", "alarm"],
 ))
 
@@ -829,7 +829,7 @@ _register(Skill(
     category="app",
     parameters=[
         SkillParam("name", "Person name to call", "str",
-                   examples=["Miguel Huerta", "John Smith"]),
+                   examples=["John Smith", "Jane Doe"]),
         SkillParam("call_type", "Type of call: audio or video", "str",
                    required=False, default="audio",
                    examples=["audio", "video"]),
@@ -855,7 +855,7 @@ _register(Skill(
     category="app",
     parameters=[
         SkillParam("name", "Person name to message", "str",
-                   examples=["Miguel Huerta", "John Smith"]),
+                   examples=["John Smith", "Jane Doe"]),
         SkillParam("message", "Message text to send", "str",
                    examples=["Hello!", "Meeting at 3pm?"]),
     ],
@@ -883,7 +883,7 @@ _register(Skill(
     category="app",
     parameters=[
         SkillParam("to", "Recipient name or email address", "str",
-                   examples=["Miguel Huerta", "john@example.com"]),
+                   examples=["John Smith", "user@example.com"]),
         SkillParam("subject", "Email subject line", "str",
                    examples=["Meeting tomorrow", "Quick question"]),
         SkillParam("body", "Email body text", "str",

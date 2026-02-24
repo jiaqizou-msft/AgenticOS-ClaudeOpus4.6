@@ -124,9 +124,9 @@ CRITICAL RULES:
     To field, press Tab to move to Subject. After Subject, press Tab again to reach the Body.
     Use Ctrl+Enter to send the email."""
 
-# Azure OpenAI config
-API_BASE = "https://bugtotest-resource.cognitiveservices.azure.com/"
-API_VERSION = "2024-12-01-preview"
+# Azure OpenAI config — reads from environment variables (no hardcoded endpoints)
+API_BASE = os.environ.get("AZURE_API_BASE", os.environ.get("AGENTICOS_LLM_BASE_URL", ""))
+API_VERSION = os.environ.get("AZURE_API_VERSION", os.environ.get("AGENTICOS_LLM_API_VERSION", "2024-12-01-preview"))
 
 DEMOS = {
     1: {
@@ -189,15 +189,15 @@ DEMOS = {
             "Step 1: The Outlook app should already be open. Click on it in the taskbar or use\n"
             "        open_app 'outlook'. Wait 3 seconds.\n"
             "Step 2: Use hotkey ['ctrl','n'] to create a new email. Wait 2 seconds.\n"
-            "Step 3: The cursor should be in the To field. type_text 'jiaqizou@microsoft.com'.\n"
+            "Step 3: The cursor should be in the To field. type_text the recipient email.\n"
             "Step 4: Press Tab ONCE to move past To field. Then check: if you see a CC/BCC area,\n"
             "        press Tab again to skip it.\n"
-            "Step 5: Now type the Subject: type_text 'Sent from AgenticOS-Opus4.6'.\n"
+            "Step 5: Now type the Subject: type_text 'Sent from AgenticOS'.\n"
             "Step 6: Press Tab ONCE to move from Subject to Body.\n"
             "Step 7: type_text 'Hello from AgenticOS! This email was composed and sent by an AI agent.'.\n"
             "Step 8: VERIFY the email by looking at the screenshot:\n"
-            "        - Is the To field filled with jiaqizou@microsoft.com?\n"
-            "        - Is the Subject filled with 'Sent from AgenticOS-Opus4.6'?\n"
+            "        - Is the To field filled with an email address?\n"
+            "        - Is the Subject filled with 'Sent from AgenticOS'?\n"
             "        - Is the Body filled with 'Hello from AgenticOS...'?\n"
             "        If any field is EMPTY, do NOT send. Instead click on that field and fix it.\n"
             "Step 9: hotkey ['ctrl','enter'] to SEND the email. Wait 2 seconds.\n"
@@ -205,8 +205,8 @@ DEMOS = {
             "===== PART B: Send Teams Message =====\n"
             "Step 11: open_app 'msteams'. Wait 4 seconds.\n"
             "Step 12: hotkey ['ctrl','e'] to open search. Wait 1 second.\n"
-            "Step 13: type_text 'Jiaqi Zou' then press_key 'enter'. Wait 2 seconds.\n"
-            "Step 14: Click on the contact 'Jiaqi Zou' in search results. Wait 2 seconds.\n"
+            "Step 13: type_text a contact name then press_key 'enter'. Wait 2 seconds.\n"
+            "Step 14: Click on the contact in search results. Wait 2 seconds.\n"
             "Step 15: The chat message box should be at the bottom. Click on it.\n"
             "Step 16: type_text 'Hi from AgenticOS!' then press_key 'enter'.\n"
             "Step 17: done with success=true.\n\n"
@@ -579,7 +579,7 @@ DEMOS = {
             "Search for a contact in Teams.\n"
             "Step 1: wait 4 seconds for Teams to load.\n"
             "Step 2: hotkey ['ctrl','e'] to open search.\n"
-            "Step 3: type_text 'Jiaqi Zou'. wait 2 seconds.\n"
+            "Step 3: type_text a contact name. wait 2 seconds.\n"
             "Step 4: done with success=true, summary='Found contact'.\n"
             "IMPORTANT: Ctrl+E opens search."
         ),

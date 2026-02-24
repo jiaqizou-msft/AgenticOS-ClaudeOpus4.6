@@ -70,9 +70,9 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 CACHE_FILE = DATA_DIR / "skill_cache.json"
 LOG_FILE = DATA_DIR / "action_log.jsonl"
 
-# Azure config
-API_BASE = "https://bugtotest-resource.cognitiveservices.azure.com/"
-API_VERSION = "2024-12-01-preview"
+# Azure config — reads from environment variables (no hardcoded endpoints)
+API_BASE = os.environ.get("AZURE_API_BASE", os.environ.get("AGENTICOS_LLM_BASE_URL", ""))
+API_VERSION = os.environ.get("AZURE_API_VERSION", os.environ.get("AGENTICOS_LLM_API_VERSION", "2024-12-01-preview"))
 
 SKILL_SYSTEM_PROMPT = """You are AgenticOS, an AI agent that controls a Windows desktop.
 You can see the screen (screenshot) and the UI element tree (accessibility tree).
@@ -215,7 +215,12 @@ def run_skill_step(
     # ── 0. Pre-launch command (if any) ──
     if skill.pre_launch:
         try:
-            cmd = skill.pre_launch.format(**params)
+            # Auto-derive URL-encoded variants for each param (e.g. query → query_encoded)
+            import urllib.parse
+            fmt_params = dict(params)
+            for k, v in params.items():
+                fmt_params[f"{k}_encoded"] = urllib.parse.quote_plus(str(v))
+            cmd = skill.pre_launch.format(**fmt_params)
             log(f"    Pre-launch: {cmd}")
             import subprocess
             result = subprocess.run(
@@ -233,6 +238,8 @@ def run_skill_step(
             log(f"    Pre-launch TIMEOUT (60s)")
         except Exception as e:
             log(f"    Pre-launch error: {e}")
+        # Reset timer so skill timeout applies AFTER pre-launch, not including it
+        t_start = time.time()
 
     # ── 1. Observe current state ──
     screenshot = screen.grab()
@@ -552,7 +559,7 @@ def run_plan(
         recorder.stop()
         gif_dir = ROOT / "recordings" / "skills"
         gif_dir.mkdir(parents=True, exist_ok=True)
-        gif_name = plan.intent[:40].replace(" ", "_").replace("/", "_").replace("\\", "_")
+        gif_name = plan.intent[:40].replace(" ", "_").replace("/", "_").replace("\\", "_").replace(":", "_").replace("?", "_").replace('"', "_").replace("<", "_").replace(">", "_").replace("|", "_")
         gif_file = gif_dir / f"{gif_name}_{int(time.time())}.gif"
         try:
             gif_path = recorder.save(str(gif_file))

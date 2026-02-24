@@ -112,7 +112,7 @@ class SkillComposer:
 
     def __init__(self, token: str = "", api_base: str = "", api_version: str = ""):
         self._token = token
-        self._api_base = api_base or "https://bugtotest-resource.cognitiveservices.azure.com/"
+        self._api_base = api_base or os.environ.get("AZURE_API_BASE", os.environ.get("AGENTICOS_LLM_BASE_URL", ""))
         self._api_version = api_version or "2024-12-01-preview"
 
     def compose(self, intent: str, use_llm: bool = True) -> SkillPlan:
@@ -301,28 +301,58 @@ Decompose the intent into skills:"""
         
         Format: ["skill_id:param1:value1:param2:value2", ...]
         Example: ["open_quick_settings", "set_slider:name:Brightness:value:100", "close_panel"]
+        
+        Smart parsing: the parser knows how many parameters each skill expects,
+        so it can handle values containing colons (e.g. URLs like https://...).
+        After consuming all expected key:value pairs, remaining text is appended
+        to the last parameter's value.
         """
         steps = []
         for spec in skill_specs:
             parts = spec.split(":")
             skill_id = parts[0]
             params = {}
-            for i in range(1, len(parts) - 1, 2):
-                key = parts[i]
-                val = parts[i + 1]
-                # Try to parse as int/float
-                try:
-                    val = int(val)
-                except ValueError:
-                    try:
-                        val = float(val)
-                    except ValueError:
-                        pass
-                params[key] = val
 
             if skill_id in SKILLS:
+                skill = SKILLS[skill_id]
+                param_names = [p.name for p in skill.parameters]
+                i = 1
+                while i < len(parts) - 1:
+                    key = parts[i]
+                    if key in param_names:
+                        val = parts[i + 1]
+                        i += 2
+                        # Check if next part is another known param key
+                        # If not, it's a continuation of the current value (e.g. URL with colons)
+                        while i < len(parts) and parts[i] not in param_names:
+                            val += ":" + parts[i]
+                            i += 1
+                        # Try to parse as int/float
+                        try:
+                            val = int(val)
+                        except ValueError:
+                            try:
+                                val = float(val)
+                            except ValueError:
+                                pass
+                        params[key] = val
+                    else:
+                        # Unknown key — skip or append to last value
+                        i += 1
                 steps.append(SkillStep(skill_id=skill_id, params=params))
             else:
+                # Fallback: simple split for unknown skills
+                for i in range(1, len(parts) - 1, 2):
+                    key = parts[i]
+                    val = parts[i + 1]
+                    try:
+                        val = int(val)
+                    except ValueError:
+                        try:
+                            val = float(val)
+                        except ValueError:
+                            pass
+                    params[key] = val
                 print(f"[SkillComposer] Unknown skill: {skill_id}")
 
         return SkillPlan(

@@ -1,6 +1,7 @@
 """Quick test: verify Azure OpenAI works via Azure AD token auth + litellm."""
 import os
-os.environ["AZURE_API_BASE"] = "https://bugtotest-resource.cognitiveservices.azure.com/"
+if "AZURE_API_BASE" not in os.environ:
+    raise EnvironmentError("Set AZURE_API_BASE env var (e.g. https://<resource>.cognitiveservices.azure.com/)")
 os.environ["AZURE_API_VERSION"] = "2024-12-01-preview"
 
 import litellm

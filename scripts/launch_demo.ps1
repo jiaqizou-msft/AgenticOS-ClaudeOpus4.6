@@ -7,7 +7,7 @@ param(
 
 $Root = Split-Path -Parent $PSScriptRoot
 if (-not $Root) { $Root = $PSScriptRoot }
-if (-not $Root) { $Root = "C:\Users\jiaqizou\Downloads\AgenticOS" }
+if (-not $Root) { $Root = (Get-Location).Path }
 
 $Python = "python"
 $Script = Join-Path $Root "scripts\run_demo_detached.py"
